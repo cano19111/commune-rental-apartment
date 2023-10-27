@@ -7,79 +7,140 @@ const to = require('await-to-js').default;
 const hashPassword = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 
 const register = async (req, res, next) => {
-    const { email, password, firstname, lastname, phone } = req.body;
-    const [err, existingUser] = await to(User.findOne({ email }));
-    if (err) throw err;
-    if (existingUser) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Email has already been used!',
-        });
-    }
-    const [errCreateUser, newUser] = await to(
-        User.create({
-            email: email,
-            password: hashPassword(password),
-            firstname: firstname,
-            lastname: lastname,
-            phone: phone,
-        }),
-    );
-    if (errCreateUser) {
-        return res.status(500).json({
-            status: 'fail',
-            message: 'Register is fail!',
-        });
-    }
-    return res.status(200).json({
-        status: 'success',
-        message: 'Register is successful!',
-        userData: newUser,
-    });
-};
-const login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const response = await User.findOne({ email });
-        if (!response) {
+        const { email, password, firstname, lastname, phone } = req.body;
+        const [errExistingUser, existingUser] = await to(User.findOne({ email }));
+
+        if (errExistingUser) {
             return res.status(500).json({
-                status: 'fail',
-                message: 'Email does not exist!',
+                status: 'error',
+                message: 'Error find user',
             });
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password, response.password);
-        if (!isPasswordCorrect) {
-            return res.status(200).json({
-                status: 'fail',
-                message: 'Password is incorrect!',
+        if (existingUser) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Email has already been used!',
             });
         }
 
-        const { password: userPassword, isAdmin, refreshToken, ...userData } = response.toObject();
-        const accessToken = generateAccessToken(response._id, isAdmin);
-        const newRefreshToken = generateRefreshToken(response._id);
-        await User.findByIdAndUpdate(response._id, { refreshToken: newRefreshToken }, { new: true });
-        res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
-        return res.status(200).json({
+        const [errCreateUser, newUser] = await to(
+            User.create({
+                email,
+                password: hashPassword(password),
+                firstname,
+                lastname,
+                phone,
+            }),
+        );
+        if (errCreateUser) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Error user register',
+            });
+        }
+        return res.status(201).json({
             status: 'success',
-            accessToken,
-            userData,
+            message: 'Register is successful!',
+            data: {
+                user: {
+                    _id: newUser._id,
+                    email: newUser.email,
+                    firstname: newUser.firstname,
+                    lastname: newUser.lastname,
+                    phone: newUser.phone,
+                },
+            },
         });
     } catch (error) {
         next(error);
     }
 };
+const login = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+        const [errUser, user] = await to(User.findOne({ email }));
+
+        if (errUser) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Error finding user',
+            });
+        }
+
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'User not found!',
+            });
+        }
+
+        const [errPassword, isPasswordCorrect] = await to(bcrypt.compare(password, user.password));
+
+        if (errPassword) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Password incorrect',
+            });
+        }
+
+        if (!isPasswordCorrect) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Incorrect password!',
+            });
+        }
+        const { password: userPassword, isAdmin, refreshToken, ...userData } = user.toObject();
+        const accessToken = generateAccessToken(user._id, isAdmin);
+        const newRefreshToken = generateRefreshToken(user._id);
+        const [errUpdate] = await to(
+            User.findByIdAndUpdate(user._id, { refreshToken: newRefreshToken }, { new: true }),
+        );
+        if (errUpdate) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Error updating user',
+            });
+        }
+
+        res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                accessToken,
+                user: userData,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const logout = async (req, res, next) => {
     try {
-        const cookie = req.cookies;
-        if (!cookie || !cookie.refreshToken) {
-            return res.status(200).json({
-                status: 'fail',
+        const { refreshToken } = req.cookies;
+
+        if (!refreshToken) {
+            return res.status(400).json({
+                status: 'error',
                 message: 'No refresh token in cookies',
             });
         }
-        await User.findOneAndUpdate({ refreshToken: cookie.refreshToken }, { refreshToken: '' }, { new: true });
+
+        const [errUpdate, updatedUser] = await to(
+            User.findOneAndUpdate({ refreshToken }, { refreshToken: '' }, { new: true }),
+        );
+
+        if (errUpdate) {
+            console.error('Logout error:', errUpdate);
+            return res.status(500).json({
+                status: 'error',
+                message: 'Internal Server Error',
+            });
+        }
+
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: true,
@@ -92,20 +153,41 @@ const logout = async (req, res, next) => {
         next(error);
     }
 };
+
 const refreshAccessToken = async (req, res, next) => {
     try {
-        const cookie = req.cookies;
-        if (!cookie || !cookie.refreshToken) {
-            return res.status(200).json({
-                status: 'fail',
+        const { refreshToken } = req.cookies;
+
+        if (!refreshToken) {
+            return res.status(400).json({
+                status: 'error',
                 message: 'No refresh token in cookies',
             });
         }
-        const rs = await jwt.verify(cookie.refreshToken, process.env.JWT_REFRESH_KEY);
-        const response = await User.findOne({ _id: rs._id, refreshToken: cookie.refreshToken });
+
+        const decodedToken = await jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+        if (!decodedToken) {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Invalid refresh token',
+            });
+        }
+
+        const [errFindUser, user] = await to(User.findOne({ _id: decodedToken._id, refreshToken }));
+
+        if (errFindUser || !user) {
+            console.error('Refresh access token error:', errFindUser);
+            return res.status(401).json({
+                status: 'error',
+                message: 'Invalid refresh token',
+            });
+        }
+
+        const newAccessToken = generateAccessToken(user._id, user.role);
+
         return res.status(200).json({
             status: 'success',
-            newAccessToken: response ? generateAccessToken(response._id, response.role) : 'Refresh token not matched',
+            newAccessToken,
         });
     } catch (error) {
         next(error);

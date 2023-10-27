@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const COLLECTION = 'users';
-const DOCUMENT = 'User';
+const COLLECTION = 'services';
+const DOCUMENT = 'Service';
 
 const userSchema = new mongoose.Schema(
     {
         title: { type: String, require: true, unique: true },
         quantity: { type: Number, require: true },
-        description: { type: String },
+        description: { type: String, default: '' },
     },
     {
         timestamps: true,
