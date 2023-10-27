@@ -33,9 +33,6 @@ app.use(
     }),
 );
 
-//app.use(passport.initialize());
-//app.use(passport.session());
-
 const PORT = process.env.SERVER_PORT || 3045;
 server.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);
