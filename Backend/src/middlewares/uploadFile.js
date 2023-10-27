@@ -5,7 +5,7 @@ const storage = new CloudinaryStorage({
     cloudinary,
     allowedFormats: ['jpg', 'png', 'gif'],
     params: {
-        folder: 'Dev-Community',
+        folder: 'rent-apartment',
     },
 });
 

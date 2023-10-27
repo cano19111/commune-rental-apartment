@@ -46,6 +46,28 @@ const createService = async (req, res, next) => {
         next(error);
     }
 };
+const getServices = async (req, res, next) => {
+    try {
+        const [errGetServices, services] = await to(Service.find());
+
+        if (errGetServices) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Error getting services',
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Get services successfully',
+            data: {
+                services: services,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 const updateService = async (req, res, next) => {
     const { sid } = req.params;
@@ -75,7 +97,7 @@ const updateService = async (req, res, next) => {
         if (errUpdateService) {
             return res.status(500).json({
                 status: 'error',
-                message: 'Error finding service',
+                message: 'Error updating service',
             });
         }
 
@@ -127,6 +149,7 @@ const deleteService = async (req, res, next) => {
     }
 };
 module.exports = {
+    getServices,
     createService,
     updateService,
     deleteService,
