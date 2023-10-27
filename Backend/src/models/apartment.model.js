@@ -6,7 +6,6 @@ const DOCUMENT = 'Apartment';
 const userSchema = new mongoose.Schema(
     {
         title: { type: String, require: true },
-        slug: { type: String, require: true, unique: true },
         location: {
             coordinate: { type: String, require: true },
             province: { type: String, require: true },
