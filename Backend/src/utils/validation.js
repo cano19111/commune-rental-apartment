@@ -13,7 +13,12 @@ const userLoginSchema = yup.object({
     password: yup.string().min(6).required(),
 });
 
+const serviceSchema = yup.object({
+    title: yup.string().required(),
+});
+
 module.exports = {
     userSchema,
     userLoginSchema,
+    serviceSchema,
 };

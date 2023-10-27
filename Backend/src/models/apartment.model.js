@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema(
             {
                 services: [
                     {
-                        type: mongoose.Schema.Types.ObjectId,
-                        ref: 'Service',
+                        service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
+                        quantity: { type: Number, require: true },
                     },
                 ],
                 description: { type: String },
