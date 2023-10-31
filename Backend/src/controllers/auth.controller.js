@@ -13,14 +13,14 @@ const register = async (req, res, next) => {
 
         if (errExistingUser) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error find user',
             });
         }
 
         if (existingUser) {
             return res.status(400).json({
-                status: 'error',
+                success: false,
                 message: 'Email has already been used!',
             });
         }
@@ -36,12 +36,12 @@ const register = async (req, res, next) => {
         );
         if (errCreateUser) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error user register',
             });
         }
         return res.status(201).json({
-            status: 'success',
+            success: true,
             message: 'Register is successful!',
             data: {
                 user: {
@@ -64,14 +64,14 @@ const login = async (req, res, next) => {
 
         if (errUser) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error finding user',
             });
         }
 
         if (!user) {
             return res.status(404).json({
-                status: 'error',
+                success: false,
                 message: 'User not found!',
             });
         }
@@ -80,14 +80,14 @@ const login = async (req, res, next) => {
 
         if (errPassword) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Password incorrect',
             });
         }
 
         if (!isPasswordCorrect) {
             return res.status(401).json({
-                status: 'error',
+                success: false,
                 message: 'Incorrect password!',
             });
         }
@@ -99,7 +99,7 @@ const login = async (req, res, next) => {
         );
         if (errUpdate) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error updating user',
             });
         }
@@ -107,7 +107,7 @@ const login = async (req, res, next) => {
         res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
 
         return res.status(200).json({
-            status: 'success',
+            success: true,
             data: {
                 accessToken,
                 user: userData,
@@ -124,7 +124,7 @@ const logout = async (req, res, next) => {
 
         if (!refreshToken) {
             return res.status(400).json({
-                status: 'error',
+                success: false,
                 message: 'No refresh token in cookies',
             });
         }
@@ -134,9 +134,8 @@ const logout = async (req, res, next) => {
         );
 
         if (errUpdate) {
-            console.error('Logout error:', errUpdate);
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Internal Server Error',
             });
         }
@@ -146,7 +145,7 @@ const logout = async (req, res, next) => {
             secure: true,
         });
         return res.status(200).json({
-            status: 'success',
+            success: true,
             message: 'Logout is done',
         });
     } catch (error) {
@@ -160,7 +159,7 @@ const refreshAccessToken = async (req, res, next) => {
 
         if (!refreshToken) {
             return res.status(400).json({
-                status: 'error',
+                success: false,
                 message: 'No refresh token in cookies',
             });
         }
@@ -168,7 +167,7 @@ const refreshAccessToken = async (req, res, next) => {
         const decodedToken = await jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
         if (!decodedToken) {
             return res.status(401).json({
-                status: 'error',
+                success: false,
                 message: 'Invalid refresh token',
             });
         }
@@ -178,7 +177,7 @@ const refreshAccessToken = async (req, res, next) => {
         if (errFindUser || !user) {
             console.error('Refresh access token error:', errFindUser);
             return res.status(401).json({
-                status: 'error',
+                success: false,
                 message: 'Invalid refresh token',
             });
         }
@@ -186,7 +185,7 @@ const refreshAccessToken = async (req, res, next) => {
         const newAccessToken = generateAccessToken(user._id, user.role);
 
         return res.status(200).json({
-            status: 'success',
+            success: true,
             newAccessToken,
         });
     } catch (error) {

@@ -9,14 +9,14 @@ const createService = async (req, res, next) => {
 
         if (errExistingService) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error finding service',
             });
         }
 
         if (existingService) {
             return res.status(400).json({
-                status: 'error',
+                success: false,
                 message: 'Service with the same title already exists',
             });
         }
@@ -30,13 +30,13 @@ const createService = async (req, res, next) => {
 
         if (errCreateService) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error creating service',
             });
         }
 
         return res.status(201).json({
-            status: 'success',
+            success: true,
             message: 'Service created successfully',
             data: {
                 service: newService,
@@ -52,13 +52,13 @@ const getServices = async (req, res, next) => {
 
         if (errGetServices) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error getting services',
             });
         }
 
         return res.status(200).json({
-            status: 'success',
+            success: true,
             message: 'Get services successfully',
             data: {
                 services: services,
@@ -78,14 +78,14 @@ const updateService = async (req, res, next) => {
 
         if (errFindService) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Internal server error',
             });
         }
 
         if (!service) {
             return res.status(404).json({
-                status: 'error',
+                success: false,
                 message: 'Service does not exist',
             });
         }
@@ -96,13 +96,13 @@ const updateService = async (req, res, next) => {
 
         if (errUpdateService) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error updating service',
             });
         }
 
         return res.status(200).json({
-            status: 'success',
+            success: true,
             message: 'Service updated successfully',
             data: {
                 service: updatedService,
@@ -120,14 +120,14 @@ const deleteService = async (req, res, next) => {
 
         if (errFindService) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error finding service',
             });
         }
 
         if (!service) {
             return res.status(404).json({
-                status: 'error',
+                success: false,
                 message: 'Service does not exist',
             });
         }
@@ -135,13 +135,13 @@ const deleteService = async (req, res, next) => {
 
         if (errDeleteService) {
             return res.status(500).json({
-                status: 'error',
+                success: false,
                 message: 'Error deleting service',
             });
         }
 
         return res.status(200).json({
-            status: 'success',
+            success: true,
             message: 'Service deleted successfully',
         });
     } catch (error) {
