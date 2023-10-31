@@ -7,7 +7,7 @@ const compression = require('compression');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const app = express();
-const dbConnect = require('./config/db.config');
+const { dbConnect } = require('./config/db.config');
 const initRoutes = require('./routes');
 const server = require('http').createServer(app);
 app.use(
@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(compression());
 dbConnect();
+
 app.use(morgan('dev'));
 initRoutes(app);
 app.use(

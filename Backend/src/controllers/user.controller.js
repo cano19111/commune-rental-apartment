@@ -6,7 +6,7 @@ const getCurrentUser = async (req, res, next) => {
         const { _id: uid } = req.user;
         if (!uid) {
             return res.status(400).json({
-                status: 'error',
+                success: false,
                 message: 'Missing user ID',
             });
         }
@@ -14,7 +14,7 @@ const getCurrentUser = async (req, res, next) => {
         const user = await User.findById(uid).select('-refreshToken -password');
         if (!user) {
             return res.status(404).json({
-                status: 'error',
+                success: false,
                 message: 'User not found',
             });
         }
