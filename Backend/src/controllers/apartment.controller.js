@@ -13,9 +13,6 @@ const getAllApartment = async (req, res, next) => {
                 .populate({
                     path: 'createBy',
                 })
-                // .populate({
-                //     path: 'reviews.postedBy',
-                // })
                 .exec(),
         );
 
@@ -57,9 +54,6 @@ const getApartment = async (req, res, next) => {
                 .populate({
                     path: 'createBy',
                 })
-                // .populate({
-                //     path: 'reviews.postedBy',
-                // })
                 .exec(),
         );
 
@@ -92,7 +86,6 @@ const createApartment = async (req, res, next) => {
     try {
         const { title, rooms } = req.body;
         const { _id: createBy } = req.user;
-        console.log(createBy);
         const roomsInApartment = rooms.map((room) => {
             return {
                 ...room,
