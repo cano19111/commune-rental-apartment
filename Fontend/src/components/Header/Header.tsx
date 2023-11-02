@@ -5,6 +5,10 @@ import { SignIn, SignUp } from '@/components';
 import { NavLink } from 'react-router-dom';
 import { Flex, Button, Modal, Tabs, Drawer, Image } from 'antd';
 import { CgMenuLeft } from 'react-icons/cg';
+import { BsPersonCircle } from 'react-icons/bs';
+import { PiSignInBold } from 'react-icons/pi';
+import { AiOutlineUsergroupAdd, AiFillCloseCircle } from 'react-icons/ai';
+
 import type { TabsProps } from 'antd';
 
 const Header: React.FC = () => {
@@ -17,14 +21,24 @@ const Header: React.FC = () => {
         {
             key: 'signin',
             label: (
-                <div className="font-main text-xl w-[150px] flex items-center justify-center lg:w-[390px]">Sign In</div>
+                <div
+                    className="font-main text-xl w-[150px] flex items-center justify-center lg:w-[390px]"
+                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                >
+                    Sign In
+                </div>
             ),
             children: <SignIn />,
         },
         {
             key: 'signup',
             label: (
-                <div className="font-main text-xl w-[150px] flex items-center justify-center lg:w-[390px]">Sign Up</div>
+                <div
+                    className="font-main text-xl w-[150px] flex items-center justify-center lg:w-[390px]"
+                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                >
+                    Sign Up
+                </div>
             ),
             children: <SignUp />,
         },
@@ -40,7 +54,7 @@ const Header: React.FC = () => {
                     <div className="hidden lg:block">
                         <Flex gap={20}>
                             {navigates.map((navigate, index) => (
-                                <NavLink className="text-[22px] font-semibold " key={index} to={navigate.path}>
+                                <NavLink className="font-main text-[22px] font-medium " key={index} to={navigate.path}>
                                     {navigate.title}
                                 </NavLink>
                             ))}
@@ -49,17 +63,20 @@ const Header: React.FC = () => {
 
                     <Flex gap={10}>
                         <Button
-                            className="font-main h-10 px-2 md:px-7 hidden md:block"
+                            className="font-main h-10 px-2 md:px-7 hidden lg:block"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
                         >
                             Sign in
                         </Button>
                         <Button
-                            className="font-main h-10 px-2 md:px-7 hidden md:block"
+                            className="font-main h-10 px-2 md:px-7 hidden lg:block"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
                         >
                             Sign up
                         </Button>
+                        <span className="mt-1 lg:hidden mr-5 cursor-pointer">
+                            <BsPersonCircle size={25} />
+                        </span>
                     </Flex>
                 </Flex>
             </div>
@@ -80,36 +97,49 @@ const Header: React.FC = () => {
                 <Tabs activeKey={modalOpen.activeTab} items={tabItems} tabBarGutter={0} />
             </Modal>
             <Drawer
-                // title={<div className="flex items-center justify-center font-main font-semibold text-2xl">Menu</div>}
+                title={
+                    <div className="w-full flex items-center justify-end" onClick={() => setOpen(false)}>
+                        <AiFillCloseCircle size={28} />
+                    </div>
+                }
                 placement="left"
-                width={250}
-                closable={false}
+                width="100%"
                 onClose={() => setOpen(false)}
                 open={open}
+                closeIcon={null}
             >
-                <Flex vertical gap={20}>
+                <div className="flex flex-col gap-5" onClick={() => setOpen(false)}>
                     <Flex gap={20} vertical>
                         {navigates.map((navigate, index) => (
-                            <NavLink className="text-[22px] font-semibold" key={index} to={navigate.path}>
-                                {navigate.title}
+                            <NavLink
+                                className="font-main text-[22px] font-medium flex items-center gap-5"
+                                key={index}
+                                to={navigate.path}
+                            >
+                                <span> {navigate.icon}</span>
+                                <span> {navigate.title}</span>
                             </NavLink>
                         ))}
                     </Flex>
-                    <Flex gap={10} vertical>
-                        <Button
-                            className="font-main h-10 px-2 md:px-7"
+                    <Flex gap={20} vertical>
+                        <span
+                            className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
                         >
-                            Sign in
-                        </Button>
-                        <Button
-                            className="font-main h-10 px-2 md:px-7"
+                            <PiSignInBold />
+                            <span>Sign in</span>
+                        </span>
+                        <span
+                            className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
                         >
-                            Sign up
-                        </Button>
+                            <span>
+                                <AiOutlineUsergroupAdd />
+                            </span>
+                            <span> Sign up</span>
+                        </span>
                     </Flex>
-                </Flex>
+                </div>
             </Drawer>
         </div>
     );
