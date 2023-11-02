@@ -1,6 +1,6 @@
 import React from 'react';
 import background from '@/assets/background.jpg';
-import { Input, DatePicker, Dropdown, Button, InputNumber } from 'antd';
+import { Input, DatePicker, Dropdown, Button } from 'antd';
 import { FaLocationDot } from 'react-icons/fa6';
 import { AiOutlinePlus } from 'react-icons/ai';
 

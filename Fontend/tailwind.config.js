@@ -8,6 +8,7 @@ export default {
             },
             colors: {
                 'midnight-blue': '#24324a',
+                'midnight-blue-500': '#8a99b3',
             },
         },
     },

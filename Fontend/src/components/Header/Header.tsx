@@ -98,7 +98,7 @@ const Header: React.FC = () => {
             </Modal>
             <Drawer
                 title={
-                    <div className="w-full flex items-center justify-end" onClick={() => setOpen(false)}>
+                    <div className="w-full flex items-center justify-end cursor-pointer" onClick={() => setOpen(false)}>
                         <AiFillCloseCircle size={28} />
                     </div>
                 }
