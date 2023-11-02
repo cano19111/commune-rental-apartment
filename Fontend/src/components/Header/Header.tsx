@@ -49,13 +49,13 @@ const Header: React.FC = () => {
 
                     <Flex gap={10}>
                         <Button
-                            className="font-main h-10 px-2 md:px-7"
+                            className="font-main h-10 px-2 md:px-7 hidden md:block"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
                         >
                             Sign in
                         </Button>
                         <Button
-                            className="font-main h-10 px-2 md:px-7"
+                            className="font-main h-10 px-2 md:px-7 hidden md:block"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
                         >
                             Sign up
@@ -87,12 +87,28 @@ const Header: React.FC = () => {
                 onClose={() => setOpen(false)}
                 open={open}
             >
-                <Flex gap={20} vertical>
-                    {navigates.map((navigate, index) => (
-                        <NavLink className="text-[22px] font-semibold" key={index} to={navigate.path}>
-                            {navigate.title}
-                        </NavLink>
-                    ))}
+                <Flex vertical gap={20}>
+                    <Flex gap={20} vertical>
+                        {navigates.map((navigate, index) => (
+                            <NavLink className="text-[22px] font-semibold" key={index} to={navigate.path}>
+                                {navigate.title}
+                            </NavLink>
+                        ))}
+                    </Flex>
+                    <Flex gap={10} vertical>
+                        <Button
+                            className="font-main h-10 px-2 md:px-7"
+                            onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                        >
+                            Sign in
+                        </Button>
+                        <Button
+                            className="font-main h-10 px-2 md:px-7"
+                            onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                        >
+                            Sign up
+                        </Button>
+                    </Flex>
                 </Flex>
             </Drawer>
         </div>
