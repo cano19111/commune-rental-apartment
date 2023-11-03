@@ -4,14 +4,11 @@ import { navigates } from '@/utils/constant';
 import { SignIn, SignUp } from '@/components';
 import { NavLink } from 'react-router-dom';
 import { Flex, Button, Modal, Tabs, Drawer, Image } from 'antd';
-import { CgMenuLeft } from 'react-icons/cg';
-import { BsPersonCircle } from 'react-icons/bs';
-import { PiSignInBold } from 'react-icons/pi';
-import { AiOutlineUsergroupAdd, AiFillCloseCircle } from 'react-icons/ai';
-
 import type { TabsProps } from 'antd';
+import icons from '@/utils/icons';
 
 const Header: React.FC = () => {
+    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft } = icons;
     const [modalOpen, setModalOpen] = useState<{ isOpen: boolean; activeTab: string }>({
         isOpen: false,
         activeTab: 'signin',
@@ -45,7 +42,7 @@ const Header: React.FC = () => {
     ];
     return (
         <div className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10">
-            <div className="w-full  flex justify-between px-3 md:px-10">
+            <div className="w-full  flex justify-between px-3 md:px-10 select-none">
                 <div className="lg:hidden" onClick={() => setOpen(true)}>
                     <CgMenuLeft size={30} />
                 </div>
@@ -54,7 +51,7 @@ const Header: React.FC = () => {
                     <div className="hidden lg:block">
                         <Flex gap={20}>
                             {navigates.map((navigate, index) => (
-                                <NavLink className="font-main text-[22px] font-medium " key={index} to={navigate.path}>
+                                <NavLink className="font-main text-[22px] font-medium" key={index} to={navigate.path}>
                                     {navigate.title}
                                 </NavLink>
                             ))}
@@ -99,7 +96,7 @@ const Header: React.FC = () => {
             <Drawer
                 title={
                     <div className="w-full flex items-center justify-end cursor-pointer" onClick={() => setOpen(false)}>
-                        <AiFillCloseCircle size={28} />
+                        <SlClose size={28} />
                     </div>
                 }
                 placement="left"
@@ -108,7 +105,7 @@ const Header: React.FC = () => {
                 open={open}
                 closeIcon={null}
             >
-                <div className="flex flex-col gap-5" onClick={() => setOpen(false)}>
+                <div className="flex flex-col gap-5 select-none" onClick={() => setOpen(false)}>
                     <Flex gap={20} vertical>
                         {navigates.map((navigate, index) => (
                             <NavLink
