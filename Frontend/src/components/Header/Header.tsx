@@ -19,7 +19,7 @@ const Header: React.FC = () => {
             key: 'signin',
             label: (
                 <div
-                    className="font-main text-xl w-[150px] flex items-center justify-center lg:w-[390px]"
+                    className="font-main text-xl w-[120px] flex items-center justify-center lg:w-[390px] md:w-[350px] sm:w-[300px]"
                     onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
                 >
                     Sign In
@@ -31,7 +31,7 @@ const Header: React.FC = () => {
             key: 'signup',
             label: (
                 <div
-                    className="font-main text-xl w-[150px] flex items-center justify-center lg:w-[390px]"
+                    className="font-main text-xl w-[120px] flex items-center justify-center lg:w-[390px] md:w-[350px] sm:w-[300px]"
                     onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
                 >
                     Sign Up
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
         },
     ];
     return (
-        <div className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10">
+        <div className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10 ">
             <div className="w-full  flex justify-between px-3 md:px-10 select-none">
                 <div className="lg:hidden" onClick={() => setOpen(true)}>
                     <CgMenuLeft size={30} />
@@ -85,13 +85,14 @@ const Header: React.FC = () => {
                 onCancel={() => setModalOpen({ isOpen: false, activeTab: 'signin' })}
                 width={840}
                 footer={null}
+                closeIcon={<SlClose size={25} />}
                 styles={{
                     mask: {
                         backdropFilter: 'blur(10px)',
                     },
                 }}
             >
-                <Tabs activeKey={modalOpen.activeTab} items={tabItems} tabBarGutter={0} />
+                <Tabs centered={true} activeKey={modalOpen.activeTab} items={tabItems} tabBarGutter={0} />
             </Modal>
             <Drawer
                 title={
