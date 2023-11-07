@@ -12,15 +12,14 @@
   "dependencies": {
     "@tanstack/react-query": "^5.0.5",
     "@tanstack/react-query-devtools": "^5.7.2",
-    "antd": "^5.10.2",
+    "antd": "^5.11.0",
     "axios": "^1.6.0",
     "clsx": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-icons": "^4.11.0",
-    "react-router-dom": "^6.17.0",
-    "react-sweetalert2": "^0.6.0"
+    "react-router-dom": "^6.17.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

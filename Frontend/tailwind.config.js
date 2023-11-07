@@ -14,6 +14,9 @@ export default {
                 'card-md': '0 0 0 1px rgba(0,0,0,0.04), 0 8px 16px rgba(0,0,0,0.15)',
                 'card-lg': '0 3px 10px rgba(0,0,0,0.1)',
             },
+            maxWidth: {
+                main: '1128px',
+            },
         },
     },
     plugins: [],

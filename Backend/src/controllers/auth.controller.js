@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt');
 const jwt = require('jsonwebtoken');
 const to = require('await-to-js').default;
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const hashPassword = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 
@@ -58,6 +61,7 @@ const register = async (req, res, next) => {
     }
 };
 const login = async (req, res, next) => {
+    await delay(5000);
     try {
         const { email, password } = req.body;
         const [errUser, user] = await to(User.findOne({ email }));

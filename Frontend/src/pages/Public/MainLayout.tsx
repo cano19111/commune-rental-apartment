@@ -6,7 +6,7 @@ const MainLayout: React.FC = () => {
     return (
         <div className="w-full flex items-center flex-col justify-center z-50">
             <Header />
-            <div>
+            <div className="w-full">
                 <Outlet />
             </div>
             <Footer />
@@ -15,4 +15,3 @@ const MainLayout: React.FC = () => {
 };
 
 export default MainLayout;
-//className="max-w-[1220px] w-full"

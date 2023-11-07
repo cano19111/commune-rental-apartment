@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
     } = icons;
     return (
         <footer className="min-h-[370px] bg-midnight-blue w-full flex items-center justify-center p-10 ">
-            <div className="max-w-[1220px] w-full flex items-start text-white flex-wrap gap-5 min-w-[240px]">
+            <div className="max-w-main w-full flex items-start text-white flex-wrap gap-5 min-w-[240px]">
                 <div className="flex flex-col gap-[20px] justify-center flex-1">
                     <div className="font-semibold font-main text-xl">About Site</div>
                     <div className="font-main text-sm font-light text-midnight-blue-500 leading-7">
