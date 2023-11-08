@@ -5,14 +5,17 @@ import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { apiLogin } from '@/apis';
 import icons from '@/utils/icons';
+import { useAuth } from '@/hooks';
+import { signIn } from '@/contexts/auth/reduces';
 
 type LoginData = {
     email: string;
     password: string;
 };
-const SignIn: React.FC = () => {
+const SignIn: React.FC = ({ setModalOpen }) => {
     const { FaRegUser, HiOutlineLockClosed, FcGoogle, SiFacebook } = icons;
     const [messageApi, contextHolder] = message.useMessage();
+    const { dispatch } = useAuth();
     const {
         handleSubmit,
         control,
@@ -30,6 +33,9 @@ const SignIn: React.FC = () => {
             onSuccess: (data) => {
                 if (data) {
                     if (data.success) {
+                        const { accessToken, user } = data.data;
+                        setModalOpen({ isOpen: false, activeTab: 'signin' });
+                        dispatch(signIn({ accessToken: accessToken, user: user }));
                         messageApi.open({
                             type: 'success',
                             content: 'Login successfully',
@@ -63,7 +69,6 @@ const SignIn: React.FC = () => {
                 tip={<div className="font-main text-lg font-medium">Loading ...</div>}
                 size="large"
                 fullscreen={true}
-                wrapperClassName="app"
                 spinning={loginMutation.isPending}
             ></Spin>
             <form onSubmit={handleSubmit(handleLogin)}>

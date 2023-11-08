@@ -1,7 +1,7 @@
 import { Input, Select, InputNumber, Switch, Upload, Modal, Flex } from 'antd';
 import React, { useState } from 'react';
 import type { SelectProps } from 'antd';
-import type { RcFile } from 'antd/es/upload';
+import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -34,6 +34,7 @@ const AddRoom: React.FC = () => {
 
     const handleCancel = () => setPreviewOpen(false);
 
+    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj as RcFile);
@@ -73,7 +74,7 @@ const AddRoom: React.FC = () => {
                 </div>
                 <Flex gap={10} align="center">
                     <div className="flex flex-col">
-                        <label className="text-lg mb-2">Size</label>
+                        <label className="text-lg mb-2">Size room</label>
                         <InputNumber className="w-full p-2 rounded-xl" size="large" placeholder="Enter the size" />
                     </div>
 
@@ -97,6 +98,7 @@ const AddRoom: React.FC = () => {
                             customRequest={() => null}
                             fileList={fileList}
                             onPreview={handlePreview}
+                            onChange={handleChange}
                         >
                             {fileList.length >= 8 ? null : uploadButton}
                         </Upload>
@@ -113,16 +115,10 @@ const AddRoom: React.FC = () => {
                     <label className="text-lg mb-2">Number of guests</label>
                     <InputNumber className="w-full p-2 rounded-xl" size="large" placeholder="Enter the size" />
                 </div>
-                <Flex gap={20} align="center" wrap="wrap">
-                    <div className="flex flex-col">
-                        <label className="text-lg mb-2">Availability</label>
-                        <Switch checked className="max-w-[50px]" />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="text-lg mb-2">Quantity</label>
-                        <InputNumber defaultValue={1} className="max-w-[50px] min-w-[200px]" />
-                    </div>
-                </Flex>
+                <div className="flex flex-col">
+                    <label className="text-lg mb-2">Quantity</label>
+                    <InputNumber defaultValue={1} className="max-w-[50px] min-w-[200px]" />
+                </div>
             </div>
         </div>
     );

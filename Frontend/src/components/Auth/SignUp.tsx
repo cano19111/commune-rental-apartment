@@ -16,9 +16,7 @@ const SignUp: React.FC = () => {
             email: '',
         },
     });
-    const handleRegister = (data) => {
-        console.log(data);
-    };
+    const handleRegister = (data) => {};
     return (
         <form onSubmit={handleSubmit(handleRegister)}>
             <div className="w-full flex gap-5">
