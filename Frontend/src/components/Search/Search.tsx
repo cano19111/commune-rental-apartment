@@ -11,14 +11,9 @@ const Search: React.FC = () => {
     const onChange = (
         value: DatePickerProps['value'] | RangePickerProps['value'],
         dateString: [string, string] | string,
-    ) => {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
-    };
+    ) => {};
 
-    const onOk = (value: DatePickerProps['value'] | RangePickerProps['value']) => {
-        console.log('onOk: ', value);
-    };
+    const onOk = (value: DatePickerProps['value'] | RangePickerProps['value']) => {};
     return (
         <div className="max-w-[900px] w-full min-h-[100px] bg-white rounded-3xl mt-[30px] flex justify-start items-center px-10 gap-5 flex-wrap py-10 lg:rounded-full lg: shadow-card-lg">
             <Input

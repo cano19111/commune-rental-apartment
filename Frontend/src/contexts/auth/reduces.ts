@@ -50,7 +50,6 @@ export function reducer(state: AuthState, action: PayloadAction<AuthState>) {
     if (!reducerHandlers[action.type]) return state;
     return reducerHandlers[action.type](state, action);
 }
-//actions
 
 export function initialize(payload: AuthState): PayloadAction<AuthState> {
     return {
