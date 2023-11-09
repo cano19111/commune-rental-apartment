@@ -7,9 +7,10 @@ export const path: { [key: string]: string } = {
     ROOT: '/',
     HOME: '',
     ALL: '/*',
-    LISTING: 'listing',
+    LISTING: 'listing/:roomId',
     FAVORITES: 'favorites',
     CONTACT: 'contact',
+    CREATE_APARTMENT: 'create-apartment',
 };
 
 export const navigates: { title: string; path: string; icon: React.ReactNode }[] = [

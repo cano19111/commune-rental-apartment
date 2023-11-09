@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import logo from '@/assets/header-logo1.png';
-import { navigates } from '@/utils/constant';
+import { navigates, path } from '@/utils/constant';
 import { SignIn, SignUp } from '@/components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Flex, Button, Modal, Tabs, Drawer, Image } from 'antd';
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
 
 const Header: React.FC = () => {
-    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft } = icons;
+    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft, AiOutlinePlus } = icons;
     const [modalOpen, setModalOpen] = useState<{ isOpen: boolean; activeTab: string }>({
         isOpen: false,
         activeTab: 'signin',
     });
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const tabItems: TabsProps['items'] = [
         {
@@ -41,24 +42,34 @@ const Header: React.FC = () => {
         },
     ];
     return (
-        <div className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10 ">
+        <header className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10 ">
             <div className="w-full  flex justify-between px-3 md:px-10 select-none">
                 <div className="lg:hidden" onClick={() => setOpen(true)}>
                     <CgMenuLeft size={30} />
                 </div>
                 <Image src={logo} className="w-[110px] md:w-[150px]" preview={false} />
-                <Flex gap={60}>
+                <Flex gap={40} align="center">
                     <div className="hidden lg:block">
-                        <Flex gap={20}>
+                        <Flex gap={15} align="center">
                             {navigates.map((navigate, index) => (
-                                <NavLink className="font-main text-[22px] font-medium" key={index} to={navigate.path}>
+                                <NavLink className="font-main text-[20px] font-medium" key={index} to={navigate.path}>
                                     {navigate.title}
                                 </NavLink>
                             ))}
                         </Flex>
                     </div>
 
-                    <Flex gap={10}>
+                    <Flex gap={10} align="center">
+                        <Button
+                            type="primary"
+                            icon={<AiOutlinePlus size={20} />}
+                            className="bg-blue-500 font-main h-10 px-2 md:px-4 hidden lg:flex rounded-full items-center"
+                            onClick={() => {
+                                navigate(`/${path.CREATE_APARTMENT}`);
+                            }}
+                        >
+                            Create
+                        </Button>
                         <Button
                             className="font-main h-10 px-2 md:px-7 hidden lg:block"
                             onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
@@ -71,6 +82,7 @@ const Header: React.FC = () => {
                         >
                             Sign up
                         </Button>
+
                         <span className="mt-1 lg:hidden mr-5 cursor-pointer">
                             <BsPersonCircle size={25} />
                         </span>
@@ -137,9 +149,19 @@ const Header: React.FC = () => {
                             <span> Sign up</span>
                         </span>
                     </Flex>
+                    <Button
+                        type="primary"
+                        icon={<AiOutlinePlus size={20} />}
+                        className="bg-blue-500 font-main h-10 px-2 flex rounded-full items-center justify-center w-full"
+                        onClick={() => {
+                            navigate(`/${path.CREATE_APARTMENT}`);
+                        }}
+                    >
+                        Create apartment
+                    </Button>
                 </div>
             </Drawer>
-        </div>
+        </header>
     );
 };
 
