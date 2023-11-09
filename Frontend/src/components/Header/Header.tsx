@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Flex, Button, Modal, Tabs, Drawer, Image } from 'antd';
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
+import { useAuth } from '@/hooks';
 
 const Header: React.FC = () => {
     const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft, AiOutlinePlus } = icons;
@@ -15,6 +16,7 @@ const Header: React.FC = () => {
     });
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const { isAuthenticated, user } = useAuth();
     const tabItems: TabsProps['items'] = [
         {
             key: 'signin',
@@ -26,7 +28,7 @@ const Header: React.FC = () => {
                     Sign In
                 </div>
             ),
-            children: <SignIn />,
+            children: <SignIn setModalOpen={setModalOpen} />,
         },
         {
             key: 'signup',
@@ -38,7 +40,7 @@ const Header: React.FC = () => {
                     Sign Up
                 </div>
             ),
-            children: <SignUp />,
+            children: <SignUp setModalOpen={setModalOpen} />,
         },
     ];
     return (
@@ -70,22 +72,26 @@ const Header: React.FC = () => {
                         >
                             Create
                         </Button>
-                        <Button
-                            className="font-main h-10 px-2 md:px-7 hidden lg:block"
-                            onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
-                        >
-                            Sign in
-                        </Button>
-                        <Button
-                            className="font-main h-10 px-2 md:px-7 hidden lg:block"
-                            onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
-                        >
-                            Sign up
-                        </Button>
-
-                        <span className="mt-1 lg:hidden mr-5 cursor-pointer">
-                            <BsPersonCircle size={25} />
-                        </span>
+                        {!isAuthenticated ? (
+                            <>
+                                <Button
+                                    className="font-main h-10 px-2 md:px-7 hidden lg:block"
+                                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                                >
+                                    Sign in
+                                </Button>
+                                <Button
+                                    className="font-main h-10 px-2 md:px-7 hidden lg:block"
+                                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                                >
+                                    Sign up
+                                </Button>
+                            </>
+                        ) : (
+                            <span className="mt-1 mx-5 cursor-pointer">
+                                <BsPersonCircle size={25} />
+                            </span>
+                        )}
                     </Flex>
                 </Flex>
             </div>
@@ -131,24 +137,26 @@ const Header: React.FC = () => {
                             </NavLink>
                         ))}
                     </Flex>
-                    <Flex gap={20} vertical>
-                        <span
-                            className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
-                            onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
-                        >
-                            <PiSignInBold />
-                            <span>Sign in</span>
-                        </span>
-                        <span
-                            className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
-                            onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
-                        >
-                            <span>
-                                <AiOutlineUsergroupAdd />
+                    {!isAuthenticated && (
+                        <Flex gap={20} vertical>
+                            <span
+                                className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
+                                onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                            >
+                                <PiSignInBold />
+                                <span>Sign in</span>
                             </span>
-                            <span> Sign up</span>
-                        </span>
-                    </Flex>
+                            <span
+                                className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
+                                onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                            >
+                                <span>
+                                    <AiOutlineUsergroupAdd />
+                                </span>
+                                <span> Sign up</span>
+                            </span>
+                        </Flex>
+                    )}
                     <Button
                         type="primary"
                         icon={<AiOutlinePlus size={20} />}

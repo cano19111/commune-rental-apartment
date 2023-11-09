@@ -1,4 +1,3 @@
-// router/Router.tsx
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Home, MainLayout } from '@/pages/Public';
 import { path } from '@/utils/constant';

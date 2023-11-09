@@ -114,6 +114,7 @@ const AddRoom: React.FC = () => {
                             customRequest={() => null}
                             fileList={fileList}
                             onPreview={handlePreview}
+                            onChange={handleChange}
                         >
                             {fileList.length >= 8 ? null : uploadButton}
                         </Upload>
