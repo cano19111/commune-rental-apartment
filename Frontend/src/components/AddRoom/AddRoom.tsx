@@ -26,14 +26,14 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
     return (
         <div>
             <h2 className="text-xl font-medium mb-5">Add room</h2>
-            <div className="p-5 rounded-xl flex flex-col gap-5 border-[2px] border-gray-700">
+            <div className="p-5 mb-5 rounded-xl flex flex-col gap-5 border-[2px] border-gray-700 md:p-10">
                 <div className="flex flex-col">
                     <label className="text-lg mb-2">Services</label>
                     <Controller
                         control={control}
                         name="rooms.0.services"
                         rules={{
-                            required: 'Services is required',
+                            required: '* Services is required',
                         }}
                         render={({ field }: any) => (
                             <Flex vertical gap={5}>
@@ -69,23 +69,23 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     control={control}
                     error={errors?.rooms?.[0]?.description}
                     name="rooms.0.description"
-                    rules={{ required: 'Description is required' }}
+                    rules={{ required: '* Description is required' }}
                     placeholder="Enter the description"
                     type="area"
                     label="Description"
-                    className="min-w-[250px]"
+                    className="md:min-w-[250px] min-w-[200px]"
                 />
-                <Flex gap={10} align="center">
+                <Flex align="center" gap={10} className="flex-wrap sm:flex-nowrap">
                     <InputForm
                         Controller={Controller}
                         control={control}
                         error={errors?.rooms?.[0]?.size}
                         name="rooms.0.size"
-                        rules={{ required: 'Size room is required' }}
+                        rules={{ required: '* Size room is required' }}
                         placeholder="Enter the size room"
                         type="number"
                         label="Size room"
-                        className="min-w-[250px]"
+                        className="md:min-w-[250px] min-w-[200px]"
                     />
 
                     <InputForm
@@ -93,11 +93,11 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                         control={control}
                         error={errors?.rooms?.[0]?.price}
                         name="rooms.0.price"
-                        rules={{ required: 'Price is required' }}
+                        rules={{ required: '* Price is required' }}
                         placeholder="Enter the size"
                         type="number"
                         label="Price"
-                        className="min-w-[250px]"
+                        className="md:min-w-[250px] min-w-[200px]"
                         formatter={(value: any) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={(value: any) => value!.replace(/\$\s?|(,*)/g, '')}
                     />
@@ -105,14 +105,14 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
 
                 <div className="flex flex-col">
                     <label className="text-lg mb-2">Images</label>
-                    <div className="flex items-center gap-2">
+                    <Flex align="center" gap={2}>
                         <Controller
                             control={control}
                             name="images"
                             rules={{
-                                required: 'Images is required',
+                                required: '* Images is required',
                             }}
-                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                            render={({ field: { onChange, onBlur, value, ref } }: any) => (
                                 <Flex vertical gap={5}>
                                     <Upload
                                         listType="picture-card"
@@ -148,23 +148,23 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                                             <div className="mt-2">Upload</div>
                                         </div>
                                     </Upload>
-                                    {errors?.image && (
-                                        <span className="font-main text-red-600">{errors?.image.message}</span>
+                                    {errors?.images && (
+                                        <span className="font-main text-red-600">{errors?.images.message}</span>
                                     )}
                                 </Flex>
                             )}
                         />
-                    </div>
+                    </Flex>
                 </div>
                 <InputForm
                     Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[0]?.roomType}
                     name="rooms.0.roomType"
-                    rules={{ required: 'Room type is required' }}
+                    rules={{ required: '* Room type is required' }}
                     placeholder="Enter the room type"
                     label="Room type"
-                    className="min-w-[250px]"
+                    className="md:min-w-[250px] min-w-[200px]"
                 />
 
                 <InputForm
@@ -172,22 +172,22 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     control={control}
                     error={errors?.rooms?.[0]?.numberOfGuest}
                     name="rooms.0.numberOfGuest"
-                    rules={{ required: 'Number of guests is required' }}
+                    rules={{ required: '* Number of guests is required' }}
                     placeholder="Enter the number of guests"
                     type="number"
                     label="Number of guests"
-                    className="min-w-[250px]"
+                    className="md:min-w-[250px] min-w-[200px]"
                 />
                 <InputForm
                     Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[0]?.quantity}
                     name="rooms.0.quantity"
-                    rules={{ required: 'Quantity is required' }}
+                    rules={{ required: '* Quantity is required', valueAsNumber: '* Quantity must be numeric' }}
                     placeholder="Enter the quantity"
                     label="Quantity"
                     type="number"
-                    className="min-w-[250px]"
+                    className="md:min-w-[250px] min-w-[200px]"
                 />
             </div>
         </div>

@@ -4,7 +4,6 @@ const helmet = require('helmet');
 var morgan = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const app = express();
 const { dbConnect } = require('./config/db.config');
@@ -26,13 +25,6 @@ dbConnect();
 
 app.use(morgan('dev'));
 initRoutes(app);
-app.use(
-    session({
-        secret: process.env.SECERT_SESSION,
-        resave: false,
-        saveUninitialized: true,
-    }),
-);
 
 const PORT = process.env.SERVER_PORT || 3045;
 server.listen(PORT, () => {

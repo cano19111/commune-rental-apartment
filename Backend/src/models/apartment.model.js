@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
             province: { type: String, require: true },
             district: { type: String, require: true },
             ward: { type: String },
+            street: { type: String, require: true },
         },
         createBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
         rooms: [
