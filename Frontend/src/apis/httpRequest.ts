@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const instance = axios.create({
     baseURL: `${import.meta.env.VITE_SERVER_URL}/api`,
+    headers: {
+        // 'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+    },
 });
 
 instance.interceptors.request.use(

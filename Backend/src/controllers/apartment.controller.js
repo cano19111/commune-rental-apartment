@@ -83,12 +83,14 @@ const getApartment = async (req, res, next) => {
     }
 };
 const createApartment = async (req, res, next) => {
+    const images = req.files.map((file) => `${process.env.SERVER_URI}/api/image/${file?.filename}`);
     try {
         const { title, rooms } = req.body;
         const { _id: createBy } = req.user;
         const roomsInApartment = rooms.map((room) => {
             return {
                 ...room,
+                images,
                 services: room.services.map((service) => new mongoose.Types.ObjectId(service)),
             };
         });
