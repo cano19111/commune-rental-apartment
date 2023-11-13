@@ -18,7 +18,7 @@ const SelectForm: React.FC = ({
 }: any) => {
     return (
         <div className="flex flex-col">
-            <label className="text-lg mb-2">{label}</label>
+            <label className="text-lg mb-2">{!error ? label : `* ${label}`}</label>
             <Controller
                 control={control}
                 name={name}

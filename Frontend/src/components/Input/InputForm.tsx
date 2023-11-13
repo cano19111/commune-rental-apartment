@@ -1,8 +1,21 @@
 import { Flex, Input, InputNumber } from 'antd';
 import React from 'react';
 import clsx from 'clsx';
+import { Controller, UseFormReturn, FieldValues } from 'react-hook-form';
 
-const InputForm: React.FC = ({
+interface InputFormProps {
+    Controller: typeof Controller;
+    control: any;
+    error?: any;
+    name: string;
+    rules?: object;
+    placeholder: string;
+    type?: string;
+    label: string;
+    className?: string;
+}
+
+const InputForm: React.FC<InputFormProps> = ({
     Controller,
     control,
     error,
@@ -13,17 +26,11 @@ const InputForm: React.FC = ({
     placeholder,
     className,
     ...propsOther
-}: any) => {
-    let InputComponent = Input;
-    if (type === 'number') {
-        InputComponent = InputNumber;
-    }
-    if (type === 'area') {
-        InputComponent = Input.TextArea;
-    }
+}) => {
+    const InputComponent = type === 'number' ? InputNumber : type === 'area' ? Input.TextArea : Input;
     return (
         <div className="flex flex-col">
-            <label className="text-lg mb-2">{label}</label>
+            <label className="text-lg mb-2">{!error ? label : `* ${label}`}</label>
             <Controller
                 control={control}
                 name={name}

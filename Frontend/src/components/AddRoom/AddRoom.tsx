@@ -1,7 +1,6 @@
 import { Select, Upload, Image, Flex } from 'antd';
 import React from 'react';
-import type { RcFile, UploadProps } from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
+import type { RcFile } from 'antd/es/upload';
 import { PlusOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { apiGetServices } from '@/apis';
@@ -15,14 +14,6 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
         queryFn: apiGetServices,
     });
 
-    const getBase64 = (file: RcFile): Promise<string> =>
-        new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = (error) => reject(error);
-        });
-
     return (
         <div>
             <h2 className="text-xl font-medium mb-5">Add room</h2>
@@ -33,7 +24,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                         control={control}
                         name="rooms.0.services"
                         rules={{
-                            required: '* Services is required',
+                            required: 'Services is required',
                         }}
                         render={({ field }: any) => (
                             <Flex vertical gap={5}>
@@ -69,7 +60,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     control={control}
                     error={errors?.rooms?.[0]?.description}
                     name="rooms.0.description"
-                    rules={{ required: '* Description is required' }}
+                    rules={{ required: 'Description is required' }}
                     placeholder="Enter the description"
                     type="area"
                     label="Description"
@@ -81,7 +72,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                         control={control}
                         error={errors?.rooms?.[0]?.size}
                         name="rooms.0.size"
-                        rules={{ required: '* Size room is required' }}
+                        rules={{ required: 'Size room is required' }}
                         placeholder="Enter the size room"
                         type="number"
                         label="Size room"
@@ -93,7 +84,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                         control={control}
                         error={errors?.rooms?.[0]?.price}
                         name="rooms.0.price"
-                        rules={{ required: '* Price is required' }}
+                        rules={{ required: 'Price is required' }}
                         placeholder="Enter the size"
                         type="number"
                         label="Price"
@@ -110,7 +101,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                             control={control}
                             name="images"
                             rules={{
-                                required: '* Images is required',
+                                required: 'Images is required',
                             }}
                             render={({ field: { onChange, onBlur, value, ref } }: any) => (
                                 <Flex vertical gap={5}>
@@ -124,15 +115,9 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                                         maxCount={50}
                                         multiple
                                         itemRender={(ReactElement, UploadFile, fileList, actions) => {
-                                            (async () => {
-                                                UploadFile.preview = await getBase64(
-                                                    UploadFile.originFileObj as RcFile,
-                                                );
-                                            })();
-
                                             return (
                                                 <div className="w-full h-full flex justify-center items-center relative">
-                                                    <Image width={100} src={UploadFile.preview as string} />
+                                                    <Image width={100} src={UploadFile.thumbUrl as string} />
                                                     <i
                                                         className="absolute top-0 right-0 border p-1 rounded-full cursor-pointer"
                                                         onClick={() => actions.remove()}
@@ -161,7 +146,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     control={control}
                     error={errors?.rooms?.[0]?.roomType}
                     name="rooms.0.roomType"
-                    rules={{ required: '* Room type is required' }}
+                    rules={{ required: 'Room type is required' }}
                     placeholder="Enter the room type"
                     label="Room type"
                     className="md:min-w-[250px] min-w-[200px]"
@@ -172,7 +157,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     control={control}
                     error={errors?.rooms?.[0]?.numberOfGuest}
                     name="rooms.0.numberOfGuest"
-                    rules={{ required: '* Number of guests is required' }}
+                    rules={{ required: 'Number of guests is required' }}
                     placeholder="Enter the number of guests"
                     type="number"
                     label="Number of guests"
@@ -183,7 +168,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     control={control}
                     error={errors?.rooms?.[0]?.quantity}
                     name="rooms.0.quantity"
-                    rules={{ required: '* Quantity is required', valueAsNumber: '* Quantity must be numeric' }}
+                    rules={{ required: 'Quantity is required', valueAsNumber: 'Quantity must be numeric' }}
                     placeholder="Enter the quantity"
                     label="Quantity"
                     type="number"

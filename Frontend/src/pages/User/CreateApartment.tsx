@@ -12,7 +12,6 @@ const CreateApartment: React.FC = () => {
     const createApartmentMutation = useMutation({ mutationFn: apiCreateApartment });
     const [districtsOption, setDistrictsOption] = useState([]);
     const [wardsOption, setWardsOption] = useState([]);
-    const [messageApi, contextHolder] = message.useMessage();
     const {
         handleSubmit,
         control,
@@ -57,6 +56,8 @@ const CreateApartment: React.FC = () => {
         setValue('location.ward', '');
     };
     const handleCreateApartment = async (data) => {
+        data.location.province = Provinces.find((province) => province.code === data.location.province).name;
+        data.location.district = districtsOption.find((district) => district.code === data.location.district).name;
         const formData = new FormData();
         Object.entries(data).forEach(([key, value]) => {
             if (key !== 'images') {
@@ -71,35 +72,21 @@ const CreateApartment: React.FC = () => {
             onSuccess: (data) => {
                 if (data) {
                     if (data.success) {
-                        messageApi.open({
-                            type: 'success',
-                            content: 'Create apartment successfully',
-                        });
+                        message.success('Create apartment successfully');
                         reset();
-                    } else
-                        messageApi.open({
-                            type: 'error',
-                            content: data?.message || 'Create apartment failed',
-                        });
+                    } else message.error(data?.message || 'Create apartment failed');
                 } else {
-                    messageApi.open({
-                        type: 'error',
-                        content: 'Create apartment failed',
-                    });
+                    message.error('Create apartment failed');
                 }
             },
 
             onError: () => {
-                messageApi.open({
-                    type: 'error',
-                    content: 'Create apartment failed',
-                });
+                message.error('Create apartment failed');
             },
         });
     };
     return (
         <form onSubmit={handleSubmit(handleCreateApartment)}>
-            {contextHolder}
             <div className="max-w-main mx-auto p-10 flex flex-col gap-5">
                 <h1 className="text-3xl font-bold mb-5">Create Apartment</h1>
                 <InputForm
@@ -107,7 +94,7 @@ const CreateApartment: React.FC = () => {
                     control={control}
                     error={errors?.title}
                     name="title"
-                    rules={{ required: '* Name is required' }}
+                    rules={{ required: 'Name is required' }}
                     placeholder="Enter the name"
                     label="Name"
                 />
@@ -118,7 +105,7 @@ const CreateApartment: React.FC = () => {
                         control={control}
                         error={errors?.location?.province}
                         name="location.province"
-                        rules={{ required: '* Province is required' }}
+                        rules={{ required: 'Province is required' }}
                         placeholder="Enter the province"
                         label="Province"
                         options={(Provinces || []).map((province: any) => {
@@ -135,7 +122,7 @@ const CreateApartment: React.FC = () => {
                         control={control}
                         error={errors?.location?.district}
                         name="location.district"
-                        rules={{ required: '* District is required' }}
+                        rules={{ required: 'District is required' }}
                         placeholder="Enter the district"
                         label="District"
                         options={(districtsOption || []).map((district: any) => {
@@ -152,26 +139,26 @@ const CreateApartment: React.FC = () => {
                         control={control}
                         error={errors?.location?.ward}
                         name="location.ward"
-                        rules={{ required: '* Ward is required' }}
+                        rules={{ required: 'Ward is required' }}
                         placeholder="Enter the ward"
                         label="Ward"
                         options={(wardsOption || []).map((ward: any) => {
                             return {
                                 label: ward.name,
-                                value: ward.code,
+                                value: ward.name,
                             };
                         })}
-                        className="md:min-w-[250px] min-w-[200px]"
+                        className="min-w-[250px]"
                     />
                     <InputForm
                         Controller={Controller}
                         control={control}
                         error={errors?.location?.street}
                         name="location.street"
-                        rules={{ required: '* Street is required' }}
+                        rules={{ required: 'Street is required' }}
                         placeholder="Enter the street"
                         label="Street"
-                        className="md:min-w-[250px] min-w-[200px] p-1"
+                        className="min-w-[250px] p-1"
                     />
                 </div>
 
@@ -181,18 +168,18 @@ const CreateApartment: React.FC = () => {
                         control={control}
                         error={errors?.location?.longitude}
                         name="location.longitude"
-                        rules={{ required: '* Longitude is required' }}
+                        rules={{ required: 'Longitude is required' }}
                         placeholder="Enter the longitude"
                         label="Longitude"
                         type="number"
-                        className="min-w-[250px]"
+                        className="min-w-[250px] "
                     />
                     <InputForm
                         Controller={Controller}
                         control={control}
                         error={errors?.location?.latitude}
                         name="location.latitude"
-                        rules={{ required: '* Latitude is required' }}
+                        rules={{ required: 'Latitude is required' }}
                         placeholder="Enter the latitude"
                         label="Latitude"
                         type="number"
