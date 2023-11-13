@@ -1,8 +1,9 @@
 import axios from './httpRequest';
 
-export const apiGetServices = () =>
+export const apiCreateApartment = (data: any) =>
     axios({
-        url: '/service',
-        method: 'get',
+        url: '/apartment',
+        method: 'post',
+        data,
         withCredentials: true,
     });

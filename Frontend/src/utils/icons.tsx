@@ -16,6 +16,7 @@ import { BiMinus } from 'react-icons/bi';
 import { SiFacebook } from 'react-icons/si';
 import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineLockClosed } from 'react-icons/hi';
+import { FiTrash } from 'react-icons/fi';
 const icons = {
     FaFacebookF,
     AiOutlineTwitter,
@@ -35,5 +36,6 @@ const icons = {
     FcGoogle,
     FaRegUser,
     HiOutlineLockClosed,
+    FiTrash,
 };
 export default icons;
