@@ -17,8 +17,11 @@ const SelectForm: React.FC = ({
     ...propsOther
 }: any) => {
     return (
-        <div className="flex flex-col">
-            <label className="text-lg mb-2">{!error ? label : `* ${label}`}</label>
+        <div className="flex flex-col w-full">
+            <label className="text-lg mb-2">
+                <span className="text-red-500">* </span>
+                {label}
+            </label>
             <Controller
                 control={control}
                 name={name}

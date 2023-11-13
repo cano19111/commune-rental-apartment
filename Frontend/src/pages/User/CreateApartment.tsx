@@ -99,7 +99,7 @@ const CreateApartment: React.FC = () => {
                     label="Name"
                 />
 
-                <div className="flex gap-5 flex-col flex-wrap sm:flex-row lg:flex-nowrap">
+                <div className="flex gap-5 flex-col flex-wrap sm:flex-row lg:flex-nowrap items-center">
                     <SelectForm
                         Controller={Controller}
                         control={control}
@@ -115,7 +115,7 @@ const CreateApartment: React.FC = () => {
                             };
                         })}
                         onChangeSelected={handleProvinceChange}
-                        className="min-w-[250px]"
+                        className="min-w-[250px] w-full"
                     />
                     <SelectForm
                         Controller={Controller}
@@ -132,7 +132,7 @@ const CreateApartment: React.FC = () => {
                             };
                         })}
                         onChangeSelected={handleDistrictChange}
-                        className="min-w-[250px]"
+                        className="min-w-[250px] w-full"
                     />
                     <SelectForm
                         Controller={Controller}
@@ -148,8 +148,10 @@ const CreateApartment: React.FC = () => {
                                 value: ward.name,
                             };
                         })}
-                        className="min-w-[250px]"
+                        className="min-w-[250px] w-full"
                     />
+                </div>
+                <div>
                     <InputForm
                         Controller={Controller}
                         control={control}

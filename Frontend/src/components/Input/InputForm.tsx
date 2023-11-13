@@ -1,7 +1,7 @@
 import { Flex, Input, InputNumber } from 'antd';
 import React from 'react';
 import clsx from 'clsx';
-import { Controller, UseFormReturn, FieldValues } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
 interface InputFormProps {
     Controller: typeof Controller;
@@ -13,6 +13,10 @@ interface InputFormProps {
     type?: string;
     label: string;
     className?: string;
+    rows?: number;
+    propsOther?: any;
+    formatter?: (value: any) => string;
+    parser?: (value: any) => string;
 }
 
 const InputForm: React.FC<InputFormProps> = ({
@@ -30,7 +34,10 @@ const InputForm: React.FC<InputFormProps> = ({
     const InputComponent = type === 'number' ? InputNumber : type === 'area' ? Input.TextArea : Input;
     return (
         <div className="flex flex-col">
-            <label className="text-lg mb-2">{!error ? label : `* ${label}`}</label>
+            <label className="text-lg mb-2">
+                <span className="text-red-500">* </span>
+                {label}
+            </label>
             <Controller
                 control={control}
                 name={name}

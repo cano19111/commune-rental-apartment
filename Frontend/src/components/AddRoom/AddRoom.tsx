@@ -1,6 +1,5 @@
 import { Select, Upload, Image, Flex } from 'antd';
 import React from 'react';
-import type { RcFile } from 'antd/es/upload';
 import { PlusOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { apiGetServices } from '@/apis';
@@ -19,7 +18,10 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
             <h2 className="text-xl font-medium mb-5">Add room</h2>
             <div className="p-5 mb-5 rounded-xl flex flex-col gap-5 border-[2px] border-gray-700 md:p-10">
                 <div className="flex flex-col">
-                    <label className="text-lg mb-2">Services</label>
+                    <label className="text-lg mb-2">
+                        <span className="text-red-500">* </span>
+                        {'Services'}
+                    </label>
                     <Controller
                         control={control}
                         name="rooms.0.services"
@@ -64,6 +66,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                     placeholder="Enter the description"
                     type="area"
                     label="Description"
+                    rows={5}
                     className="md:min-w-[250px] min-w-[200px]"
                 />
                 <Flex align="center" gap={10} className="flex-wrap sm:flex-nowrap">
@@ -95,7 +98,10 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                 </Flex>
 
                 <div className="flex flex-col">
-                    <label className="text-lg mb-2">Images</label>
+                    <label className="text-lg mb-2">
+                        <span className="text-red-500">* </span>
+                        {'Images'}
+                    </label>
                     <Flex align="center" gap={2}>
                         <Controller
                             control={control}
@@ -103,7 +109,7 @@ const AddRoom: React.FC = ({ Controller, errors, control }: any) => {
                             rules={{
                                 required: 'Images is required',
                             }}
-                            render={({ field: { onChange, onBlur, value, ref } }: any) => (
+                            render={({ field: { onChange, value } }: any) => (
                                 <Flex vertical gap={5}>
                                     <Upload
                                         listType="picture-card"
