@@ -6,8 +6,9 @@ import {
     AiOutlineGoogle,
     AiOutlineUsergroupAdd,
     AiOutlinePlus,
+    AiOutlineUser,
 } from 'react-icons/ai';
-import { BsPinterest, BsPersonCircle } from 'react-icons/bs';
+import { BsPinterest, BsPersonCircle, BsHouses } from 'react-icons/bs';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { SlClose } from 'react-icons/sl';
 import { CgMenuLeft } from 'react-icons/cg';
@@ -16,6 +17,9 @@ import { BiMinus } from 'react-icons/bi';
 import { SiFacebook } from 'react-icons/si';
 import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineLockClosed } from 'react-icons/hi';
+import { LiaSignOutAltSolid } from 'react-icons/lia';
+import { TbBrandBooking } from 'react-icons/tb';
+
 const icons = {
     FaFacebookF,
     AiOutlineTwitter,
@@ -35,5 +39,9 @@ const icons = {
     FcGoogle,
     FaRegUser,
     HiOutlineLockClosed,
+    AiOutlineUser,
+    LiaSignOutAltSolid,
+    BsHouses,
+    TbBrandBooking,
 };
 export default icons;

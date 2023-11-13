@@ -1,6 +1,6 @@
 import { createContext, Dispatch, FC, useEffect, useReducer } from 'react';
 import { AuthState } from './types';
-import { initialize, reducer } from './reduces';
+import { initialize, reducer, signIn } from './reduces';
 import { apiGetCurrentUser } from '@/apis';
 
 interface AuthProviderProps {
@@ -38,11 +38,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             const accessToken = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
             if (!accessToken) {
                 return dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
-            }
+            } else dispatch(initialize({ isAuthenticated: true, accessToken, user: null }));
             try {
                 const response = await apiGetCurrentUser();
-                if (response.success)
-                    dispatch(initialize({ isAuthenticated: true, accessToken, user: response?.data.user }));
+                if (response.success) dispatch(signIn({ accessToken, user: response?.data.user }));
                 else dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
             } catch {
                 dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
