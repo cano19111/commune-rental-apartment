@@ -17,6 +17,7 @@ import { BiMinus } from 'react-icons/bi';
 import { SiFacebook } from 'react-icons/si';
 import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineLockClosed } from 'react-icons/hi';
+import { FiTrash } from 'react-icons/fi';
 import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { TbBrandBooking } from 'react-icons/tb';
 
@@ -43,5 +44,6 @@ const icons = {
     LiaSignOutAltSolid,
     BsHouses,
     TbBrandBooking,
+    FiTrash,
 };
 export default icons;

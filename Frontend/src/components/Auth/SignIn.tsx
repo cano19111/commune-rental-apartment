@@ -14,7 +14,6 @@ type LoginData = {
 };
 const SignIn: React.FC = ({ setModalOpen }) => {
     const { FaRegUser, HiOutlineLockClosed, FcGoogle, SiFacebook } = icons;
-    const [messageApi, contextHolder] = message.useMessage();
     const { dispatch } = useAuth();
     const {
         handleSubmit,
@@ -36,41 +35,22 @@ const SignIn: React.FC = ({ setModalOpen }) => {
                         const { accessToken, user } = data.data;
                         setModalOpen({ isOpen: false, activeTab: 'signin' });
                         dispatch(signIn({ accessToken: accessToken, user: user }));
-                        messageApi.open({
-                            type: 'success',
-                            content: 'Login successfully',
-                        });
+                        message.success('Login successfully');
                         reset();
-                    } else
-                        messageApi.open({
-                            type: 'error',
-                            content: data?.message,
-                        });
+                    } else message.error(data?.message);
                 } else {
-                    messageApi.open({
-                        type: 'error',
-                        content: 'Login failed',
-                    });
+                    message.error('Login failed');
                 }
             },
 
             onError: () => {
-                messageApi.open({
-                    type: 'error',
-                    content: 'Login failed',
-                });
+                message.error('Login failed');
             },
         });
     };
     return (
         <>
-            {contextHolder}
-            <Spin
-                tip={<div className="font-main text-lg font-medium">Loading ...</div>}
-                size="large"
-                fullscreen={true}
-                spinning={loginMutation.isPending}
-            ></Spin>
+            <Spin size="large" fullscreen={true} spinning={loginMutation.isPending}></Spin>
             <form onSubmit={handleSubmit(handleLogin)}>
                 <div className="w-full flex gap-5">
                     <div className="flex-1 pb-10 hidden lg:block">

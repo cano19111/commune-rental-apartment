@@ -7,10 +7,12 @@ const userSchema = new mongoose.Schema(
     {
         title: { type: String, require: true },
         location: {
-            coordinate: { type: String },
-            province: { type: String },
-            district: { type: String },
-            street: { type: String },
+            longitude: { type: Number, require: true },
+            latitude: { type: Number, require: true },
+            province: { type: String, require: true },
+            district: { type: String, require: true },
+            ward: { type: String },
+            street: { type: String, require: true },
         },
         createBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true },
         rooms: [
@@ -19,8 +21,8 @@ const userSchema = new mongoose.Schema(
                 description: { type: String, require: true },
                 size: { type: Number, require: true },
                 price: { type: Number, require: true },
-                image: [{ type: String, require: true }],
-                availability: { type: Boolean, require: true },
+                images: [{ type: String, require: true }],
+                availability: { type: Boolean, require: true, default: true },
                 roomType: { type: String, require: true },
                 numberOfGuest: { type: Number, require: true },
                 reviews: [

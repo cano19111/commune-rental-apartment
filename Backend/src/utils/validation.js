@@ -27,8 +27,6 @@ const roomSchema = yup.object({
     size: yup.number().required(),
     price: yup.number().required(),
     description: yup.string().required(),
-    image: yup.array().of(yup.string()).required(),
-    availability: yup.boolean().required(),
     roomType: yup.string(),
     numberOfGuest: yup.number().required(),
 });
