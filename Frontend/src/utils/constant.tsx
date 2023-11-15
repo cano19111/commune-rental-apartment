@@ -12,7 +12,7 @@ export const path: { [key: string]: string } = {
     CONTACT: 'contact',
     CREATE_APARTMENT: 'create-apartment',
     ACCOUNT_SETTINGS: 'account-settings',
-    PERSONAL_DETAIL: 'personal-detail',
+    PERSONAL_INFORMATION: 'personal-information',
     MANAGE_APARTMENT: 'manage-apartment',
 };
 

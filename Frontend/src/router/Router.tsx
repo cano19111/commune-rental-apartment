@@ -2,7 +2,7 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Home, MainLayout } from '@/pages/Public';
 import { path } from '@/utils/constant';
 import { CreateApartment, ManageAccount, MyFavorites } from '@/pages/User';
-import PersonalDetail from '@/pages/User/PersonalDetail';
+import PersonalInformation from '@/pages/User/PersonalInformation';
 import ManagerApartment from '@/pages/User/ManagerApartment';
 
 const Router = () => {
@@ -24,8 +24,8 @@ const Router = () => {
             element: <ManageAccount />,
             children: [
                 {
-                    path: path.PERSONAL_DETAIL,
-                    element: <PersonalDetail />,
+                    path: path.PERSONAL_INFORMATION,
+                    element: <PersonalInformation />,
                 },
                 {
                     path: path.MANAGE_APARTMENT,

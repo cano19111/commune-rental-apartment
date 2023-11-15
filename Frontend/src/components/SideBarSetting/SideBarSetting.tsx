@@ -6,7 +6,7 @@ const SideBarSetting: React.FC = () => {
     return (
         <div className="w-full flex flex-col gap-2">
             <NavLink
-                to={`/${path.ACCOUNT_SETTINGS}/${path.PERSONAL_DETAIL}`}
+                to={`/${path.ACCOUNT_SETTINGS}/${path.PERSONAL_INFORMATION}`}
                 end
                 className={({ isActive }) =>
                     isActive
@@ -14,7 +14,7 @@ const SideBarSetting: React.FC = () => {
                         : 'w-full py-7 px-4 text-gray-700 hover:bg-gray-100 rounded-3xl '
                 }
             >
-                Personal detail
+                Personal Information
             </NavLink>
 
             <NavLink

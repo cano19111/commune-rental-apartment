@@ -20,7 +20,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false,
+    }),
+);
 app.use(compression());
 dbConnect();
 
@@ -33,7 +37,9 @@ app.use(
         saveUninitialized: true,
     }),
 );
-
+helmet({
+    crossOriginResourcePolicy: false,
+});
 const PORT = process.env.SERVER_PORT || 3045;
 server.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`);

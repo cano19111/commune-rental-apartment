@@ -20,7 +20,7 @@ const getCurrentUser = async (req, res, next) => {
         }
 
         return res.status(200).json({
-            success: 'success',
+            success: true,
             data: {
                 user,
             },
@@ -30,6 +30,62 @@ const getCurrentUser = async (req, res, next) => {
     }
 };
 
+const editUser = async (req, res, next) => {
+    try {
+        const { _id: uid } = req.user;
+        const update = req.body;
+        let avatar;
+        if (req.file) {
+            avatar = `${process.env.SERVER_URI}/api/image/${req.file.filename}`;
+        }
+
+        if (!uid) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing input',
+            });
+        }
+
+        const [errEdit, editedUser] = await to(
+            User.findByIdAndUpdate(
+                uid,
+                {
+                    ...update,
+                    avatar,
+                },
+                { new: true },
+            ),
+        );
+
+        if (errEdit) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error updating user',
+            });
+        }
+
+        if (editedUser) {
+            return res.status(200).json({
+                success: true,
+                data: {
+                    user: editedUser,
+                },
+            });
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    }
+};
+
 module.exports = {
     getCurrentUser,
+    editUser,
 };
