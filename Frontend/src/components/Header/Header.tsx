@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import logo from '@/assets/header-logo1.png';
-import { navigates, path } from '@/utils/constant';
+import { navigates } from '@/utils/constant';
 import { MenuAccount, SignIn, SignUp } from '@/components';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Flex, Button, Modal, Tabs, Drawer, Image, Popover } from 'antd';
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
 
 const Header: React.FC = () => {
-    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft, AiOutlinePlus } = icons;
+    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft } = icons;
     const [modalOpen, setModalOpen] = useState<{ isOpen: boolean; activeTab: string }>({
         isOpen: false,
         activeTab: 'signin',
     });
-    const navigate = useNavigate();
     const [openNavigate, setOpenNavigate] = useState(false);
     const { isAuthenticated } = useAuth();
     const tabItems: TabsProps['items'] = [
@@ -62,18 +61,6 @@ const Header: React.FC = () => {
                     </div>
 
                     <Flex gap={10} align="center">
-                        {isAuthenticated && (
-                            <Button
-                                type="primary"
-                                icon={<AiOutlinePlus size={20} />}
-                                className="bg-blue-500 font-main h-10 px-2 md:px-4 hidden lg:flex rounded-full items-center"
-                                onClick={() => {
-                                    navigate(`/${path.CREATE_APARTMENT}`);
-                                }}
-                            >
-                                Create
-                            </Button>
-                        )}
                         {!isAuthenticated ? (
                             <>
                                 <Button
@@ -94,10 +81,10 @@ const Header: React.FC = () => {
                             <Popover
                                 placement="bottom"
                                 content={<MenuAccount />}
-                                arrow={false}
+                                arrow={true}
                                 trigger={['click', 'contextMenu']}
                             >
-                                <span className="mt-1 mx-5 cursor-pointer">
+                                <span className="mt-3 mx-5 cursor-pointer pb-3">
                                     <BsPersonCircle size={25} />
                                 </span>
                             </Popover>
@@ -169,18 +156,6 @@ const Header: React.FC = () => {
                                 <span> Sign up</span>
                             </span>
                         </Flex>
-                    )}
-                    {isAuthenticated && (
-                        <Button
-                            type="primary"
-                            icon={<AiOutlinePlus size={20} />}
-                            className="bg-blue-500 font-main h-10 px-2 flex rounded-full items-center justify-center w-full"
-                            onClick={() => {
-                                navigate(`/${path.CREATE_APARTMENT}`);
-                            }}
-                        >
-                            Create apartment
-                        </Button>
                     )}
                 </div>
             </Drawer>

@@ -20,6 +20,7 @@ import { HiOutlineLockClosed } from 'react-icons/hi';
 import { FiTrash } from 'react-icons/fi';
 import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { TbBrandBooking } from 'react-icons/tb';
+import { IoCreateOutline } from 'react-icons/io5';
 
 const icons = {
     FaFacebookF,
@@ -45,5 +46,6 @@ const icons = {
     BsHouses,
     TbBrandBooking,
     FiTrash,
+    IoCreateOutline,
 };
 export default icons;

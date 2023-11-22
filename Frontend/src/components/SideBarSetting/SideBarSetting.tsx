@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { path } from '@/utils/constant';
 import React from 'react';
+import clsx from 'clsx';
 
 const SideBarSetting: React.FC = () => {
     return (
@@ -9,9 +10,10 @@ const SideBarSetting: React.FC = () => {
                 to={`/${path.ACCOUNT_SETTINGS}/${path.PERSONAL_INFORMATION}`}
                 end
                 className={({ isActive }) =>
-                    isActive
-                        ? 'w-full py-7 px-4 hover:bg-gray-100 bg-gray-200 text-blue-500 rounded-3xl'
-                        : 'w-full py-7 px-4 text-gray-700 hover:bg-gray-100 rounded-3xl '
+                    clsx(
+                        'w-full py-5 px-4 rounded-3xl hover:bg-gray-100 font-semibold text-xl',
+                        isActive ? ' bg-gray-200 text-blue-400' : 'text-gray-700 ',
+                    )
                 }
             >
                 Personal Information
@@ -20,9 +22,10 @@ const SideBarSetting: React.FC = () => {
             <NavLink
                 to={`/${path.ACCOUNT_SETTINGS}/${path.MANAGE_APARTMENT}`}
                 className={({ isActive }) =>
-                    isActive
-                        ? 'w-full py-7 px-4 hover:bg-gray-100 bg-gray-200 text-blue-500 rounded-3xl'
-                        : 'w-full py-7 px-4 text-gray-700 hover:bg-gray-100 rounded-3xl'
+                    clsx(
+                        'w-full py-5 px-4 rounded-3xl hover:bg-gray-100 font-semibold text-xl',
+                        isActive ? ' bg-gray-200 text-blue-400' : 'text-gray-700 ',
+                    )
                 }
             >
                 Manage Apartment
