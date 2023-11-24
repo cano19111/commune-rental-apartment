@@ -268,7 +268,7 @@ const PersonalInformation: React.FC = () => {
                                         <Controller
                                             control={control}
                                             name="dateOfBirth"
-                                            defaultValue={user?.dateOfBirth}
+                                            defaultValue={user?.dateOfBirth ? dayjs(user?.dateOfBirth) : null}
                                             rules={{
                                                 required: 'Date of birth is required',
                                             }}
@@ -277,7 +277,9 @@ const PersonalInformation: React.FC = () => {
                                                     <DatePicker
                                                         {...field}
                                                         format="DD-MM-YYYY"
-                                                        value={dayjs(field.value)}
+                                                        onChange={(value) => {
+                                                            field.onChange(value ? dayjs(value) : null);
+                                                        }}
                                                         status={errors?.dateOfBirth && 'error'}
                                                     />
                                                     {errors?.dateOfBirth && (
