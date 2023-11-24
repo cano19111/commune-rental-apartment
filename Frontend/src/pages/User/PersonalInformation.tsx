@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Button, DatePicker, Flex, Input, Select, Spin, message, Upload } from 'antd';
+import { Avatar, Button, DatePicker, Flex, Input, Select, Spin, message, Upload, Row, Col } from 'antd';
 import { UserOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm, Controller } from 'react-hook-form';
@@ -78,7 +78,8 @@ const PersonalInformation: React.FC = () => {
             <div className="w-full">
                 <form onSubmit={handleSubmit(handleEditUser)} className="w-full">
                     <h2 className="font-semibold text-3xl mb-4 text-center">Personal information</h2>
-                    <div className="w-full my-4 flex items-center justify-center">
+                    <div className="w-full my-4 flex items-center justify-center"></div>
+                    <div className="flex flex-col justify-center items-center">
                         <Controller
                             control={control}
                             name="avatarEdit"
@@ -133,260 +134,293 @@ const PersonalInformation: React.FC = () => {
                                 </Flex>
                             )}
                         />
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="flex border-t border-b border-gray-300 py-6 items-center gap-40">
-                            <div className="flex gap-5 items-center">
-                                <span className="font-medium text-base whitespace-nowrap">First name :</span>
-                                {isEditing ? (
-                                    <Controller
-                                        control={control}
-                                        name="firstname"
-                                        defaultValue={user?.firstname}
-                                        rules={{
-                                            required: 'First name is required',
-                                        }}
-                                        render={({ field }) => (
-                                            <div className="flex flex-col gap-5">
-                                                <Input {...field} status={errors?.firstname && 'error'} />
-                                                {errors?.firstname && (
-                                                    <span className="font-main text-red-600">
-                                                        {errors?.firstname.message as string}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
-                                    />
-                                ) : (
-                                    <span className="text-base">{user?.firstname}</span>
-                                )}
-                            </div>
-
-                            <div className="flex gap-5 items-center">
-                                <span className="font-medium text-base whitespace-nowrap">Last name :</span>
-                                {isEditing ? (
-                                    <Controller
-                                        control={control}
-                                        name="lastname"
-                                        defaultValue={user?.lastname}
-                                        rules={{
-                                            required: 'Last name is required',
-                                        }}
-                                        render={({ field }) => (
-                                            <div className="flex flex-col gap-5">
-                                                <Input {...field} status={errors?.lastname && 'error'} />
-                                                {errors?.lastname && (
-                                                    <span className="font-main text-red-600">
-                                                        {errors?.lastname?.message as string}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
-                                    />
-                                ) : (
-                                    <span className="text-base">{user?.lastname}</span>
-                                )}
-                            </div>
-                        </div>
-                        <div className="flex border-t border-b border-gray-300 py-6 items-center gap-7">
-                            <div className="font-medium text-base">Email address :</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    name="email"
-                                    defaultValue={user?.email}
-                                    rules={{
-                                        required: 'Email is required',
-                                        pattern: {
-                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                            message: 'Invalid email address',
-                                        },
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <Input {...field} status={errors?.email && 'error'} />
-                                            {errors?.email && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.email?.message as string}
-                                                </span>
+                        <Row gutter={[0, 0]} className="mt-5">
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-center">
+                                    <div className="font-medium text-base whitespace-nowrap w-[50%] md:w-[30%] lg:w-[40%]">
+                                        First name :
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="firstname"
+                                            defaultValue={user?.firstname}
+                                            rules={{
+                                                required: 'First name is required',
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.firstname && 'error'} />
+                                                    {errors?.firstname && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.firstname.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             )}
-                                        </div>
+                                        />
+                                    ) : (
+                                        <span className="text-base">{user?.firstname}</span>
                                     )}
-                                />
-                            ) : (
-                                <div className="text-base">{user?.email}</div>
-                            )}
-                        </div>
-                        <div className="flex border-t border-b border-gray-300 py-6 items-start gap-5">
-                            <div className="font-medium text-base">Phone number :</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    name="phone"
-                                    defaultValue={user?.phone}
-                                    rules={{
-                                        required: 'Phone is required',
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <Input {...field} status={errors?.phone && 'error'} />
-                                            {errors?.phone && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.phone?.message as string}
-                                                </span>
-                                            )}
-                                        </div>
-                                    )}
-                                />
-                            ) : (
-                                <div className="text-base">{user?.phone}</div>
-                            )}
-                        </div>
-
-                        <div className="flex border-t border-b border-gray-300 py-6 items-start gap-9">
-                            <div className="font-medium text-base">Date of birth :</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    name="dateOfBirth"
-                                    defaultValue={user?.dateOfBirth}
-                                    rules={{
-                                        required: 'Date of birth is required',
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <DatePicker
-                                                {...field}
-                                                format="DD-MM-YYYY"
-                                                value={dayjs(field.value)}
-                                                status={errors?.dateOfBirth && 'error'}
-                                            />
-                                            {errors?.dateOfBirth && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.dateOfBirth?.message as string}
-                                                </span>
-                                            )}
-                                        </div>
-                                    )}
-                                />
-                            ) : (
-                                <div className="text-base">
-                                    {moment(user?.dateOfBirth || undefined).format('DD-MM-YYYY')}
                                 </div>
-                            )}
-                        </div>
-                        <div className="flex border-t border-b border-gray-300 py-6 items-start gap-11">
-                            <div className="font-medium text-base">Nationality :</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    name="nationality"
-                                    defaultValue={user?.nationality}
-                                    rules={{
-                                        required: 'Nationality is required',
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <Input {...field} status={errors?.nationality && 'error'} />
-                                            {errors?.nationality && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.nationality?.message as string}
-                                                </span>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-center">
+                                    <div className="font-medium text-base whitespace-nowrap w-[50%] md:w-[30%] lg:w-[40%]">
+                                        Last name :
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="lastname"
+                                            defaultValue={user?.lastname}
+                                            rules={{
+                                                required: 'Last name is required',
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.lastname && 'error'} />
+                                                    {errors?.lastname && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.lastname?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             )}
+                                        />
+                                    ) : (
+                                        <span className="text-base">{user?.lastname}</span>
+                                    )}
+                                </div>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-center">
+                                    <div className="font-medium text-base w-[50%] md:w-[30%] lg:w-[40%]">
+                                        Email address :
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="email"
+                                            defaultValue={user?.email}
+                                            rules={{
+                                                required: 'Email is required',
+                                                pattern: {
+                                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                    message: 'Invalid email address',
+                                                },
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.email && 'error'} />
+                                                    {errors?.email && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.email?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        />
+                                    ) : (
+                                        <div className="text-base">{user?.email}</div>
+                                    )}
+                                </div>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
+                                    <div className="font-medium text-base w-[50%] md:w-[30%] lg:w-[40%]">
+                                        Phone number :
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="phone"
+                                            defaultValue={user?.phone}
+                                            rules={{
+                                                required: 'Phone is required',
+                                                pattern: {
+                                                    value: /^0\d{9}$/,
+                                                    message: 'Invalid phone number',
+                                                },
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.phone && 'error'} />
+                                                    {errors?.phone && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.phone?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        />
+                                    ) : (
+                                        <div className="text-base">{user?.phone}</div>
+                                    )}
+                                </div>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
+                                    <div className="font-medium text-base w-[50%] md:w-[30%] lg:w-[40%]">
+                                        Date of birth :
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="dateOfBirth"
+                                            defaultValue={user?.dateOfBirth}
+                                            rules={{
+                                                required: 'Date of birth is required',
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <DatePicker
+                                                        {...field}
+                                                        format="DD-MM-YYYY"
+                                                        value={dayjs(field.value)}
+                                                        status={errors?.dateOfBirth && 'error'}
+                                                    />
+                                                    {errors?.dateOfBirth && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.dateOfBirth?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        />
+                                    ) : (
+                                        <div className="text-base">
+                                            {moment(user?.dateOfBirth || undefined).format('DD-MM-YYYY')}
                                         </div>
                                     )}
-                                />
-                            ) : (
-                                <div className="text-base">{user?.nationality}</div>
-                            )}
-                        </div>
-
-                        <div className="flex border-t border-b border-gray-300 py-6 items-start gap-12">
-                            <div className="mr-5 font-medium text-base">Gender :</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    defaultValue={user?.gender}
-                                    name="gender"
-                                    rules={{
-                                        required: 'Gender is required',
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <Select
-                                                {...field}
-                                                status={errors?.gender && 'error'}
-                                                className="min-w-[100px]"
-                                                options={[
-                                                    { label: 'Male', value: 'Male' },
-                                                    { label: 'Female', value: 'Female' },
-                                                    { label: 'Other', value: 'Other' },
-                                                ]}
-                                            />
-                                            {errors?.gender && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.gender?.message as string}
-                                                </span>
+                                </div>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
+                                    <div className="font-medium text-base w-[50%] md:w-[30%] lg:w-[40%]">
+                                        Nationality :
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="nationality"
+                                            defaultValue={user?.nationality}
+                                            rules={{
+                                                required: 'Nationality is required',
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.nationality && 'error'} />
+                                                    {errors?.nationality && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.nationality?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             )}
-                                        </div>
+                                        />
+                                    ) : (
+                                        <div className="text-base">{user?.nationality}</div>
                                     )}
-                                />
-                            ) : (
-                                <div className="text-base">{user?.gender}</div>
-                            )}
-                        </div>
-
-                        <div className="flex border-t border-b border-gray-300 py-6 items-start gap-12">
-                            <div className="mr-3 font-medium text-base">Address :</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    name="address"
-                                    defaultValue={user?.address}
-                                    rules={{
-                                        required: 'Address is required',
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <Input {...field} status={errors?.address && 'error'} />
-                                            {errors?.address && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.address?.message as string}
-                                                </span>
+                                </div>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
+                                    <div className="font-medium text-base w-[50%] md:w-[30%] lg:w-[40%]">Gender :</div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            defaultValue={user?.gender}
+                                            name="gender"
+                                            rules={{
+                                                required: 'Gender is required',
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Select
+                                                        {...field}
+                                                        status={errors?.gender && 'error'}
+                                                        className="min-w-[100px]"
+                                                        options={[
+                                                            { label: 'Male', value: 'Male' },
+                                                            { label: 'Female', value: 'Female' },
+                                                            { label: 'Other', value: 'Other' },
+                                                        ]}
+                                                    />
+                                                    {errors?.gender && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.gender?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             )}
-                                        </div>
+                                        />
+                                    ) : (
+                                        <div className="text-base">{user?.gender}</div>
                                     )}
-                                />
-                            ) : (
-                                <div className="text-base">{user?.address}</div>
-                            )}
-                        </div>
-
-                        <div className="flex border-t border-b border-gray-300 py-6 items-start gap-11">
-                            <div className="font-medium text-base">Personal ID:</div>
-                            {isEditing ? (
-                                <Controller
-                                    control={control}
-                                    name="personalId"
-                                    defaultValue={user?.personalId}
-                                    rules={{
-                                        required: 'Personal Id is required',
-                                    }}
-                                    render={({ field }) => (
-                                        <div className="flex flex-col gap-5">
-                                            <Input {...field} status={errors?.personalId && 'error'} />
-                                            {errors?.personalId && (
-                                                <span className="font-main text-red-600">
-                                                    {errors?.personalId?.message as string}
-                                                </span>
+                                </div>
+                            </Col>
+                            <Col span={24} lg={12}>
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
+                                    <div className="font-medium text-base w-[50%] md:w-[30%] lg:w-[40%]">Address :</div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="address"
+                                            defaultValue={user?.address}
+                                            rules={{
+                                                required: 'Address is required',
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.address && 'error'} />
+                                                    {errors?.address && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.address?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
                                             )}
-                                        </div>
+                                        />
+                                    ) : (
+                                        <div className="text-base">{user?.address}</div>
                                     )}
-                                />
-                            ) : (
-                                <div className="text-base">{user?.personalId}</div>
-                            )}
-                        </div>
+                                </div>
+                            </Col>
+                            <Col span={24}>
+                                <div className="w-full flex border-t border-b border-gray-300 py-6 items-start">
+                                    <div className="font-medium text-base lg:w-[20%] pl-3 w-[50%] md:w-[30%]">
+                                        Personal ID:
+                                    </div>
+                                    {isEditing ? (
+                                        <Controller
+                                            control={control}
+                                            name="personalId"
+                                            defaultValue={user?.personalId}
+                                            rules={{
+                                                required: 'Personal Id is required',
+                                                pattern: {
+                                                    value: /^\d{12}$/,
+                                                    message: 'Invalid Personal ID, it should have 12 digits',
+                                                },
+                                            }}
+                                            render={({ field }) => (
+                                                <div className="flex flex-col gap-5">
+                                                    <Input {...field} status={errors?.personalId && 'error'} />
+                                                    {errors?.personalId && (
+                                                        <span className="font-main text-red-600">
+                                                            {errors?.personalId?.message as string}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        />
+                                    ) : (
+                                        <div className="text-base">{user?.personalId}</div>
+                                    )}
+                                </div>
+                            </Col>
+                        </Row>
                     </div>
                     {isEditing && (
                         <Flex gap={10}>
