@@ -89,6 +89,7 @@ const PersonalInformation: React.FC = () => {
                                         <Upload
                                             listType="picture-circle"
                                             className="avatar-uploader"
+                                            accept="image/*"
                                             showUploadList={false}
                                             customRequest={() => {}}
                                             fileList={typeof value === 'string' ? null : value}

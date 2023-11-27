@@ -34,7 +34,7 @@ const InputForm: React.FC<InputFormProps> = ({
     const InputComponent = type === 'number' ? InputNumber : type === 'area' ? Input.TextArea : Input;
     return (
         <div className="flex flex-col">
-            <label className="text-lg mb-2">
+            <label className="text-lg mb-1">
                 <span className="text-red-500">* </span>
                 {label}
             </label>
@@ -46,12 +46,8 @@ const InputForm: React.FC<InputFormProps> = ({
                     <Flex vertical gap={5}>
                         <InputComponent
                             {...propsOther}
-                            size="large"
-                            className={clsx(
-                                'px-2 py-1 rounded-xl border border-gray-500 focus:outline-none focus:border-blue-500 text-lg w-full',
-                                className,
-                                type === 'number' && 'p-0',
-                            )}
+                            size="medium"
+                            className={clsx('font-main', className)}
                             placeholder={placeholder}
                             {...field}
                             status={error && 'error'}

@@ -11,6 +11,7 @@ import { Wards } from '@/utils/location/wards';
 const CreateApartment: React.FC = () => {
     const createApartmentMutation = useMutation({ mutationFn: apiCreateApartment });
     const [districtsOption, setDistrictsOption] = useState([]);
+    const [listRooms, setListRooms] = useState(1);
     const [wardsOption, setWardsOption] = useState([]);
     const {
         handleSubmit,
@@ -20,7 +21,6 @@ const CreateApartment: React.FC = () => {
         setValue,
     } = useForm({
         defaultValues: {
-            images: [],
             title: '',
             location: {
                 longitude: null,
@@ -37,6 +37,7 @@ const CreateApartment: React.FC = () => {
                     price: null,
                     size: null,
                     numberOfGuest: null,
+                    images: [],
                     roomType: '',
                     quantity: null,
                 },
@@ -56,18 +57,24 @@ const CreateApartment: React.FC = () => {
         setValue('location.ward', '');
     };
     const handleCreateApartment = async (data) => {
-        data.location.province = Provinces.find((province) => province.code === data.location.province).name;
-        data.location.district = districtsOption.find((district) => district.code === data.location.district).name;
+        console.log(data.rooms[0].images);
+        data.location.province = Provinces.find((province) => province.code === data.location.province)?.name;
+        data.location.district = districtsOption.find((district) => district.code === data.location.district)?.name;
         const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
-            if (key !== 'images') {
-                value = JSON.stringify(value);
-                formData.append(key, value);
-            } else {
-                data.images = data.images.map((images: any) => formData.append(key, images.originFileObj));
-            }
+        data.rooms.forEach((room, index) => {
+            Object.entries(room).forEach(([key, value]) => {
+                if (key === 'images') {
+                    room.images.forEach((image, imageIndex) => {
+                        formData.append(`rooms[${index}][images]`, image.originFileObj);
+                    });
+                    delete data.rooms[index].images;
+                }
+            });
         });
-
+        Object.entries(data).forEach(([key, value]) => {
+            value = JSON.stringify(value);
+            formData.append(key, value as string);
+        });
         createApartmentMutation.mutate(formData, {
             onSuccess: (data) => {
                 if (data) {
@@ -85,9 +92,10 @@ const CreateApartment: React.FC = () => {
             },
         });
     };
+
     return (
         <form onSubmit={handleSubmit(handleCreateApartment)}>
-            <div className="max-w-main mx-auto p-10 flex flex-col gap-5">
+            <div className="max-w-main mx-auto p-10 flex flex-col gap-3">
                 <h1 className="text-3xl font-bold mb-5">Create Apartment</h1>
                 <InputForm
                     Controller={Controller}
@@ -160,7 +168,6 @@ const CreateApartment: React.FC = () => {
                         rules={{ required: 'Street is required' }}
                         placeholder="Enter the street"
                         label="Street"
-                        className="min-w-[250px] p-1"
                     />
                 </div>
 
@@ -189,14 +196,20 @@ const CreateApartment: React.FC = () => {
                     />
                 </Flex>
 
-                <AddRoom Controller={Controller} control={control} errors={errors} />
+                <h2 className="text-xl font-medium">Room information</h2>
+
+                {Array.from({ length: listRooms }).map((_, index) => (
+                    <AddRoom key={index} Controller={Controller} control={control} errors={errors} index={index} />
+                ))}
+
+                <Button onClick={() => setListRooms((prev) => prev + 1)}>Add more room</Button>
                 <Button
                     htmlType="submit"
                     type="primary"
                     size="large"
                     className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                    Add Room
+                    Create apartment
                 </Button>
             </div>
         </form>
