@@ -18,6 +18,18 @@ const userSchema = new mongoose.Schema(
             require: true,
             unique: true,
         },
+        dateOfBirth: {
+            type: Date,
+        },
+        nationality: {
+            type: String,
+        },
+        gender: {
+            type: String,
+        },
+        personalId: {
+            type: String,
+        },
         isAdmin: {
             type: Boolean,
             default: false,

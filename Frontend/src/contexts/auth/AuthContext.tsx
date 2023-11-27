@@ -1,8 +1,13 @@
-import { createContext, Dispatch, FC, useEffect, useReducer } from 'react';
+import React, { createContext, Dispatch, FC, useEffect, useReducer } from 'react';
 import { AuthState } from './types';
 import { initialize, reducer } from './reduces';
 import { apiGetCurrentUser } from '@/apis';
+import { useQuery } from '@tanstack/react-query';
+import { Spin } from 'antd';
 
+interface AuthProviderProps {
+    children: React.ReactNode;
+}
 interface AuthProviderProps {
     children: React.ReactNode;
 }
@@ -25,7 +30,6 @@ const initialState: AuthState = {
     accessToken: null,
     user: null,
 };
-
 export const AuthContext = createContext<AuthContextType>({
     ...initialState,
     dispatch: () => null,
@@ -33,21 +37,30 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    const {
+        data: currentUser,
+        isError,
+        isLoading,
+    } = useQuery({
+        queryKey: ['currentUser'],
+        queryFn: apiGetCurrentUser,
+        enabled: !!localStorage.getItem('ACCESS_TOKEN'),
+    });
+
     useEffect(() => {
-        (async () => {
-            const accessToken = JSON.parse(localStorage.getItem('ACCESS_TOKEN'));
-            if (!accessToken) {
-                return dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
-            }
-            try {
-                const response = await apiGetCurrentUser();
-                if (response.success)
-                    dispatch(initialize({ isAuthenticated: true, accessToken, user: response?.data.user }));
-                else dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
-            } catch {
-                dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
-            }
-        })();
-    }, []);
-    return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>;
+        if (!currentUser && !isLoading) {
+            dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
+        } else if (currentUser && !isError && !!localStorage.getItem('ACCESS_TOKEN')) {
+            const token = JSON.parse(localStorage.getItem('ACCESS_TOKEN') as string);
+            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data.user }));
+        }
+    }, [currentUser, isError, isLoading, state.accessToken]);
+    return (
+        <AuthContext.Provider value={{ ...state, dispatch }}>
+            <Spin spinning={isLoading} fullscreen={isLoading} size="large">
+                {children}
+            </Spin>
+        </AuthContext.Provider>
+    );
 };

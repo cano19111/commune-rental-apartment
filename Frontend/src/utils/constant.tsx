@@ -11,6 +11,9 @@ export const path: { [key: string]: string } = {
     FAVORITES: 'favorites',
     CONTACT: 'contact',
     CREATE_APARTMENT: 'create-apartment',
+    ACCOUNT_SETTINGS: 'account-settings',
+    PERSONAL_INFORMATION: 'personal-information',
+    MANAGE_APARTMENT: 'manage-apartment',
 };
 
 export const navigates: { title: string; path: string; icon: React.ReactNode }[] = [

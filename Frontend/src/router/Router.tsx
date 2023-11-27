@@ -1,7 +1,9 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Home, MainLayout } from '@/pages/Public';
 import { path } from '@/utils/constant';
-import { CreateApartment, MyFavorites } from '@/pages/User';
+import { CreateApartment, ManageAccount, MyFavorites } from '@/pages/User';
+import PersonalInformation from '@/pages/User/PersonalInformation';
+import ManagerApartment from '@/pages/User/ManagerApartment';
 
 const Router = () => {
     const routes: RouteObject[] = [
@@ -16,6 +18,20 @@ const Router = () => {
         {
             path: path.FAVORITES,
             element: <MyFavorites />,
+        },
+        {
+            path: path.ACCOUNT_SETTINGS,
+            element: <ManageAccount />,
+            children: [
+                {
+                    path: path.PERSONAL_INFORMATION,
+                    element: <PersonalInformation />,
+                },
+                {
+                    path: path.MANAGE_APARTMENT,
+                    element: <ManagerApartment />,
+                },
+            ],
         },
         {
             path: path.ALL,

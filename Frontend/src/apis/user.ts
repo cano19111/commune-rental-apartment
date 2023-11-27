@@ -6,3 +6,11 @@ export const apiGetCurrentUser = () =>
         method: 'get',
         withCredentials: true,
     });
+
+export const apiEditUser = (data) =>
+    axios({
+        url: '/user',
+        method: 'put',
+        data,
+        withCredentials: true,
+    });

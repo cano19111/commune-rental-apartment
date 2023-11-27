@@ -5,5 +5,6 @@ export { default as Footer } from './Footer/Footer';
 export { default as Search } from './Search/Search';
 export { default as DropDownItem } from './Search/DropDownItem';
 export { default as AddRoom } from './AddRoom/AddRoom';
+export { default as MenuAccount } from './MenuAccount/MenuAccount';
 export { default as InputForm } from './Input/InputForm';
 export { default as SelectForm } from './Input/SelectForm';

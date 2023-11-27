@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import logo from '@/assets/header-logo1.png';
-import { navigates, path } from '@/utils/constant';
-import { SignIn, SignUp } from '@/components';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Flex, Button, Modal, Tabs, Drawer, Image } from 'antd';
+import { navigates } from '@/utils/constant';
+import { MenuAccount, SignIn, SignUp } from '@/components';
+import { NavLink } from 'react-router-dom';
+import { Flex, Button, Modal, Tabs, Drawer, Image, Popover } from 'antd';
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
 
 const Header: React.FC = () => {
-    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft, AiOutlinePlus } = icons;
+    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft } = icons;
     const [modalOpen, setModalOpen] = useState<{ isOpen: boolean; activeTab: string }>({
         isOpen: false,
         activeTab: 'signin',
     });
-    const navigate = useNavigate();
-    const [open, setOpen] = useState(false);
-    const { isAuthenticated, user } = useAuth();
+    const [openNavigate, setOpenNavigate] = useState(false);
+    const { isAuthenticated } = useAuth();
     const tabItems: TabsProps['items'] = [
         {
             key: 'signin',
@@ -46,7 +45,7 @@ const Header: React.FC = () => {
     return (
         <header className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10 ">
             <div className="w-full  flex justify-between px-3 md:px-10 select-none">
-                <div className="lg:hidden" onClick={() => setOpen(true)}>
+                <div className="lg:hidden" onClick={() => setOpenNavigate(true)}>
                     <CgMenuLeft size={30} />
                 </div>
                 <Image src={logo} className="w-[110px] md:w-[150px]" preview={false} />
@@ -62,20 +61,11 @@ const Header: React.FC = () => {
                     </div>
 
                     <Flex gap={10} align="center">
-                        <Button
-                            type="primary"
-                            icon={<AiOutlinePlus size={20} />}
-                            className="bg-blue-500 font-main h-10 px-2 md:px-4 hidden lg:flex rounded-full items-center"
-                            onClick={() => {
-                                navigate(`/${path.CREATE_APARTMENT}`);
-                            }}
-                        >
-                            Create
-                        </Button>
                         {!isAuthenticated ? (
                             <>
                                 <Button
-                                    className="font-main h-10 px-2 md:px-7 hidden lg:block"
+                                    type="primary"
+                                    className="font-main h-10 px-2 md:px-7 hidden lg:block bg-blue-500 text-white"
                                     onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
                                 >
                                     Sign in
@@ -88,9 +78,16 @@ const Header: React.FC = () => {
                                 </Button>
                             </>
                         ) : (
-                            <span className="mt-1 mx-5 cursor-pointer">
-                                <BsPersonCircle size={25} />
-                            </span>
+                            <Popover
+                                placement="bottom"
+                                content={<MenuAccount />}
+                                arrow={true}
+                                trigger={['click', 'contextMenu']}
+                            >
+                                <span className="mt-3 mx-5 cursor-pointer pb-3">
+                                    <BsPersonCircle size={25} />
+                                </span>
+                            </Popover>
                         )}
                     </Flex>
                 </Flex>
@@ -114,17 +111,20 @@ const Header: React.FC = () => {
             </Modal>
             <Drawer
                 title={
-                    <div className="w-full flex items-center justify-end cursor-pointer" onClick={() => setOpen(false)}>
+                    <div
+                        className="w-full flex items-center justify-end cursor-pointer"
+                        onClick={() => setOpenNavigate(false)}
+                    >
                         <SlClose size={28} />
                     </div>
                 }
                 placement="left"
                 width="100%"
-                onClose={() => setOpen(false)}
-                open={open}
+                onClose={() => setOpenNavigate(false)}
+                open={openNavigate}
                 closeIcon={null}
             >
-                <div className="flex flex-col gap-5 select-none" onClick={() => setOpen(false)}>
+                <div className="flex flex-col gap-5 select-none" onClick={() => setOpenNavigate(false)}>
                     <Flex gap={20} vertical>
                         {navigates.map((navigate, index) => (
                             <NavLink
@@ -157,16 +157,6 @@ const Header: React.FC = () => {
                             </span>
                         </Flex>
                     )}
-                    <Button
-                        type="primary"
-                        icon={<AiOutlinePlus size={20} />}
-                        className="bg-blue-500 font-main h-10 px-2 flex rounded-full items-center justify-center w-full"
-                        onClick={() => {
-                            navigate(`/${path.CREATE_APARTMENT}`);
-                        }}
-                    >
-                        Create apartment
-                    </Button>
                 </div>
             </Drawer>
         </header>

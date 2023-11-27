@@ -19,12 +19,20 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false,
+    }),
+);
 app.use(compression());
 dbConnect();
 
 app.use(morgan('dev'));
 initRoutes(app);
+
+helmet({
+    crossOriginResourcePolicy: false,
+});
 
 const PORT = process.env.SERVER_PORT || 3045;
 server.listen(PORT, () => {
