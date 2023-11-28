@@ -30,7 +30,7 @@ const SelectForm: React.FC = ({
                     <Flex vertical gap={5}>
                         <Select
                             {...propsOther}
-                            size="large"
+                            size="medium"
                             options={options}
                             className={clsx(className)}
                             placeholder={placeholder}

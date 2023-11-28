@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import logo from '@/assets/header-logo1.png';
-import { navigates } from '@/utils/constant';
+import { navigates, path } from '@/utils/constant';
 import { MenuAccount, SignIn, SignUp } from '@/components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Flex, Button, Modal, Tabs, Drawer, Image, Popover } from 'antd';
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks';
 
 const Header: React.FC = () => {
     const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft } = icons;
+    const navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState<{ isOpen: boolean; activeTab: string }>({
         isOpen: false,
         activeTab: 'signin',
@@ -48,7 +49,12 @@ const Header: React.FC = () => {
                 <div className="lg:hidden" onClick={() => setOpenNavigate(true)}>
                     <CgMenuLeft size={30} />
                 </div>
-                <Image src={logo} className="w-[110px] md:w-[150px]" preview={false} />
+                <Image
+                    src={logo}
+                    className="w-[110px] md:w-[150px] cursor-pointer"
+                    preview={false}
+                    onClick={() => navigate(`/${path.HOME}`)}
+                />
                 <Flex gap={40} align="center">
                     <div className="hidden lg:block">
                         <Flex gap={15} align="center">

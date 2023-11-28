@@ -7,6 +7,7 @@ import {
     AiOutlineUsergroupAdd,
     AiOutlinePlus,
     AiOutlineUser,
+    AiOutlineClose,
 } from 'react-icons/ai';
 import { BsPinterest, BsPersonCircle, BsHouses } from 'react-icons/bs';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
@@ -47,5 +48,6 @@ const icons = {
     TbBrandBooking,
     FiTrash,
     IoCreateOutline,
+    AiOutlineClose,
 };
 export default icons;

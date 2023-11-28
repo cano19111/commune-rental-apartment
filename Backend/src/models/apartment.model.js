@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const COLLECTION = 'apartments';
 const DOCUMENT = 'Apartment';
 
-const userSchema = new mongoose.Schema(
+const apartmentsSchema = new mongoose.Schema(
     {
         title: { type: String, require: true },
         location: {
@@ -41,4 +41,4 @@ const userSchema = new mongoose.Schema(
     },
 );
 
-module.exports = mongoose.model(DOCUMENT, userSchema, COLLECTION);
+module.exports = mongoose.model(DOCUMENT, apartmentsSchema, COLLECTION);

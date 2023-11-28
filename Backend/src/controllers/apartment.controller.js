@@ -83,11 +83,16 @@ const getApartment = async (req, res, next) => {
     }
 };
 const createApartment = async (req, res, next) => {
-    const images = req.files.map((file) => `${process.env.SERVER_URI}/api/image/${file?.filename}`);
     try {
-        const { title, rooms } = req.body;
+        const { title, rooms, location } = req.body;
         const { _id: createBy } = req.user;
-        const roomsInApartment = rooms.map((room) => {
+        const roomsInApartment = rooms.map((room, index) => {
+            const fieldName = `rooms[${index}][images]`;
+
+            const roomImages = req.files.filter((image) => image.fieldname === fieldName) || [];
+
+            const images = roomImages.map((file) => `${process.env.SERVER_URI}/api/image/${file?.filename}`);
+
             return {
                 ...room,
                 images,
@@ -102,6 +107,7 @@ const createApartment = async (req, res, next) => {
             Apartment.create({
                 title,
                 createBy,
+                location,
                 rooms: roomsInApartment,
             }),
         );
