@@ -83,7 +83,6 @@ const getApartment = async (req, res, next) => {
     }
 };
 const createApartment = async (req, res, next) => {
-    console.log(req.files);
     try {
         const { title, rooms, location } = req.body;
         const { _id: createBy } = req.user;
