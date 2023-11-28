@@ -11,7 +11,7 @@ import { Wards } from '@/utils/location/wards';
 const CreateApartment: React.FC = () => {
     const createApartmentMutation = useMutation({ mutationFn: apiCreateApartment });
     const [districtsOption, setDistrictsOption] = useState([]);
-    const [listRooms, setListRooms] = useState(1);
+    const [rooms, setRooms] = useState([{}]);
     const [wardsOption, setWardsOption] = useState([]);
     const {
         handleSubmit,
@@ -56,6 +56,14 @@ const CreateApartment: React.FC = () => {
         setWardsOption(filteredWards);
         setValue('location.ward', '');
     };
+
+    const handleRemoveRoom = (indexToRemove) => {
+        setRooms((prevRooms) => {
+            const updatedRooms = [...prevRooms.slice(0, indexToRemove), ...prevRooms.slice(indexToRemove + 1)];
+            return updatedRooms;
+        });
+    };
+
     const handleCreateApartment = async (data) => {
         console.log(data.rooms[0].images);
         data.location.province = Provinces.find((province) => province.code === data.location.province)?.name;
@@ -197,12 +205,17 @@ const CreateApartment: React.FC = () => {
                 </Flex>
 
                 <h2 className="text-xl font-medium">Room information</h2>
-
-                {Array.from({ length: listRooms }).map((_, index) => (
-                    <AddRoom key={index} Controller={Controller} control={control} errors={errors} index={index} />
+                {rooms.map((room, index) => (
+                    <AddRoom
+                        key={index}
+                        Controller={Controller}
+                        control={control}
+                        errors={errors}
+                        indexRoom={index}
+                        onClose={handleRemoveRoom}
+                    />
                 ))}
-
-                <Button onClick={() => setListRooms((prev) => prev + 1)}>Add more room</Button>
+                <Button onClick={() => setRooms([...rooms, {}])}>Add more room</Button>
                 <Button
                     htmlType="submit"
                     type="primary"

@@ -5,16 +5,25 @@ import { useQuery } from '@tanstack/react-query';
 import { apiGetServices } from '@/apis';
 import { InputForm } from '..';
 import icons from '@/utils/icons';
+import clsx from 'clsx';
+const { FiTrash, AiOutlineClose } = icons;
 
-const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
-    const { FiTrash } = icons;
-    const { data: servicesData, isLoading: isLoadingServices } = useQuery({
+const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: any) => {
+    const { data: servicesData } = useQuery({
         queryKey: ['services'],
         queryFn: apiGetServices,
     });
-
     return (
-        <div className="p-5 rounded-xl flex flex-col gap-5 border-[1px] border-gray-700 md:py-5 px-10">
+        <div className="p-5 rounded-xl flex flex-col gap-5 border-[1px] border-gray-300 md:py-5 px-10 relative">
+            <span
+                className={clsx(
+                    'absolute top-3 right-3 p-2 rounded-xl border border-red-500 cursor-pointer',
+                    indexRoom === 0 && 'hidden',
+                )}
+                onClick={() => onClose(indexRoom)}
+            >
+                <AiOutlineClose color="#e50000" />
+            </span>
             <div className="flex flex-col">
                 <label className="text-lg mb-1">
                     <span className="text-red-500">* </span>
@@ -22,7 +31,7 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                 </label>
                 <Controller
                     control={control}
-                    name={`rooms.${index}.services`}
+                    name={`rooms.${indexRoom}.services`}
                     rules={{
                         required: 'Services is required',
                     }}
@@ -36,9 +45,9 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                                 {...field}
                                 defaultValue={field.value}
                             />
-                            {errors?.rooms?.[index]?.services && (
+                            {errors?.rooms?.[indexRoom]?.services && (
                                 <span className="font-main text-red-600">
-                                    {errors?.rooms?.[index]?.services.message}
+                                    {errors?.rooms?.[indexRoom]?.services.message}
                                 </span>
                             )}
                         </Flex>
@@ -49,8 +58,8 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
             <InputForm
                 Controller={Controller}
                 control={control}
-                error={errors?.rooms?.[index]?.description}
-                name={`rooms.${index}.description`}
+                error={errors?.rooms?.[indexRoom]?.description}
+                name={`rooms.${indexRoom}.description`}
                 rules={{ required: 'Description is required' }}
                 placeholder="Enter the description"
                 type="area"
@@ -66,7 +75,7 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                 <Flex align="center" gap={2}>
                     <Controller
                         control={control}
-                        name={`rooms.${index}.images`}
+                        name={`rooms.${indexRoom}.images`}
                         rules={{
                             required: 'Images is required',
                         }}
@@ -85,7 +94,13 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                                     itemRender={(ReactElement, UploadFile, fileList, actions) => {
                                         return (
                                             <div className="w-full h-full flex justify-center items-center relative">
-                                                <Image width={100} src={UploadFile.thumbUrl as string} />
+                                                <Image
+                                                    width={100}
+                                                    src={
+                                                        (UploadFile.thumbUrl as string) ||
+                                                        URL.createObjectURL(UploadFile.originFileObj as File)
+                                                    }
+                                                />
                                                 <i
                                                     className="absolute top-0 right-0 border p-1 rounded-full cursor-pointer"
                                                     onClick={() => actions.remove()}
@@ -101,9 +116,9 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                                         <div className="mt-2">Upload</div>
                                     </div>
                                 </Upload>
-                                {errors?.rooms?.[index]?.images && (
+                                {errors?.rooms?.[indexRoom]?.images && (
                                     <span className="font-main text-red-600">
-                                        {errors?.rooms?.[index]?.images.message}
+                                        {errors?.rooms?.[indexRoom]?.images.message}
                                     </span>
                                 )}
                             </Flex>
@@ -115,21 +130,31 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                 <InputForm
                     Controller={Controller}
                     control={control}
-                    error={errors?.rooms?.[index]?.size}
-                    name={`rooms.${index}.size`}
-                    rules={{ required: 'Size room is required' }}
-                    placeholder="Enter the size room"
+                    error={errors?.rooms?.[indexRoom]?.size}
+                    name={`rooms.${indexRoom}.size`}
+                    rules={{
+                        required: 'Room size is required',
+                        validate: {
+                            positive: (value) => value >= 0 || 'Room size cannot be less than 0',
+                        },
+                    }}
+                    placeholder="Enter the room size"
                     type="number"
-                    label="Size room"
+                    label="Room size"
                     className="md:min-w-[250px] min-w-[200px]"
                 />
 
                 <InputForm
                     Controller={Controller}
                     control={control}
-                    error={errors?.rooms?.[index]?.price}
-                    name={`rooms.${index}.price`}
-                    rules={{ required: 'Price is required' }}
+                    error={errors?.rooms?.[indexRoom]?.price}
+                    name={`rooms.${indexRoom}.price`}
+                    rules={{
+                        required: 'Price is required',
+                        validate: {
+                            positive: (value) => value >= 0 || 'Price cannot be less than 0',
+                        },
+                    }}
                     placeholder="Enter the size"
                     type="number"
                     label="Price"
@@ -140,8 +165,8 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                 <InputForm
                     Controller={Controller}
                     control={control}
-                    error={errors?.rooms?.[index]?.roomType}
-                    name={`rooms.${index}.roomType`}
+                    error={errors?.rooms?.[indexRoom]?.roomType}
+                    name={`rooms.${indexRoom}.roomType`}
                     rules={{ required: 'Room type is required' }}
                     placeholder="Enter the room type"
                     label="Room type"
@@ -151,9 +176,14 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                 <InputForm
                     Controller={Controller}
                     control={control}
-                    error={errors?.rooms?.[index]?.numberOfGuest}
-                    name={`rooms.${index}.numberOfGuest`}
-                    rules={{ required: 'Number of guests is required' }}
+                    error={errors?.rooms?.[indexRoom]?.numberOfGuest}
+                    name={`rooms.${indexRoom}.numberOfGuest`}
+                    rules={{
+                        required: 'Number of guests is required',
+                        validate: {
+                            positive: (value) => value >= 0 || 'Number of guests cannot be less than 0',
+                        },
+                    }}
                     placeholder="Enter the number of guests"
                     type="number"
                     label="Number of guests"
@@ -162,9 +192,15 @@ const AddRoom: React.FC = ({ Controller, errors, control, index }: any) => {
                 <InputForm
                     Controller={Controller}
                     control={control}
-                    error={errors?.rooms?.[index]?.quantity}
-                    name={`rooms.${index}.quantity`}
-                    rules={{ required: 'Quantity is required', valueAsNumber: 'Quantity must be numeric' }}
+                    error={errors?.rooms?.[indexRoom]?.quantity}
+                    name={`rooms.${indexRoom}.quantity`}
+                    rules={{
+                        required: 'Quantity is required',
+                        valueAsNumber: 'Quantity must be numeric',
+                        validate: {
+                            positive: (value) => value >= 0 || 'Quantity cannot be less than 0',
+                        },
+                    }}
                     placeholder="Enter the quantity"
                     label="Quantity"
                     type="number"
