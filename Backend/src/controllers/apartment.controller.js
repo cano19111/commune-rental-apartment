@@ -148,7 +148,14 @@ const createApartment = async (req, res, next) => {
 };
 const searchRooms = async (req, res, next) => {
     try {
-        const { numberOfGuest, quantity, province, district, ward, street } = req.query;
+        const { numberOfGuest, quantity, province, district, ward, street, dateFrom } = req.query;
+        const parsedDateFrom = new Date(dateFrom);
+        if (parsedDateFrom < Date.now()) {
+            return res.status(400).json({
+                success: false,
+                message: 'The start date cannot be earlier than the current date',
+            });
+        }
         const parsedNumberOfGuest = parseInt(numberOfGuest, 10) || 1;
         const parsedQuantity = parseInt(quantity, 10) || 1;
 
@@ -217,7 +224,7 @@ const searchRooms = async (req, res, next) => {
         ];
 
         const page = parseInt(req.query.page, 10) || 1;
-        const limit = parseInt(req.query.limit, 10) || 5;
+        const limit = parseInt(req.query.limit, 10) || 10;
         const skip = (page - 1) * limit;
 
         aggregateOptions.push({ $skip: skip }, { $limit: limit });
