@@ -146,6 +146,111 @@ const createApartment = async (req, res, next) => {
         next(error);
     }
 };
+const searchRooms = async (req, res, next) => {
+    try {
+        const { numberOfGuest, quantity, province, district, ward, street, dateFrom } = req.query;
+        const parsedDateFrom = new Date(dateFrom);
+        if (parsedDateFrom < Date.now()) {
+            return res.status(400).json({
+                success: false,
+                message: 'The start date cannot be earlier than the current date',
+            });
+        }
+        const parsedNumberOfGuest = parseInt(numberOfGuest, 10) || 1;
+        const parsedQuantity = parseInt(quantity, 10) || 1;
+
+        const aggregateOptions = [
+            {
+                $match: {
+                    'rooms.numberOfGuest': { $gte: parsedNumberOfGuest || 1 },
+                    'rooms.quantity': { $gte: parsedQuantity || 1 },
+                    'location.province': new RegExp(province, 'i'),
+                    'location.district': new RegExp(district, 'i'),
+                    'location.ward': new RegExp(ward, 'i'),
+                    'location.street': new RegExp(street, 'i'),
+                },
+            },
+            {
+                $project: {
+                    rooms: {
+                        $filter: {
+                            input: '$rooms',
+                            as: 'room',
+                            cond: {
+                                $and: [
+                                    { $gte: ['$$room.numberOfGuest', parsedNumberOfGuest || 1] },
+                                    { $gte: ['$$room.quantity', parsedQuantity || 1] },
+                                ],
+                            },
+                        },
+                    },
+                    title: 1,
+                    location: {
+                        street: 1,
+                        ward: 1,
+                        district: 1,
+                        province: 1,
+                    },
+                },
+            },
+            {
+                $unwind: '$rooms',
+            },
+            {
+                $project: {
+                    _id: '$rooms._id',
+                    name: '$title',
+                    address: {
+                        street: '$location.street',
+                        ward: '$location.ward',
+                        district: '$location.district',
+                        province: '$location.province',
+                    },
+                    image: { $arrayElemAt: ['$rooms.images', 0] },
+                    price: '$rooms.price',
+                    numberOfGuest: '$rooms.numberOfGuest',
+                    quantity: '$rooms.quantity',
+                    rating: {
+                        $cond: {
+                            if: { $gt: [{ $size: '$rooms.reviews' }, 0] },
+                            then: {
+                                $avg: '$rooms.reviews.star',
+                            },
+                            else: 0,
+                        },
+                    },
+                },
+            },
+        ];
+
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 10;
+        const skip = (page - 1) * limit;
+
+        aggregateOptions.push({ $skip: skip }, { $limit: limit });
+
+        const [error, result] = await to(Apartment.aggregate(aggregateOptions));
+
+        if (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error searching rooms',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Search rooms successfully',
+            data: {
+                page,
+                count: result.length,
+                rooms: result,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 const updateApartment = async (req, res, next) => {
     try {
@@ -307,4 +412,5 @@ module.exports = {
     removeRoomFromApartment,
     getApartment,
     getAllApartment,
+    searchRooms,
 };
