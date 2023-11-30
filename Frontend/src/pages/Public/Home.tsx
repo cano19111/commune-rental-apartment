@@ -4,7 +4,7 @@ import { Search } from '@/components';
 
 const Home: React.FC = () => {
     return (
-        <div className="h-[1500px]">
+        <div className="h-full">
             <div
                 className="bg-cover bg-center relative h-[960px] w-screen"
                 style={{ backgroundImage: `url(${background})` }}

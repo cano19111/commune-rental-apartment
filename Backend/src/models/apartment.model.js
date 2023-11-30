@@ -27,7 +27,7 @@ const apartmentsSchema = new mongoose.Schema(
                 numberOfGuest: { type: Number, require: true },
                 reviews: [
                     {
-                        star: { type: Number },
+                        score: { type: Number },
                         comment: { type: Number },
                         postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
                     },
@@ -40,5 +40,10 @@ const apartmentsSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
-
+apartmentsSchema.index({
+    'location.province': 'text',
+    'location.district': 'text',
+    'location.ward': 'text',
+    'location.street': 'text',
+});
 module.exports = mongoose.model(DOCUMENT, apartmentsSchema, COLLECTION);

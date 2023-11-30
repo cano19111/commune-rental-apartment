@@ -53,7 +53,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
         } else if (currentUser && !isError && !!localStorage.getItem('ACCESS_TOKEN')) {
             const token = JSON.parse(localStorage.getItem('ACCESS_TOKEN') as string);
-            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data.user }));
+            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data?.user }));
         }
     }, [currentUser, isError, isLoading, state.accessToken]);
     return (

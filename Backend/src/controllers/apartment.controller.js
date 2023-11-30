@@ -148,7 +148,7 @@ const createApartment = async (req, res, next) => {
 };
 const searchRooms = async (req, res, next) => {
     try {
-        const { numberOfGuest, quantity, province, district, ward, street, dateFrom } = req.query;
+        const { numberOfGuest, quantity, province, district, ward, street, dateFrom, name } = req.query;
         const parsedDateFrom = new Date(dateFrom);
         if (parsedDateFrom < Date.now()) {
             return res.status(400).json({
@@ -156,18 +156,21 @@ const searchRooms = async (req, res, next) => {
                 message: 'The start date cannot be earlier than the current date',
             });
         }
+
         const parsedNumberOfGuest = parseInt(numberOfGuest, 10) || 1;
         const parsedQuantity = parseInt(quantity, 10) || 1;
+        const textSearchString = `${province} ${district} ${ward} ${street} ${name}`;
 
         const aggregateOptions = [
             {
                 $match: {
-                    'rooms.numberOfGuest': { $gte: parsedNumberOfGuest || 1 },
-                    'rooms.quantity': { $gte: parsedQuantity || 1 },
-                    'location.province': new RegExp(province, 'i'),
-                    'location.district': new RegExp(district, 'i'),
-                    'location.ward': new RegExp(ward, 'i'),
-                    'location.street': new RegExp(street, 'i'),
+                    $text: { $search: textSearchString },
+                    // $and: [
+                    //     { 'location.province': { $regex: new RegExp(province, 'i') } },
+                    //     { 'location.district': { $regex: new RegExp(district, 'i') } },
+                    //     { 'location.ward': { $regex: new RegExp(ward, 'i') } },
+                    //     { 'location.street': { $regex: new RegExp(street, 'i') } },
+                    // ],
                 },
             },
             {
@@ -197,6 +200,14 @@ const searchRooms = async (req, res, next) => {
                 $unwind: '$rooms',
             },
             {
+                $lookup: {
+                    from: 'services',
+                    localField: 'rooms.services',
+                    foreignField: '_id',
+                    as: 'rooms.services',
+                },
+            },
+            {
                 $project: {
                     _id: '$rooms._id',
                     name: '$title',
@@ -210,11 +221,14 @@ const searchRooms = async (req, res, next) => {
                     price: '$rooms.price',
                     numberOfGuest: '$rooms.numberOfGuest',
                     quantity: '$rooms.quantity',
+                    services: {
+                        $slice: ['$rooms.services.title', 3],
+                    },
                     rating: {
                         $cond: {
                             if: { $gt: [{ $size: '$rooms.reviews' }, 0] },
                             then: {
-                                $avg: '$rooms.reviews.star',
+                                $avg: '$rooms.reviews.score',
                             },
                             else: 0,
                         },
