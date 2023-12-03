@@ -9,13 +9,14 @@ const app = express();
 const { dbConnect } = require('./config/db.config');
 const initRoutes = require('./routes');
 const server = require('http').createServer(app);
-app.use(
-    cors({
-        origin: process.env.CLIENT_URI,
-        methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
-        credentials: true,
-    }),
-);
+// app.use(
+//     cors({
+//         origin: process.env.CLIENT_URI,
+//         methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
+//         credentials: true,
+//     }),
+// );
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
