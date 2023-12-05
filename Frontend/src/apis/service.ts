@@ -4,5 +4,4 @@ export const apiGetServices = () =>
     axios({
         url: '/service',
         method: 'get',
-        withCredentials: true,
     });

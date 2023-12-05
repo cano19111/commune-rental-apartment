@@ -91,7 +91,7 @@ const createApartment = async (req, res, next) => {
 
             const roomImages = req.files.filter((image) => image.fieldname === fieldName) || [];
 
-            const images = roomImages.map((file) => `${process.env.SERVER_URI}/api/image/${file?.filename}`);
+            const images = roomImages.map((file) => file?.filename);
 
             return {
                 ...room,
@@ -146,14 +146,16 @@ const createApartment = async (req, res, next) => {
         next(error);
     }
 };
-const searchRooms = async (req, res, next) => {
+const searchApartments = async (req, res, next) => {
     try {
-        const { numberOfGuest, quantity, province, district, ward, street, dateFrom, name } = req.query;
-        const parsedDateFrom = new Date(dateFrom);
-        if (parsedDateFrom < Date.now()) {
+        const { numberOfGuest, quantity, province, district, ward, street, startDate, endDate, name } = req.query;
+        const parsedStartDay = new Date(startDate);
+        const parsedEndDay = new Date(endDate);
+
+        if (parsedStartDay < new Date() || parsedEndDay < new Date()) {
             return res.status(400).json({
                 success: false,
-                message: 'The start date cannot be earlier than the current date',
+                message: 'The start date or end date cannot be earlier than the current date',
             });
         }
 
@@ -165,40 +167,44 @@ const searchRooms = async (req, res, next) => {
             {
                 $match: {
                     $text: { $search: textSearchString },
-                    // $and: [
-                    //     { 'location.province': { $regex: new RegExp(province, 'i') } },
-                    //     { 'location.district': { $regex: new RegExp(district, 'i') } },
-                    //     { 'location.ward': { $regex: new RegExp(ward, 'i') } },
-                    //     { 'location.street': { $regex: new RegExp(street, 'i') } },
-                    // ],
-                },
-            },
-            {
-                $project: {
-                    rooms: {
-                        $filter: {
-                            input: '$rooms',
-                            as: 'room',
-                            cond: {
-                                $and: [
-                                    { $gte: ['$$room.numberOfGuest', parsedNumberOfGuest || 1] },
-                                    { $gte: ['$$room.quantity', parsedQuantity || 1] },
-                                ],
-                            },
-                        },
-                    },
-                    title: 1,
-                    location: {
-                        street: 1,
-                        ward: 1,
-                        district: 1,
-                        province: 1,
-                    },
                 },
             },
             {
                 $unwind: '$rooms',
             },
+            {
+                $match: {
+                    'rooms.numberOfGuest': { $gte: parsedNumberOfGuest },
+                    'rooms.quantity': { $gte: parsedQuantity },
+                    'rooms.unavailableDateRanges': {
+                        $not: {
+                            $elemMatch: {
+                                startDay: { $lte: parsedEndDay },
+                                endDay: { $gte: parsedStartDay },
+                            },
+                        },
+                    },
+                },
+            },
+            {
+                $count: 'totalResults',
+            },
+        ];
+
+        const [countError, countResult] = await to(Apartment.aggregate(aggregateOptions));
+
+        if (countError) {
+            console.log(countError);
+            return res.status(500).json({
+                success: false,
+                message: 'Error counting total results',
+            });
+        }
+
+        const totalResults = countResult.length > 0 ? countResult[0].totalResults : 0;
+
+        const finalAggregateOptions = [
+            ...aggregateOptions.slice(0, aggregateOptions.length - 1),
             {
                 $lookup: {
                     from: 'services',
@@ -209,7 +215,7 @@ const searchRooms = async (req, res, next) => {
             },
             {
                 $project: {
-                    _id: '$rooms._id',
+                    _id: '$_id',
                     name: '$title',
                     address: {
                         street: '$location.street',
@@ -217,7 +223,9 @@ const searchRooms = async (req, res, next) => {
                         district: '$location.district',
                         province: '$location.province',
                     },
-                    image: { $arrayElemAt: ['$rooms.images', 0] },
+                    image: {
+                        $concat: [`${process.env.SERVER_URI}/api/image/`, { $arrayElemAt: ['$rooms.images', 0] }],
+                    },
                     price: '$rooms.price',
                     numberOfGuest: '$rooms.numberOfGuest',
                     quantity: '$rooms.quantity',
@@ -241,24 +249,26 @@ const searchRooms = async (req, res, next) => {
         const limit = parseInt(req.query.limit, 10) || 10;
         const skip = (page - 1) * limit;
 
-        aggregateOptions.push({ $skip: skip }, { $limit: limit });
+        finalAggregateOptions.push({ $skip: skip }, { $limit: limit });
 
-        const [error, result] = await to(Apartment.aggregate(aggregateOptions));
+        const [error, result] = await to(Apartment.aggregate(finalAggregateOptions));
 
         if (error) {
+            console.log(error);
             return res.status(500).json({
                 success: false,
-                message: 'Error searching rooms',
+                message: 'Error searching apartments',
             });
         }
 
         res.status(200).json({
             success: true,
-            message: 'Search rooms successfully',
+            message: 'Search apartments successfully',
             data: {
                 page,
-                count: result.length,
-                rooms: result,
+                countPage: result.length,
+                totalResults,
+                apartments: result,
             },
         });
     } catch (error) {
@@ -426,5 +436,5 @@ module.exports = {
     removeRoomFromApartment,
     getApartment,
     getAllApartment,
-    searchRooms,
+    searchApartments,
 };

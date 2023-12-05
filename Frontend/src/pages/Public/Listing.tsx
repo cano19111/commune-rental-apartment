@@ -1,5 +1,5 @@
 import icons from '@/utils/icons';
-import { Button, Checkbox, Flex, Image, Slider } from 'antd';
+import { Button, Checkbox, Flex, Image, Skeleton, Slider } from 'antd';
 import React from 'react';
 import mapImage from '@/assets/map.png';
 import { useQuery } from '@tanstack/react-query';
@@ -8,12 +8,14 @@ import { useSearchParams } from 'react-router-dom';
 const { GoLocation, FaLocationDot } = icons;
 
 const Listing: React.FC = () => {
-    const params = useSearchParams();
-    const { data } = useQuery({
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { data, isFetching } = useQuery({
         queryKey: ['listing'],
-        queryFn: () => apiSearchRoom(params[0]),
+        queryFn: () => apiSearchRoom(searchParams),
         staleTime: 0,
     });
+    const roomNumber = searchParams.get('room');
+    const numberOfGuest = searchParams.get('numberOfGuest');
     return (
         <div className="w-full flex items-center justify-center font-main">
             <div className="max-w-main w-full min-h-screen flex mt-10 gap-5">
@@ -69,50 +71,72 @@ const Listing: React.FC = () => {
                 </div>
                 <div className="w-full flex flex-col gap-5">
                     <div className="h-[60px] bg-slate-100 flex items-center p-5 rounded-xl">
-                        <div className="">9 Search results</div>
+                        <div className="">{`${data?.data?.totalResults || 0} Search results`}</div>
                     </div>
                     <div className="w-full h-full bg-slate-100 flex flex-col gap-5 p-2 rounded-lg">
-                        {(data?.data?.rooms || []).map((room) => (
-                            <div key={room._id} className="flex items-start gap-10 bg-white p-1 rounded-lg">
-                                <div className="w-2/5">
-                                    <Image src={room.image} className="rounded-lg" preview={false} />
-                                </div>
-                                <div className="w-3/5 flex h-full py-3">
-                                    <div className="w-7/12 flex flex-col mt-3 gap-3">
-                                        <div className="font-medium text-lg overflow-hidden line-clamp-2">
-                                            {room.name}
+                        {isFetching ? (
+                            <>
+                                <Skeleton loading={isFetching} active avatar={{ size: 180, shape: 'square' }} />
+                                <Skeleton loading={isFetching} active avatar={{ size: 180, shape: 'square' }} />
+                                <Skeleton loading={isFetching} active avatar={{ size: 180, shape: 'square' }} />
+                            </>
+                        ) : (
+                            <>
+                                {(data?.data?.apartments || []).map((room) => (
+                                    <div key={room._id} className="flex items-start gap-10 bg-white p-1 rounded-lg">
+                                        <div className="w-2/5">
+                                            <Image
+                                                src={room.image}
+                                                className="rounded-lg"
+                                                preview={false}
+                                                height={200}
+                                                width="100%"
+                                            />
                                         </div>
-                                        <div className="text-xs font-light flex items-start justify-center gap-1">
-                                            <GoLocation size={15} />
-                                            <span className="hover:underline line-clamp-2 text-blue-700">
-                                                {`${room.address.street} ${room.address.ward} ${room.address.district} ${room.address.province}`}
-                                            </span>
-                                        </div>
-                                        <div className="font-light text-sm ml-3">
-                                            {(room?.services || []).map((service, index) => (
-                                                <span key={index}>{index === 0 ? service : ` • ${service}`}</span>
-                                            ))}
+                                        <div className="w-3/5 flex h-full py-3">
+                                            <div className="w-7/12 flex flex-col mt-3 gap-3">
+                                                <div className="font-medium text-lg overflow-hidden line-clamp-2">
+                                                    {room.name}
+                                                </div>
+                                                <div className="text-xs font-light flex items-start justify-center gap-1">
+                                                    <GoLocation size={15} />
+                                                    <span className="hover:underline line-clamp-2 text-blue-700">
+                                                        {`${room.address.street} ${room.address.ward} ${room.address.district} ${room.address.province}`}
+                                                    </span>
+                                                </div>
+                                                <div className="font-light text-sm ml-3 flex items-center gap-1 flex-wrap">
+                                                    {(room?.services || []).map((service, index) => (
+                                                        <span key={index} className="px-3 border ">
+                                                            {service}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <div className="w-5/12 flex flex-col justify-between items-end">
+                                                <div className="flex gap-2 min-w-[150px]">
+                                                    <div className="flex flex-col items-end">
+                                                        <span className=" font-medium">Review score</span>
+                                                        <span className=" font-light">1 reviews</span>
+                                                    </div>
+                                                    <div className="rounded-score bg-blue-600 w-[40px] h-[40px] relative">
+                                                        <span className="absolute top-2 right-3 text-white">8.7</span>
+                                                    </div>
+                                                </div>
+                                                <div className="w-full flex flex-col justify-end items-end mt-2 pr-5">
+                                                    <div className="font-light text-xs">{`1 night, ${numberOfGuest} people`}</div>
+                                                    <div className="text-lg">{`${(
+                                                        +roomNumber * +room.price
+                                                    )?.toLocaleString()} VND`}</div>
+                                                    <div className="font-light text-xs">
+                                                        +VND 114,409 taxes and fees
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="w-5/12 flex flex-col justify-between items-end">
-                                        <div className="flex gap-2 min-w-[150px]">
-                                            <div className="flex flex-col items-end">
-                                                <span className=" font-medium">Review score</span>
-                                                <span className=" font-light">1 reviews</span>
-                                            </div>
-                                            <div className="rounded-score bg-blue-600 w-[40px] h-[40px] relative">
-                                                <span className="absolute top-2 right-3 text-white">8.7</span>
-                                            </div>
-                                        </div>
-                                        <div className="w-full flex flex-col justify-end items-end mt-2 pr-5">
-                                            <div className="font-light text-xs">1 night, 2 people</div>
-                                            <div className="text-lg">VND 463,386</div>
-                                            <div className="font-light text-xs">+VND 114,409 taxes and fees</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                                ))}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

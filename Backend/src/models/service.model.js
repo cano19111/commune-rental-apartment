@@ -6,7 +6,6 @@ const DOCUMENT = 'Service';
 const serviceSchema = new mongoose.Schema(
     {
         title: { type: String, required: true, unique: true },
-        quantity: { type: Number, required: true },
         description: { type: String, default: '' },
     },
     {

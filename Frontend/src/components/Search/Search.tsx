@@ -18,8 +18,8 @@ const Search: React.FC = () => {
             numberOfGuest: numberOfGuest.toString(),
             room: rooms.toString(),
             province: searchText,
-            //startDate: dateRange ? dateRange[0] : '',
-            //endDate: dateRange ? dateRange[1] : '',
+            startDate: dateRange ? dateRange[0] : '',
+            endDate: dateRange ? dateRange[1] : '',
         });
         navigate(`/listing?${queryParams.toString()}`);
     };
