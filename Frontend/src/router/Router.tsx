@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { Home, MainLayout } from '@/pages/Public';
+import { ApartmentDetail, Home, MainLayout } from '@/pages/Public';
 import { path } from '@/utils/constant';
 import { CreateApartment, ManageAccount, MyFavorites } from '@/pages/User';
 import PersonalInformation from '@/pages/User/PersonalInformation';
@@ -18,6 +18,10 @@ const Router = () => {
         {
             path: path.FAVORITES,
             element: <MyFavorites />,
+        },
+        {
+            path: path.APARTMENT_DETAIL,
+            element: <ApartmentDetail />,
         },
         {
             path: path.ACCOUNT_SETTINGS,

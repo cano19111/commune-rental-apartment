@@ -8,6 +8,7 @@ export const path: { [key: string]: string } = {
     HOME: '',
     ALL: '/*',
     LISTING: 'listing/:roomId',
+    APARTMENT_DETAIL: 'apartment/:apartmentId',
     FAVORITES: 'favorites',
     CONTACT: 'contact',
     CREATE_APARTMENT: 'create-apartment',
