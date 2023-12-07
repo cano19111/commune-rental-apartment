@@ -94,7 +94,7 @@ const Search: React.FC = () => {
                                 <PiUserThin size={25} />
                                 <span className="">{`${getValues('searchGuest')?.guest || 1} adult · ${
                                     getValues('searchGuest')?.room || 1
-                                } room`}</span>
+                                } rooms`}</span>
                             </Button>
                         </Dropdown>
                     </Tooltip>

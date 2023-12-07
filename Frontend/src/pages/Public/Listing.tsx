@@ -17,6 +17,7 @@ const Listing: React.FC = () => {
         handleSubmit,
         formState: { errors },
         getValues,
+        watch,
     } = useForm();
 
     const { data, isFetching } = useQuery({
@@ -50,13 +51,13 @@ const Listing: React.FC = () => {
     return (
         <div className="w-full flex items-center justify-center font-main">
             <form onSubmit={handleSubmit(handleSearch)} className="max-w-main w-full min-h-screen flex mt-10 gap-5">
-                <div className="max-w-[265px] w-full bg-slate-100 rounded-lg px-3 py-5 pb-10">
+                <div className="max-w-[270px] w-full bg-slate-100 rounded-lg px-3 py-5 pb-10">
                     <div className="flex flex-col gap-2">
                         <div className="text-lg mx-2">Search</div>
                         <Controller
                             name="searchName"
                             rules={{
-                                required: 'Search name is required',
+                                required: 'Please enter a destination',
                             }}
                             control={control}
                             defaultValue={searchParams.get('province')}
@@ -80,7 +81,7 @@ const Listing: React.FC = () => {
                             name="searchDate"
                             control={control}
                             rules={{
-                                required: 'Date checkIn and checkOut is required',
+                                required: 'Please select the time',
                             }}
                             defaultValue={startDate && endDate ? [dayjs(startDate), dayjs(endDate)] : undefined}
                             render={({ field }) => (
@@ -110,7 +111,7 @@ const Listing: React.FC = () => {
                             rules={{
                                 required: 'Date is required',
                             }}
-                            defaultValue={{ guest: roomNumber, room: numberOfGuest }}
+                            defaultValue={{ guest: +roomNumber, room: +numberOfGuest }}
                             render={({ field }) => (
                                 <Tooltip
                                     title={errors?.searchGuest?.message as string}
@@ -132,7 +133,7 @@ const Listing: React.FC = () => {
                                             <PiUserThin size={25} />
                                             <span className="">{`${getValues('searchGuest')?.guest || 1} adult · ${
                                                 getValues('searchGuest')?.room || 1
-                                            } room`}</span>
+                                            } rooms`}</span>
                                         </Button>
                                     </Dropdown>
                                 </Tooltip>
@@ -153,7 +154,11 @@ const Listing: React.FC = () => {
                         <div className="p-3 flex flex-col justify-center gap-3">
                             <h2>Your budget (per night)</h2>
                             <div className="">
-                                <div className="font-light">VND 300,000 - VND 10,000,000+</div>
+                                <div className="font-light">{`VND ${(
+                                    (watch('searchPrice')?.[0] || 100) * 1000
+                                ).toLocaleString()} - VND ${(
+                                    (watch('searchPrice')?.[1] || 5000) * 1000
+                                ).toLocaleString()}${watch('searchPrice')?.[1] === 5000 ? '+' : ''}`}</div>
                                 <Controller
                                     name="searchPrice"
                                     control={control}
@@ -161,8 +166,8 @@ const Listing: React.FC = () => {
                                         <Slider
                                             range={{ draggableTrack: true }}
                                             min={100}
-                                            max={10000}
-                                            defaultValue={[200, 2000]}
+                                            max={5000}
+                                            defaultValue={[100, 5000]}
                                             {...field}
                                         />
                                     )}
@@ -216,7 +221,8 @@ const Listing: React.FC = () => {
                         ) : (
                             <>
                                 {(data?.data?.apartments || []).map((room) => {
-                                    const price = +roomNumber * +room.price * numberOfDays;
+                                    const numDate = !numberOfDays || numberOfDays === 0 ? 1 : +numberOfDays;
+                                    const price = +roomNumber * +room.price * numDate;
                                     return (
                                         <div key={room._id} className="flex items-start gap-10 bg-white p-1 rounded-lg">
                                             <div className="w-2/5">
@@ -262,7 +268,7 @@ const Listing: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="w-full flex flex-col justify-end items-end mt-2 pr-5">
-                                                        <div className="font-light text-xs">{`1 night, ${numberOfGuest} people`}</div>
+                                                        <div className="font-light text-xs">{`${numDate} night, ${numberOfGuest} people`}</div>
                                                         <div className="text-lg">{`${price?.toLocaleString()} VND`}</div>
                                                         <div className="font-light text-xs">
                                                             {`+VND ${(price * 0.11)?.toLocaleString()} taxes and fees`}
