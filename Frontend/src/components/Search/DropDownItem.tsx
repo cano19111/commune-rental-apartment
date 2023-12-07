@@ -3,25 +3,29 @@ import { Button, message } from 'antd';
 import icons from '@/utils/icons';
 
 interface DropDownItemProps {
-    guest: number;
-    room: number;
-    setGuest: React.Dispatch<React.SetStateAction<number>>;
-    setRoom: React.Dispatch<React.SetStateAction<number>>;
+    value: {
+        guest: number;
+        room: number;
+    };
+    onChange: (newValue: { guest: number; room: number }) => void;
 }
 
-const DropDownItem: React.FC<DropDownItemProps> = ({ guest, room, setGuest, setRoom }) => {
+const DropDownItem: React.FC<DropDownItemProps> = ({ value, onChange }) => {
     const { BiMinus, AiOutlinePlus } = icons;
 
     const handleGuestChange = (amount: number) => {
-        if (guest + amount < room) {
+        if (value.guest + amount < value.room) {
             message.error('The number of rooms cannot be less than the number of people');
             return;
         }
-        setGuest((prevGuest) => Math.max(1, prevGuest + amount));
+        onChange({ ...value, guest: Math.max(1, value.guest + amount) });
     };
 
     const handleRoomChange = (amount: number) => {
-        setRoom((prevRoom) => Math.max(1, Math.min(guest, prevRoom + amount)));
+        onChange({
+            ...value,
+            room: Math.max(1, Math.min(value.guest, value.room + amount)),
+        });
     };
 
     return (
@@ -35,7 +39,7 @@ const DropDownItem: React.FC<DropDownItemProps> = ({ guest, room, setGuest, setR
                         onClick={() => handleGuestChange(-1)}
                     />
                     <div className="font-main font-medium text-base w-[15px] flex items-center justify-center">
-                        {guest}
+                        {value.guest || 1}
                     </div>
                     <Button
                         className="w-[30px] h-[30px] rounded-full border border-gray-900 flex items-center justify-center"
@@ -53,7 +57,7 @@ const DropDownItem: React.FC<DropDownItemProps> = ({ guest, room, setGuest, setR
                         onClick={() => handleRoomChange(-1)}
                     />
                     <div className="font-main font-medium text-base w-[15px] flex items-center justify-center">
-                        {room}
+                        {value.room || 1}
                     </div>
                     <Button
                         className="w-[30px] h-[30px] rounded-full border border-gray-900 flex items-center justify-center"

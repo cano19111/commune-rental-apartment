@@ -2,7 +2,6 @@ const User = require('../models/user.model');
 const { default: to } = require('await-to-js');
 const mongoose = require('mongoose');
 const Apartment = require('../models/apartment.model');
-const { response } = require('express');
 
 const getAllApartment = async (req, res, next) => {
     try {
@@ -155,9 +154,11 @@ const searchApartments = async (req, res, next) => {
         const parsedEndDay = new Date(endDate);
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
+        const minPrice = (parseInt(req.query.minPrice, 10) || 0) * 1000;
+        const maxPrice = (parseInt(req.query.maxPrice, 10) || 10000000) * 1000;
         const skip = (page - 1) * limit;
-
-        if (parsedStartDay < new Date() || parsedEndDay < new Date()) {
+        const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
+        if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
             return res.status(400).json({
                 success: false,
                 message: 'The start date or end date cannot be earlier than the current date',
@@ -185,6 +186,7 @@ const searchApartments = async (req, res, next) => {
                     },
                 },
             },
+            'rooms.price': { $gte: minPrice, $lte: maxPrice },
         };
 
         const [error, aggregateResult] = await to(
@@ -240,14 +242,18 @@ const searchApartments = async (req, res, next) => {
                                     services: {
                                         $slice: ['$services.title', 3],
                                     },
+
                                     rating: {
-                                        $cond: {
-                                            if: { $gt: [{ $size: { $ifNull: ['$reviews', []] } }, 0] },
-                                            then: {
-                                                $avg: '$reviews.score',
+                                        ratingAgv: {
+                                            $cond: {
+                                                if: { $gt: [{ $size: { $ifNull: ['$reviews', []] } }, 0] },
+                                                then: {
+                                                    $avg: '$reviews.score',
+                                                },
+                                                else: 0,
                                             },
-                                            else: 0,
                                         },
+                                        totalRating: { $sum: { $ifNull: ['$reviews.score', 0] } },
                                     },
                                 },
                             },
