@@ -138,8 +138,8 @@ const Header: React.FC = () => {
                                 key={index}
                                 to={navigate.path}
                             >
-                                <span> {navigate.icon}</span>
-                                <span> {navigate.title}</span>
+                                <span>{navigate.icon}</span>
+                                <span>{navigate.title}</span>
                             </NavLink>
                         ))}
                     </Flex>

@@ -8,10 +8,6 @@ import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
 import { signIn } from '@/contexts/auth/reduces';
 
-type LoginData = {
-    email: string;
-    password: string;
-};
 interface SignInProps {
     setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
 }
@@ -30,17 +26,15 @@ const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
         },
     });
     const loginMutation = useMutation({ mutationFn: apiLogin });
-    const handleLogin = (data: LoginData) => {
+    const handleLogin = (data: ReqSignIn) => {
         loginMutation.mutate(data, {
             onSuccess: (response) => {
-                if (response.data && response.data.success) {
-                    const { accessToken, user } = response.data.data;
+                if (response.success) {
+                    const { accessToken, user } = response.data || {};
                     setModalOpen({ isOpen: false, activeTab: 'signin' });
                     dispatch(signIn({ accessToken, user }));
                     message.success('Login successfully');
                     reset();
-                } else {
-                    message.error(response.data?.message || 'Login failed');
                 }
             },
             onError: () => {
@@ -48,6 +42,7 @@ const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
             },
         });
     };
+
     return (
         <>
             <Spin size="large" fullscreen={true} spinning={loginMutation.isPending}></Spin>

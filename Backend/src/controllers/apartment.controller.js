@@ -148,10 +148,6 @@ const createApartment = async (req, res, next) => {
 };
 
 const searchApartments = async (req, res, next) => {
-    function delay(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-    await delay(1000);
     try {
         const { numberOfGuest, quantity, province, district, ward, street, startDate, endDate, name } = req.query;
         const parsedStartDay = new Date(startDate);
