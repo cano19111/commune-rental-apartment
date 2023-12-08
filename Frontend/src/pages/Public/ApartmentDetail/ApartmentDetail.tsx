@@ -2,11 +2,35 @@ import { DropDownItem } from '@/components';
 import icons from '@/utils/icons';
 import { Button, DatePicker, Dropdown, Image } from 'antd';
 import React from 'react';
+import './ApartmentDetail.css';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+
+const center = {
+    lat: 13.755734463406828,
+    lng: 109.21495999261536,
+};
 
 const ApartmentDetail: React.FC = () => {
+    const { isLoaded } = useJsApiLoader({
+        id: 'rent-apartment-407116',
+        googleMapsApiKey: 'AIzaSyBqip7J60tcOjwbuPv7qege_NMoQoFyNag',
+    });
+
+    const [map, setMap] = React.useState(null);
+
+    const onLoad = React.useCallback(function callback(map) {
+        const bounds = new window.google.maps.LatLngBounds(center);
+        map.fitBounds(bounds);
+
+        setMap(map);
+    }, []);
+
+    const onUnmount = React.useCallback(function callback(map) {
+        setMap(null);
+    }, []);
     const { FaLocationDot } = icons;
     return (
-        <div className="w-full flex justify-center h-screen font-main">
+        <div className="w-full flex justify-center font-main">
             <div className="max-w-main w-full">
                 <div className="grid grid-cols-4 gap-2 mt-10 w-full rounded-sm overflow-hidden">
                     <div className="col-span-2 h-full">
@@ -48,12 +72,12 @@ const ApartmentDetail: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-5 pt-7 flex-wrap">
-                            <div className="px-5 py-3 border rounded-md border-gray-500">Free parking</div>
-                            <div className="px-5 py-3 border rounded-md border-gray-500">Free parking</div>
-                            <div className="px-5 py-3 border rounded-md border-gray-500">Free parking</div>
-                            <div className="px-5 py-3 border rounded-md border-gray-500">Free parking</div>
-                            <div className="px-5 py-3 border rounded-md border-gray-500">Free parking</div>
-                            <div className="px-5 py-3 border rounded-md border-gray-500">Free parking</div>
+                            <div className="px-5 py-3">Free parking</div>
+                            <div className="px-5 py-3">Free parking</div>
+                            <div className="px-5 py-3">Free parking</div>
+                            <div className="px-5 py-3">Free parking</div>
+                            <div className="px-5 py-3">Free parking</div>
+                            <div className="px-5 py-3">Free parking</div>
                         </div>
                     </div>
                     <div className="p-7 shadow shadow-gray-400 rounded-xl sticky top-[90px]">
@@ -91,6 +115,23 @@ const ApartmentDetail: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="h-[480px] my-7 google-map">
+                    {isLoaded ? (
+                        <GoogleMap
+                            mapContainerStyle={{
+                                width: '100%',
+                                height: '480px',
+                                borderRadius: '10px',
+                            }}
+                            center={center}
+                            zoom={14}
+                        >
+                            <></>
+                        </GoogleMap>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
         </div>
