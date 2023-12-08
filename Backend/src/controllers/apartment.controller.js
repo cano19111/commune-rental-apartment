@@ -148,14 +148,18 @@ const createApartment = async (req, res, next) => {
 };
 
 const searchApartments = async (req, res, next) => {
+    function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    await delay(1000);
     try {
         const { numberOfGuest, quantity, province, district, ward, street, startDate, endDate, name } = req.query;
         const parsedStartDay = new Date(startDate);
         const parsedEndDay = new Date(endDate);
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
-        const minPrice = (parseInt(req.query.minPrice, 10) || 0) * 1000;
-        const maxPrice = (parseInt(req.query.maxPrice, 10) || 10000000) * 1000;
+        const minPrice = parseInt(req.query.minPrice, 10) || 0;
+        const maxPrice = parseInt(req.query.maxPrice, 10) || 1000000000;
         const skip = (page - 1) * limit;
         const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
         if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
