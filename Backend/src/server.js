@@ -11,11 +11,10 @@ const initRoutes = require('./routes');
 const server = require('http').createServer(app);
 app.use(
     cors({
-        origin: process.env.CLIENT_URI,
-        methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
-        credentials: true,
+        origin: '*',
     }),
 );
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -29,10 +28,6 @@ dbConnect();
 
 app.use(morgan('dev'));
 initRoutes(app);
-
-helmet({
-    crossOriginResourcePolicy: false,
-});
 
 const PORT = process.env.SERVER_PORT || 3045;
 server.listen(PORT, () => {
