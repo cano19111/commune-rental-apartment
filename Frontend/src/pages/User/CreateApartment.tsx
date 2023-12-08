@@ -84,9 +84,9 @@ const CreateApartment: React.FC = () => {
             formData.append(key, value as string);
         });
         createApartmentMutation.mutate(formData, {
-            onSuccess: (data) => {
-                if (data) {
-                    if (data.success) {
+            onSuccess: (response) => {
+                if (response.data) {
+                    if (response.data.success) {
                         message.success('Create apartment successfully');
                         reset();
                     } else message.error(data?.message || 'Create apartment failed');

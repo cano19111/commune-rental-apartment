@@ -138,7 +138,7 @@ const Listing: React.FC = () => {
                                                 />
                                             )}
                                             placement="bottomLeft"
-                                            trigger="click"
+                                            trigger={['click']}
                                         >
                                             <Button className="font-main w-full h-[48px] bg-white rounded-xl flex items-center gap-1 justify-center">
                                                 <PiUserThin size={25} />

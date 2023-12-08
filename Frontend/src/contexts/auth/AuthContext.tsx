@@ -8,9 +8,6 @@ import { Spin } from 'antd';
 interface AuthProviderProps {
     children: React.ReactNode;
 }
-interface AuthProviderProps {
-    children: React.ReactNode;
-}
 
 export enum AuthActionType {
     INITIALIZE = 'INITIALIZE',
@@ -18,18 +15,23 @@ export enum AuthActionType {
     SIGN_OUT = 'SIGN_OUT',
 }
 
+// Corrected PayloadAction type
 export interface PayloadAction<T> {
     type: AuthActionType;
-    payload: T;
+    payload?: T;
+    dispatch?: Dispatch<PayloadAction<AuthState>>;
 }
+
 export interface AuthContextType extends AuthState {
-    dispatch: Dispatch<PayloadAction<AuthContextType>>;
+    dispatch: Dispatch<PayloadAction<AuthState>>;
 }
+
 const initialState: AuthState = {
     isAuthenticated: false,
     accessToken: null,
     user: null,
 };
+
 export const AuthContext = createContext<AuthContextType>({
     ...initialState,
     dispatch: () => null,
@@ -56,6 +58,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data?.user }));
         }
     }, [currentUser, isError, isLoading, state.accessToken]);
+
     return (
         <AuthContext.Provider value={{ ...state, dispatch }}>
             <Spin spinning={isLoading} fullscreen={isLoading} size="large">
