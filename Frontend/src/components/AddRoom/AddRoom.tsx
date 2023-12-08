@@ -6,9 +6,18 @@ import { apiGetServices } from '@/apis';
 import { InputForm } from '..';
 import icons from '@/utils/icons';
 import clsx from 'clsx';
+import { Controller, FieldValues, DeepMap, FieldError } from 'react-hook-form';
 const { FiTrash, AiOutlineClose } = icons;
 
-const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: any) => {
+interface AddRoomProps {
+    Controller: typeof Controller;
+    errors: DeepMap<FieldValues, FieldError>;
+    control: any;
+    indexRoom: number;
+    onClose: (index: number) => void;
+}
+
+const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoom, onClose }) => {
     const { data: servicesData } = useQuery({
         queryKey: ['services'],
         queryFn: apiGetServices,
@@ -35,10 +44,10 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                     rules={{
                         required: 'Services is required',
                     }}
-                    render={({ field }: any) => (
+                    render={({ field }) => (
                         <Flex vertical gap={5}>
                             <Checkbox.Group
-                                options={(servicesData?.data.services || []).map((service: any) => ({
+                                options={(servicesData?.data.services || []).map((service) => ({
                                     label: service.title,
                                     value: service._id,
                                 }))}
@@ -79,7 +88,7 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                         rules={{
                             required: 'Images is required',
                         }}
-                        render={({ field: { onChange, value } }: any) => (
+                        render={({ field: { onChange, value } }) => (
                             <Flex vertical gap={5}>
                                 <Upload
                                     listType="picture-card"
@@ -159,8 +168,8 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                     type="number"
                     label="Price"
                     className="md:min-w-[250px] min-w-[200px]"
-                    formatter={(value: any) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value: any) => value!.replace(/\$\s?|(,*)/g, '')}
+                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
                 />
                 <InputForm
                     Controller={Controller}

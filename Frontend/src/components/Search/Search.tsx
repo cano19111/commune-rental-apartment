@@ -97,7 +97,7 @@ const Search: React.FC = () => {
                                     <DropDownItem value={field.value} onChange={(value) => field.onChange(value)} />
                                 )}
                                 placement="bottomLeft"
-                                trigger="click"
+                                trigger={['click']}
                             >
                                 <Button className="font-main px-5 h-[50px] rounded-full flex items-center gap-1 justify-center">
                                     <PiUserThin size={25} />

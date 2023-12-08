@@ -2,10 +2,12 @@ import React from 'react';
 import registerImage from '@/assets/register.jpg';
 import { Button, Flex, Input } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import icons from '@/utils/icons';
 
-const SignUp: React.FC = () => {
+interface SignInProps {
+    setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
+}
+const SignUp: React.FC<SignInProps> = () => {
     const { FaRegUser, FcGoogle, SiFacebook } = icons;
     const {
         handleSubmit,
@@ -16,7 +18,7 @@ const SignUp: React.FC = () => {
             email: '',
         },
     });
-    const handleRegister = (data) => {};
+    const handleRegister = () => {};
     return (
         <form onSubmit={handleSubmit(handleRegister)}>
             <div className="w-full flex gap-5">

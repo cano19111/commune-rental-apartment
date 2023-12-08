@@ -1,8 +1,24 @@
 import { Flex, Select } from 'antd';
 import React from 'react';
 import clsx from 'clsx';
+import { Controller } from 'react-hook-form';
 
-const SelectForm: React.FC = ({
+interface SelectFormProps {
+    Controller: typeof Controller;
+    control: any;
+    error?: any;
+    name: string;
+    rules?: object;
+    placeholder: string;
+    type?: string;
+    label: string;
+    className?: string;
+    options: any;
+    onChangeSelected?: (value: any) => void;
+    propsOther?: any;
+    defaultValue?: any;
+}
+const SelectForm: React.FC<SelectFormProps> = ({
     Controller,
     control,
     error,
@@ -15,7 +31,7 @@ const SelectForm: React.FC = ({
     defaultValue,
     onChangeSelected,
     ...propsOther
-}: any) => {
+}) => {
     return (
         <div className="flex flex-col w-full">
             <label className="text-lg mb-2">
@@ -30,7 +46,6 @@ const SelectForm: React.FC = ({
                     <Flex vertical gap={5}>
                         <Select
                             {...propsOther}
-                            size="medium"
                             options={options}
                             className={clsx(className)}
                             placeholder={placeholder}

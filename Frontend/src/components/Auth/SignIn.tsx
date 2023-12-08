@@ -12,7 +12,10 @@ type LoginData = {
     email: string;
     password: string;
 };
-const SignIn: React.FC = ({ setModalOpen }) => {
+interface SignInProps {
+    setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
+}
+const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
     const { FaRegUser, HiOutlineLockClosed, FcGoogle, SiFacebook } = icons;
     const { dispatch } = useAuth();
     const {
@@ -29,20 +32,17 @@ const SignIn: React.FC = ({ setModalOpen }) => {
     const loginMutation = useMutation({ mutationFn: apiLogin });
     const handleLogin = (data: LoginData) => {
         loginMutation.mutate(data, {
-            onSuccess: (data) => {
-                if (data) {
-                    if (data.success) {
-                        const { accessToken, user } = data.data;
-                        setModalOpen({ isOpen: false, activeTab: 'signin' });
-                        dispatch(signIn({ accessToken: accessToken, user: user }));
-                        message.success('Login successfully');
-                        reset();
-                    } else message.error(data?.message);
+            onSuccess: (response) => {
+                if (response.data && response.data.success) {
+                    const { accessToken, user } = response.data.data;
+                    setModalOpen({ isOpen: false, activeTab: 'signin' });
+                    dispatch(signIn({ accessToken, user }));
+                    message.success('Login successfully');
+                    reset();
                 } else {
-                    message.error('Login failed');
+                    message.error(response.data?.message || 'Login failed');
                 }
             },
-
             onError: () => {
                 message.error('Login failed');
             },

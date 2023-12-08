@@ -45,7 +45,8 @@ const PersonalInformation: React.FC = () => {
 
         editProfileMutator.mutate(formData, {
             onSuccess: (response) => {
-                if (response.success) {
+                const responseData = response.data;
+                if (responseData && responseData.success) {
                     message.success('Edit profile updated successfully');
                     setIsEditing(false);
                     queryClient.invalidateQueries({
@@ -56,7 +57,7 @@ const PersonalInformation: React.FC = () => {
                     });
                     reset();
                 } else {
-                    message.error(response?.message || 'Edit profile failed');
+                    message.error(responseData?.message || 'Edit profile failed');
                 }
             },
             onError: () => {
