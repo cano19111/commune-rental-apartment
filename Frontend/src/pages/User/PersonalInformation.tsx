@@ -10,7 +10,7 @@ import { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
 const PersonalInformation: React.FC = () => {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const editProfileMutator = useMutation({
         mutationFn: apiEditUser,

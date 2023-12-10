@@ -23,7 +23,7 @@ const Search: React.FC = () => {
     } = useForm();
     const navigate = useNavigate();
 
-    const handleSearch = (data) => {
+    const handleSearch = (data: SearchData) => {
         const queryParams = new URLSearchParams({
             province: data.searchText,
             startDate: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),

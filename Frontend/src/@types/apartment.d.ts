@@ -15,8 +15,19 @@ interface Room {
     services: string[];
     description: string;
     price: number;
-    size: numberOfGuest;
+    size: number;
+    numberOfGuest: number;
     images: [];
     roomType: number;
     quantity: number;
+}
+interface SearchData {
+    searchText: string;
+    searchDate: [Date, Date];
+    searchGuest: {
+        guest: number;
+        room: number;
+    };
+    room: number;
+    searchPrice?: number;
 }

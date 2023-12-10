@@ -95,7 +95,6 @@ const CreateApartment: React.FC = () => {
                     reset();
                 }
             },
-
             onError: () => {
                 message.error('Create apartment failed');
             },
@@ -108,7 +107,6 @@ const CreateApartment: React.FC = () => {
                 <div className="max-w-main mx-auto p-10 flex flex-col gap-3">
                     <h1 className="text-3xl font-bold mb-5">Create Apartment</h1>
                     <InputForm
-                        Controller={Controller}
                         control={control}
                         error={errors?.title}
                         name="title"
@@ -171,7 +169,6 @@ const CreateApartment: React.FC = () => {
                     </div>
                     <div>
                         <InputForm
-                            Controller={Controller}
                             control={control}
                             error={errors?.location?.street}
                             name="location.street"
@@ -183,7 +180,6 @@ const CreateApartment: React.FC = () => {
 
                     <Flex gap={20} align="center" className="flex-wrap sm:flex-nowrap">
                         <InputForm
-                            Controller={Controller}
                             control={control}
                             error={errors?.location?.longitude}
                             name="location.longitude"
@@ -194,7 +190,6 @@ const CreateApartment: React.FC = () => {
                             className="min-w-[250px] "
                         />
                         <InputForm
-                            Controller={Controller}
                             control={control}
                             error={errors?.location?.latitude}
                             name="location.latitude"

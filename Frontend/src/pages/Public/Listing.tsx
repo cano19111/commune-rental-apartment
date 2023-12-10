@@ -30,18 +30,18 @@ const Listing: React.FC = () => {
         queryFn: () => apiSearchRoom(searchParams.toString()),
         staleTime: 0,
     });
-    const roomNumber = searchParams.get('room') ?? 1;
-    const numberOfGuest = searchParams.get('numberOfGuest') ?? 1;
+    const roomNumber: number = +searchParams.get('room') ?? 1;
+    const numberOfGuest: number = +searchParams.get('numberOfGuest') ?? 1;
     const startDate: string | null = searchParams.get('startDate');
     const endDate: string | null = searchParams.get('endDate');
 
-    const checkIn = startDate ? new Date(startDate) : null;
-    const checkOut = endDate ? new Date(endDate) : null;
+    const checkIn: Date | null = startDate ? new Date(startDate) : null;
+    const checkOut: Date | null = endDate ? new Date(endDate) : null;
     const numberOfDays: number =
         checkIn && checkOut ? Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)) : 1;
-    const handleSearch = (data) => {
+    const handleSearch = (data: SearchData) => {
         const queryParams = new URLSearchParams({
-            province: data.searchName,
+            province: data.searchText,
             startDate: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
             endDate: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
             numberOfGuest: data.searchGuest.guest.toString(),
@@ -64,7 +64,7 @@ const Listing: React.FC = () => {
                         <div className="flex flex-col gap-2">
                             <div className="text-lg mx-2">Search</div>
                             <Controller
-                                name="searchName"
+                                name="searchText"
                                 rules={{
                                     required: 'Please enter a destination',
                                 }}
@@ -72,9 +72,9 @@ const Listing: React.FC = () => {
                                 defaultValue={searchParams.get('province')}
                                 render={({ field }) => (
                                     <Tooltip
-                                        title={errors?.searchName?.message as string}
+                                        title={errors?.searchText?.message as string}
                                         color="red"
-                                        open={!!errors.searchName}
+                                        open={!!errors.searchText}
                                         placement="right"
                                     >
                                         <Autocomplete>
