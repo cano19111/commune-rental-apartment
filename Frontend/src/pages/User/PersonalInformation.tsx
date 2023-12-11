@@ -10,7 +10,7 @@ import { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
 const PersonalInformation: React.FC = () => {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const editProfileMutator = useMutation({
         mutationFn: apiEditUser,
@@ -44,9 +44,8 @@ const PersonalInformation: React.FC = () => {
         });
 
         editProfileMutator.mutate(formData, {
-            onSuccess: (response) => {
-                const responseData = response.data;
-                if (responseData && responseData.success) {
+            onSuccess: (response: Res) => {
+                if (response.success) {
                     message.success('Edit profile updated successfully');
                     setIsEditing(false);
                     queryClient.invalidateQueries({
@@ -56,8 +55,6 @@ const PersonalInformation: React.FC = () => {
                         queryKey: ['currentUser'],
                     });
                     reset();
-                } else {
-                    message.error(responseData?.message || 'Edit profile failed');
                 }
             },
             onError: () => {

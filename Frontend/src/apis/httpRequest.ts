@@ -1,4 +1,5 @@
-import axios from 'axios';
+import { message } from 'antd';
+import axios, { AxiosResponse } from 'axios';
 
 const instance = axios.create({
     baseURL: `${import.meta.env.VITE_SERVER_URL}/api`,
@@ -9,12 +10,7 @@ instance.interceptors.request.use(
         const localStorageData = localStorage.getItem('ACCESS_TOKEN');
         if (localStorageData && typeof localStorageData === 'string') {
             const token = JSON.parse(localStorageData);
-
-            // Use 'any' to handle any type mismatch
-            config.headers = {
-                ...config.headers,
-                authorization: `Bearer ${token}`,
-            } as any;
+            config.headers.authorization = `Bearer ${token}`;
         }
         return config;
     },
@@ -24,11 +20,12 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-    function (response) {
+    function (response: AxiosResponse) {
         return response?.data;
     },
     function (error) {
-        return error?.response?.data;
+        message.error(error?.response.data.message || 'Error from server');
+        return error?.response;
     },
 );
 

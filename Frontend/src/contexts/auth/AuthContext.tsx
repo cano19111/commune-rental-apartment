@@ -1,5 +1,5 @@
 import React, { createContext, Dispatch, FC, useEffect, useReducer } from 'react';
-import { AuthState } from './types';
+import { AuthActionType } from './types';
 import { initialize, reducer } from './reduces';
 import { apiGetCurrentUser } from '@/apis';
 import { useQuery } from '@tanstack/react-query';
@@ -9,13 +9,6 @@ interface AuthProviderProps {
     children: React.ReactNode;
 }
 
-export enum AuthActionType {
-    INITIALIZE = 'INITIALIZE',
-    SIGN_IN = 'SIGN_IN',
-    SIGN_OUT = 'SIGN_OUT',
-}
-
-// Corrected PayloadAction type
 export interface PayloadAction<T> {
     type: AuthActionType;
     payload?: T;

@@ -65,7 +65,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
             </div>
 
             <InputForm
-                Controller={Controller}
                 control={control}
                 error={errors?.rooms?.[indexRoom]?.description}
                 name={`rooms.${indexRoom}.description`}
@@ -137,14 +136,13 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
             </div>
             <Flex align="center" gap={20} wrap="wrap">
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.size}
                     name={`rooms.${indexRoom}.size`}
                     rules={{
                         required: 'Room size is required',
                         validate: {
-                            positive: (value) => value >= 0 || 'Room size cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Room size cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the room size"
@@ -154,14 +152,13 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                 />
 
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.price}
                     name={`rooms.${indexRoom}.price`}
                     rules={{
                         required: 'Price is required',
                         validate: {
-                            positive: (value) => value >= 0 || 'Price cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Price cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the size"
@@ -172,7 +169,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                     parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
                 />
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.roomType}
                     name={`rooms.${indexRoom}.roomType`}
@@ -183,14 +179,13 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                 />
 
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.numberOfGuest}
                     name={`rooms.${indexRoom}.numberOfGuest`}
                     rules={{
                         required: 'Number of guests is required',
                         validate: {
-                            positive: (value) => value >= 0 || 'Number of guests cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Number of guests cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the number of guests"
@@ -199,7 +194,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                     className="md:min-w-[250px] min-w-[200px]"
                 />
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.quantity}
                     name={`rooms.${indexRoom}.quantity`}
@@ -207,7 +201,7 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                         required: 'Quantity is required',
                         valueAsNumber: 'Quantity must be numeric',
                         validate: {
-                            positive: (value) => value >= 0 || 'Quantity cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Quantity cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the quantity"
