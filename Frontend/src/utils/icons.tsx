@@ -1,4 +1,4 @@
-import { FaFacebookF, FaRegUser } from 'react-icons/fa';
+import { FaFacebookF, FaRegUser, FaUser } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 import {
     AiOutlineTwitter,
@@ -49,5 +49,6 @@ const icons = {
     FiTrash,
     IoCreateOutline,
     AiOutlineClose,
+    FaUser,
 };
 export default icons;
