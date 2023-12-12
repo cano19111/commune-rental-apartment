@@ -1,5 +1,5 @@
-import { AuthActionType, PayloadAction } from './AuthContext';
-import { AuthState } from './types';
+import { PayloadAction } from './AuthContext';
+import { AuthActionType } from './types';
 
 export interface ReducerHandler {
     INITIALIZE(state: AuthState, action: PayloadAction<AuthState>): AuthState;

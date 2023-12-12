@@ -18,11 +18,14 @@ const getCurrentUser = async (req, res, next) => {
                 message: 'User not found',
             });
         }
-
+        const avatarUrl = `${process.env.SERVER_URI}/api/image/${user.avatar}`;
         return res.status(200).json({
             success: true,
             data: {
-                user,
+                user: {
+                    ...user.toObject(),
+                    avatar: avatarUrl,
+                },
             },
         });
     } catch (error) {
@@ -36,7 +39,7 @@ const editUser = async (req, res, next) => {
         const update = req.body;
         let avatar;
         if (req.file) {
-            avatar = `${process.env.SERVER_URI}/api/image/${req.file.filename}`;
+            avatar = req.file.filename;
         }
 
         if (!uid) {

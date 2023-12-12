@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { Controller } from 'react-hook-form';
 
 interface InputFormProps {
-    Controller: typeof Controller;
     control: any;
     error?: any;
     name: string;
@@ -15,12 +14,11 @@ interface InputFormProps {
     className?: string;
     rows?: number;
     propsOther?: any;
-    formatter?: (value: any) => string;
-    parser?: (value: any) => string;
+    formatter?: (value: string) => string;
+    parser?: (value: string) => string;
 }
 
 const InputForm: React.FC<InputFormProps> = ({
-    Controller,
     control,
     error,
     name,
@@ -42,11 +40,10 @@ const InputForm: React.FC<InputFormProps> = ({
                 control={control}
                 name={name}
                 rules={rules}
-                render={({ field }: any) => (
+                render={({ field }) => (
                     <Flex vertical gap={5}>
                         <InputComponent
                             {...propsOther}
-                            size="medium"
                             className={clsx('font-main', className)}
                             placeholder={placeholder}
                             {...field}

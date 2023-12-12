@@ -1,13 +1,13 @@
 import axios from './httpRequest';
 
-export const apiRegister = (data) =>
+export const apiRegister = (data: ReqSignUp): Promise<Res> =>
     axios({
         url: '/auth/register',
         method: 'post',
         data,
-        withCredentials: true,
     });
-export const apiLogin = (data) =>
+
+export const apiLogin = (data: ReqSignIn): Promise<Res> =>
     axios({
         url: '/auth/login',
         method: 'post',

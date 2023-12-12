@@ -1,16 +1,13 @@
 import axios from './httpRequest';
 
-export const apiGetCurrentUser = () =>
+export const apiGetCurrentUser = (): Promise<Res> =>
     axios({
         url: '/user/current-user',
         method: 'get',
-        withCredentials: true,
     });
-
-export const apiEditUser = (data) =>
+export const apiEditUser = (data: FormData): Promise<Res> =>
     axios({
         url: '/user',
         method: 'put',
         data,
-        withCredentials: true,
     });

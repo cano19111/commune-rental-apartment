@@ -17,6 +17,9 @@ export default {
             maxWidth: {
                 main: '1128px',
             },
+            borderRadius: {
+                score: '50% 50% 88% 12% / 42% 40% 60% 58% ',
+            },
         },
     },
     plugins: [],

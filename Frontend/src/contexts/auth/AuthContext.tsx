@@ -1,5 +1,5 @@
 import React, { createContext, Dispatch, FC, useEffect, useReducer } from 'react';
-import { AuthState } from './types';
+import { AuthActionType } from './types';
 import { initialize, reducer } from './reduces';
 import { apiGetCurrentUser } from '@/apis';
 import { useQuery } from '@tanstack/react-query';
@@ -8,28 +8,23 @@ import { Spin } from 'antd';
 interface AuthProviderProps {
     children: React.ReactNode;
 }
-interface AuthProviderProps {
-    children: React.ReactNode;
-}
-
-export enum AuthActionType {
-    INITIALIZE = 'INITIALIZE',
-    SIGN_IN = 'SIGN_IN',
-    SIGN_OUT = 'SIGN_OUT',
-}
 
 export interface PayloadAction<T> {
     type: AuthActionType;
-    payload: T;
+    payload?: T;
+    dispatch?: Dispatch<PayloadAction<AuthState>>;
 }
+
 export interface AuthContextType extends AuthState {
-    dispatch: Dispatch<PayloadAction<AuthContextType>>;
+    dispatch: Dispatch<PayloadAction<AuthState>>;
 }
+
 const initialState: AuthState = {
     isAuthenticated: false,
     accessToken: null,
     user: null,
 };
+
 export const AuthContext = createContext<AuthContextType>({
     ...initialState,
     dispatch: () => null,
@@ -53,9 +48,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
             dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
         } else if (currentUser && !isError && !!localStorage.getItem('ACCESS_TOKEN')) {
             const token = JSON.parse(localStorage.getItem('ACCESS_TOKEN') as string);
-            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data.user }));
+            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data?.user }));
         }
     }, [currentUser, isError, isLoading, state.accessToken]);
+
     return (
         <AuthContext.Provider value={{ ...state, dispatch }}>
             <Spin spinning={isLoading} fullscreen={isLoading} size="large">

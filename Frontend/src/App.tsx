@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import Router from './router/Router';
-import { AuthProvider } from './contexts/auth/AuthContext';
+import { AuthProvider } from './contexts';
 
 const App: React.FC = () => {
     const router = Router();

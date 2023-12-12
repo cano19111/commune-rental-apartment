@@ -17,7 +17,7 @@ const Header: React.FC = () => {
     });
     const [openNavigate, setOpenNavigate] = useState(false);
     const { isAuthenticated } = useAuth();
-    const tabItems: TabsProps['items'] = [
+    const tabItemsModal: TabsProps['items'] = [
         {
             key: 'signin',
             label: (
@@ -113,7 +113,7 @@ const Header: React.FC = () => {
                     },
                 }}
             >
-                <Tabs centered={true} activeKey={modalOpen.activeTab} items={tabItems} tabBarGutter={0} />
+                <Tabs centered={true} activeKey={modalOpen.activeTab} items={tabItemsModal} tabBarGutter={0} />
             </Modal>
             <Drawer
                 title={
@@ -138,8 +138,8 @@ const Header: React.FC = () => {
                                 key={index}
                                 to={navigate.path}
                             >
-                                <span> {navigate.icon}</span>
-                                <span> {navigate.title}</span>
+                                <span>{navigate.icon}</span>
+                                <span>{navigate.title}</span>
                             </NavLink>
                         ))}
                     </Flex>

@@ -10,7 +10,7 @@ import { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
 const PersonalInformation: React.FC = () => {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const editProfileMutator = useMutation({
         mutationFn: apiEditUser,
@@ -44,7 +44,7 @@ const PersonalInformation: React.FC = () => {
         });
 
         editProfileMutator.mutate(formData, {
-            onSuccess: (response) => {
+            onSuccess: (response: Res) => {
                 if (response.success) {
                     message.success('Edit profile updated successfully');
                     setIsEditing(false);
@@ -55,8 +55,6 @@ const PersonalInformation: React.FC = () => {
                         queryKey: ['currentUser'],
                     });
                     reset();
-                } else {
-                    message.error(response?.message || 'Edit profile failed');
                 }
             },
             onError: () => {
@@ -128,7 +126,7 @@ const PersonalInformation: React.FC = () => {
                                         />
                                     )}
                                     {errors?.avatarEdit && (
-                                        <span className="font-main text-red-600">
+                                        <span className="font-main text-xs text-red-600">
                                             {errors?.avatarEdit.message as string}
                                         </span>
                                     )}
@@ -137,7 +135,7 @@ const PersonalInformation: React.FC = () => {
                         />
                         <Row gutter={[0, 0]} className="mt-5">
                             <Col span={24} lg={12}>
-                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-center">
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
                                     <div className="font-medium text-base whitespace-nowrap w-[50%] md:w-[30%] lg:w-[40%]">
                                         First name :
                                     </div>
@@ -150,10 +148,10 @@ const PersonalInformation: React.FC = () => {
                                                 required: 'First name is required',
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.firstname && 'error'} />
                                                     {errors?.firstname && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.firstname.message as string}
                                                         </span>
                                                     )}
@@ -166,7 +164,7 @@ const PersonalInformation: React.FC = () => {
                                 </div>
                             </Col>
                             <Col span={24} lg={12}>
-                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-center">
+                                <div className="w-full flex border-t border-gray-300 py-6 px-3 items-start">
                                     <div className="font-medium text-base whitespace-nowrap w-[50%] md:w-[30%] lg:w-[40%]">
                                         Last name :
                                     </div>
@@ -179,10 +177,10 @@ const PersonalInformation: React.FC = () => {
                                                 required: 'Last name is required',
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.lastname && 'error'} />
                                                     {errors?.lastname && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.lastname?.message as string}
                                                         </span>
                                                     )}
@@ -212,10 +210,10 @@ const PersonalInformation: React.FC = () => {
                                                 },
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.email && 'error'} />
                                                     {errors?.email && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.email?.message as string}
                                                         </span>
                                                     )}
@@ -245,10 +243,10 @@ const PersonalInformation: React.FC = () => {
                                                 },
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.phone && 'error'} />
                                                     {errors?.phone && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.phone?.message as string}
                                                         </span>
                                                     )}
@@ -274,7 +272,7 @@ const PersonalInformation: React.FC = () => {
                                                 required: 'Date of birth is required',
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <DatePicker
                                                         {...field}
                                                         format="DD-MM-YYYY"
@@ -284,7 +282,7 @@ const PersonalInformation: React.FC = () => {
                                                         status={errors?.dateOfBirth && 'error'}
                                                     />
                                                     {errors?.dateOfBirth && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.dateOfBirth?.message as string}
                                                         </span>
                                                     )}
@@ -312,10 +310,10 @@ const PersonalInformation: React.FC = () => {
                                                 required: 'Nationality is required',
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.nationality && 'error'} />
                                                     {errors?.nationality && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.nationality?.message as string}
                                                         </span>
                                                     )}
@@ -339,7 +337,7 @@ const PersonalInformation: React.FC = () => {
                                                 required: 'Gender is required',
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Select
                                                         {...field}
                                                         status={errors?.gender && 'error'}
@@ -351,7 +349,7 @@ const PersonalInformation: React.FC = () => {
                                                         ]}
                                                     />
                                                     {errors?.gender && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.gender?.message as string}
                                                         </span>
                                                     )}
@@ -375,10 +373,10 @@ const PersonalInformation: React.FC = () => {
                                                 required: 'Address is required',
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.address && 'error'} />
                                                     {errors?.address && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.address?.message as string}
                                                         </span>
                                                     )}
@@ -408,10 +406,10 @@ const PersonalInformation: React.FC = () => {
                                                 },
                                             }}
                                             render={({ field }) => (
-                                                <div className="flex flex-col gap-5">
+                                                <div className="flex flex-col gap-1">
                                                     <Input {...field} status={errors?.personalId && 'error'} />
                                                     {errors?.personalId && (
-                                                        <span className="font-main text-red-600">
+                                                        <span className="font-main text-xs text-red-600">
                                                             {errors?.personalId?.message as string}
                                                         </span>
                                                     )}

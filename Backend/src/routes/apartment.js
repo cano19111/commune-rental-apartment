@@ -6,7 +6,7 @@ const { apartmentSchema } = require('../utils/validation');
 const upload = require('../middlewares/uploadFile');
 
 router.post('/', verifyAccessToken, upload.any(), validateRequest(apartmentSchema, true), controller.createApartment);
-router.get('/search', controller.searchRooms);
+router.get('/search', controller.searchApartments);
 
 router.get('/', verifyAccessToken, controller.getAllApartment);
 router.get('/:apartmentId', verifyAccessToken, controller.getApartment);

@@ -6,9 +6,18 @@ import { apiGetServices } from '@/apis';
 import { InputForm } from '..';
 import icons from '@/utils/icons';
 import clsx from 'clsx';
+import { Controller, FieldValues, DeepMap, FieldError } from 'react-hook-form';
 const { FiTrash, AiOutlineClose } = icons;
 
-const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: any) => {
+interface AddRoomProps {
+    Controller: typeof Controller;
+    errors: DeepMap<FieldValues, FieldError>;
+    control: any;
+    indexRoom: number;
+    onClose: (index: number) => void;
+}
+
+const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoom, onClose }) => {
     const { data: servicesData } = useQuery({
         queryKey: ['services'],
         queryFn: apiGetServices,
@@ -35,10 +44,10 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                     rules={{
                         required: 'Services is required',
                     }}
-                    render={({ field }: any) => (
+                    render={({ field }) => (
                         <Flex vertical gap={5}>
                             <Checkbox.Group
-                                options={(servicesData?.data.services || []).map((service: any) => ({
+                                options={(servicesData?.data.services || []).map((service) => ({
                                     label: service.title,
                                     value: service._id,
                                 }))}
@@ -56,7 +65,6 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
             </div>
 
             <InputForm
-                Controller={Controller}
                 control={control}
                 error={errors?.rooms?.[indexRoom]?.description}
                 name={`rooms.${indexRoom}.description`}
@@ -79,7 +87,7 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                         rules={{
                             required: 'Images is required',
                         }}
-                        render={({ field: { onChange, value } }: any) => (
+                        render={({ field: { onChange, value } }) => (
                             <Flex vertical gap={5}>
                                 <Upload
                                     listType="picture-card"
@@ -128,14 +136,13 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
             </div>
             <Flex align="center" gap={20} wrap="wrap">
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.size}
                     name={`rooms.${indexRoom}.size`}
                     rules={{
                         required: 'Room size is required',
                         validate: {
-                            positive: (value) => value >= 0 || 'Room size cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Room size cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the room size"
@@ -145,25 +152,23 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                 />
 
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.price}
                     name={`rooms.${indexRoom}.price`}
                     rules={{
                         required: 'Price is required',
                         validate: {
-                            positive: (value) => value >= 0 || 'Price cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Price cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the size"
                     type="number"
                     label="Price"
                     className="md:min-w-[250px] min-w-[200px]"
-                    formatter={(value: any) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value: any) => value!.replace(/\$\s?|(,*)/g, '')}
+                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
                 />
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.roomType}
                     name={`rooms.${indexRoom}.roomType`}
@@ -174,14 +179,13 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                 />
 
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.numberOfGuest}
                     name={`rooms.${indexRoom}.numberOfGuest`}
                     rules={{
                         required: 'Number of guests is required',
                         validate: {
-                            positive: (value) => value >= 0 || 'Number of guests cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Number of guests cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the number of guests"
@@ -190,7 +194,6 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                     className="md:min-w-[250px] min-w-[200px]"
                 />
                 <InputForm
-                    Controller={Controller}
                     control={control}
                     error={errors?.rooms?.[indexRoom]?.quantity}
                     name={`rooms.${indexRoom}.quantity`}
@@ -198,7 +201,7 @@ const AddRoom: React.FC = ({ Controller, errors, control, indexRoom, onClose }: 
                         required: 'Quantity is required',
                         valueAsNumber: 'Quantity must be numeric',
                         validate: {
-                            positive: (value) => value >= 0 || 'Quantity cannot be less than 0',
+                            positive: (value: number) => value >= 0 || 'Quantity cannot be less than 0',
                         },
                     }}
                     placeholder="Enter the quantity"

@@ -13,7 +13,7 @@ import { BsPinterest, BsPersonCircle, BsHouses } from 'react-icons/bs';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { SlClose } from 'react-icons/sl';
 import { CgMenuLeft } from 'react-icons/cg';
-import { PiSignInBold } from 'react-icons/pi';
+import { PiSignInBold, PiUserThin } from 'react-icons/pi';
 import { BiMinus } from 'react-icons/bi';
 import { SiFacebook } from 'react-icons/si';
 import { FcGoogle } from 'react-icons/fc';
@@ -22,6 +22,7 @@ import { FiTrash } from 'react-icons/fi';
 import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { TbBrandBooking } from 'react-icons/tb';
 import { IoCreateOutline } from 'react-icons/io5';
+import { GoLocation } from 'react-icons/go';
 
 const icons = {
     FaFacebookF,
@@ -49,6 +50,8 @@ const icons = {
     FiTrash,
     IoCreateOutline,
     AiOutlineClose,
+    GoLocation,
+    PiUserThin,
     FaUser,
 };
 export default icons;

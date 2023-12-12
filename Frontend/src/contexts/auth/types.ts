@@ -1,5 +1,5 @@
-export interface AuthState {
-    isAuthenticated?: boolean;
-    accessToken?: string | null;
-    user?: any | null;
+export enum AuthActionType {
+    INITIALIZE = 'INITIALIZE',
+    SIGN_IN = 'SIGN_IN',
+    SIGN_OUT = 'SIGN_OUT',
 }
