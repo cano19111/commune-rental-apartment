@@ -21,3 +21,20 @@ th {
     background: #3c7cb1 !important;
     color: white !important;
 }
+.google-map {
+    position: relative;
+}
+.gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom {
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
+.gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom > .gmnoprint > div {
+    border-radius: 12px !important;
+}
+.gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom > .gm-svpc {
+    display: none;
+}
+.apartment-detail .ant-image-mask-info {
+    display: none;
+}

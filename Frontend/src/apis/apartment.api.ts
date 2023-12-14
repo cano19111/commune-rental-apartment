@@ -11,3 +11,8 @@ export const apiSearchRoom = (params: string): Promise<Res> =>
         url: `/apartment/search?${params}`,
         method: 'get',
     });
+export const apiApartmentDetail = (apartmentId: string, params: string): Promise<Res> =>
+    axios({
+        url: `/apartment/${apartmentId}?${params}`,
+        method: 'get',
+    });

@@ -11,8 +11,9 @@ const { PiUserThin } = icons;
 
 const Search: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
-        libraries: ['places'],
+        id: 'rent-apartment',
+        googleMapsApiKey: 'AIzaSyBqip7J60tcOjwbuPv7qege_NMoQoFyNag',
+        libraries: ['maps', 'places'],
     });
 
     const {

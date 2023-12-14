@@ -7,7 +7,7 @@ export const path: { [key: string]: string } = {
     ROOT: '/',
     HOME: '',
     ALL: '/*',
-    LISTING: 'listing/:roomId',
+    LISTING: 'listing',
     APARTMENT_DETAIL: 'apartment/:apartmentId',
     FAVORITES: 'favorites',
     CONTACT: 'contact',

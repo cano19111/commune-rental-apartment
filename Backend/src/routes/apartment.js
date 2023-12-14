@@ -9,7 +9,7 @@ router.post('/', verifyAccessToken, upload.any(), validateRequest(apartmentSchem
 router.get('/search', controller.searchApartments);
 
 router.get('/', verifyAccessToken, controller.getAllApartment);
-router.get('/:apartmentId', verifyAccessToken, controller.getApartment);
+router.get('/:apartmentId', controller.getApartment);
 router.put('/:apartmentId', verifyAccessToken, validateRequest(apartmentSchema), controller.updateApartment);
 router.delete('/:apartmentId', verifyAccessToken, controller.deleteApartment);
 router.delete('/room/:roomId', verifyAccessToken, controller.removeRoomFromApartment);

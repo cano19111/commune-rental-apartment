@@ -23,7 +23,7 @@ import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { TbBrandBooking } from 'react-icons/tb';
 import { IoCreateOutline } from 'react-icons/io5';
 import { GoLocation } from 'react-icons/go';
-
+import { CgMenuGridO } from 'react-icons/cg';
 const icons = {
     FaFacebookF,
     AiOutlineTwitter,
@@ -53,5 +53,6 @@ const icons = {
     GoLocation,
     PiUserThin,
     FaUser,
+    CgMenuGridO,
 };
 export default icons;
