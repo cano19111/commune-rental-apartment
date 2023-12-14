@@ -55,7 +55,7 @@ const TableSelectRoom: React.FC<{ roomsData: DataTypeRooms[]; numberRoom: number
                         title: `Price for ${numberRoom} nights`,
                         dataIndex: 'price',
                         key: 'price',
-                        render: (price: number) => <span className="">{`VND ${price?.toLocaleString()}`}</span>,
+                        render: (price: number) => <span className="">{`${price?.toLocaleString()} VND`}</span>,
                     },
                     {
                         title: 'Room number',
@@ -73,7 +73,7 @@ const TableSelectRoom: React.FC<{ roomsData: DataTypeRooms[]; numberRoom: number
                         title: 'Total',
                         key: 'total',
                         render: (_, record) => (
-                            <span>{`VND ${(record.price * record.roomNumber)?.toLocaleString()}`}</span>
+                            <span>{`${(record.price * record.roomNumber)?.toLocaleString()} VND`}</span>
                         ),
                     },
                 ]}
