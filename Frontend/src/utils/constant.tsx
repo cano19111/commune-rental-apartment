@@ -12,6 +12,7 @@ export const path: { [key: string]: string } = {
     FAVORITES: 'favorites',
     CONTACT: 'contact',
     CREATE_APARTMENT: 'create-apartment',
+    BOOKING_CONFIRM: 'booking-confirm',
     ACCOUNT_SETTINGS: 'account-settings',
     PERSONAL_INFORMATION: 'personal-information',
     MANAGE_APARTMENT: 'manage-apartment',

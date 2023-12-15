@@ -121,7 +121,10 @@ const getApartment = async (req, res, next) => {
                                             $map: {
                                                 input: '$rooms.services',
                                                 as: 'service',
-                                                in: '$$service.title',
+                                                in: {
+                                                    title: '$$service.title',
+                                                    image: '$$service.image',
+                                                },
                                             },
                                         },
                                         images: {
@@ -315,6 +318,7 @@ const searchApartments = async (req, res, next) => {
                                     roomPriceMin: {
                                         $min: '$rooms.price',
                                     },
+                                    roomId: { $first: '$rooms._id' },
                                     title: { $first: '$title' },
                                     location: { $first: '$location' },
                                     numberOfGuest: { $first: '$rooms.numberOfGuest' },
@@ -327,6 +331,7 @@ const searchApartments = async (req, res, next) => {
                             {
                                 $project: {
                                     _id: 1,
+                                    roomId: '$roomId',
                                     name: '$title',
                                     address: {
                                         street: '$location.street',

@@ -1,7 +1,8 @@
-import icons from '@/utils/icons';
-import { Table, Tag, Space } from 'antd';
+// Trong component TableSelectRoom
 import React from 'react';
+import { Button, Table, Tag } from 'antd';
 import { FiMinus, FiPlus } from 'react-icons/fi';
+import icons from '@/utils/icons';
 const { FaUser } = icons;
 
 interface RoomType {
@@ -15,9 +16,32 @@ interface DataTypeRooms {
     numberOfGuest: number;
     price: number;
     roomNumber: number;
+    quantity: number;
 }
 
-const TableSelectRoom: React.FC<{ roomsData: DataTypeRooms[]; numberRoom: number }> = ({ roomsData, numberRoom }) => {
+const TableSelectRoom: React.FC<{
+    numberOfDay: number;
+    onChange: (updatedRooms: DataTypeRooms[]) => void;
+    value: DataTypeRooms[];
+}> = ({ numberOfDay, onChange, value }) => {
+    const increaseRoom = (roomId: string) => {
+        const updatedRooms = value.map((room) => {
+            if (room.key === roomId) {
+                const newRoomNumber = room.roomNumber + 1;
+                return newRoomNumber <= room.quantity ? { ...room, roomNumber: newRoomNumber } : room;
+            }
+            return room;
+        });
+        onChange(updatedRooms);
+    };
+
+    const decreaseRoom = (roomId: string) => {
+        const updatedRooms = value.map((room) =>
+            room.key === roomId && room.roomNumber > 0 ? { ...room, roomNumber: room.roomNumber - 1 } : room,
+        );
+        onChange(updatedRooms);
+    };
+
     return (
         <div>
             <Table
@@ -52,32 +76,44 @@ const TableSelectRoom: React.FC<{ roomsData: DataTypeRooms[]; numberRoom: number
                         ),
                     },
                     {
-                        title: `Price for ${numberRoom} nights`,
+                        title: `Price for ${numberOfDay} nights`,
                         dataIndex: 'price',
                         key: 'price',
-                        render: (price: number) => <span className="">{`${price?.toLocaleString()} VND`}</span>,
+                        render: (price: number) => (
+                            <span className="">{`${(numberOfDay * price)?.toLocaleString()} VND`}</span>
+                        ),
                     },
                     {
                         title: 'Room number',
                         key: 'roomNumber',
                         dataIndex: 'roomNumber',
-                        render: (roomNumber: number) => (
-                            <Space size="middle">
-                                <FiPlus size={18} />
-                                <span>{roomNumber}</span>
-                                <FiMinus size={18} />
-                            </Space>
+                        render: (_, record) => (
+                            <div className="flex items-center justify-center px-2">
+                                <Button
+                                    type="primary"
+                                    icon={<FiMinus size={18} />}
+                                    className="px-3 py-4 bg-blue-500 text-white rounded-none rounded-l-2xl flex items-center justify-center"
+                                    onClick={() => decreaseRoom(record.key)}
+                                />
+                                <span className="px-4 py-1.5 bg-gray-200">{record.roomNumber}</span>
+                                <Button
+                                    type="primary"
+                                    icon={<FiPlus size={18} />}
+                                    className="px-3 py-4 bg-blue-500 text-white rounded-none rounded-r-2xl flex items-center justify-center"
+                                    onClick={() => increaseRoom(record.key)}
+                                />
+                            </div>
                         ),
                     },
                     {
                         title: 'Total',
                         key: 'total',
                         render: (_, record) => (
-                            <span>{`${(record.price * record.roomNumber)?.toLocaleString()} VND`}</span>
+                            <span>{`${(record.price * record.roomNumber * numberOfDay)?.toLocaleString()} VND`}</span>
                         ),
                     },
                 ]}
-                dataSource={roomsData}
+                dataSource={value}
                 pagination={false}
             />
         </div>

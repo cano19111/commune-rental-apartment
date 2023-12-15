@@ -4,18 +4,21 @@ const reviews = [
     {
         author: 'Dino',
         date: '5 days ago',
+        avatar: 'https://a0.muscache.com/im/pictures/user/733bd3c4-4b23-45f7-9ab6-1dbdd7092dbc.jpg?im_w=240',
         comment:
             'Nice hotel, near the beach, friendly staff, an ideal place to stay, everything is fine, delicious, fresh food.',
     },
     {
         author: 'Alice',
         date: '1 week ago',
+        avatar: 'https://a0.muscache.com/im/pictures/user/User-214181514/original/1259fee2-b9db-418c-b813-43219460da90.jpeg?im_w=240',
         comment:
             'Great experience! The room was clean, and the view from the balcony was breathtaking. I highly recommend this place.',
     },
     {
         author: 'Bob',
         date: '2 weeks ago',
+        avatar: 'https://a0.muscache.com/im/pictures/user/733bd3c4-4b23-45f7-9ab6-1dbdd7092dbc.jpg?im_w=240',
         comment:
             'Amazing hospitality! The staff went above and beyond to make our stay memorable. Will definitely come back.',
     },
@@ -32,13 +35,13 @@ const Reviews: React.FC = () => {
                 {reviews.map((review, index) => (
                     <div key={index} className="flex flex-col w-full md:w-[calc(50%-30px)] px-2 mb-4">
                         <div className="flex items-center mb-2">
-                            <Avatar />
+                            <Avatar size={47} src={review.avatar} />
                             <div className="flex flex-col ml-2">
-                                <span className="font-semibold">{review.author}</span>
+                                <span className="font-semibold text-md">{review.author}</span>
                                 <span className="text-xs">{review.date}</span>
                             </div>
                         </div>
-                        <div className="text-sm">{review.comment}</div>
+                        <div className="text-sm font-light">{review.comment}</div>
                     </div>
                 ))}
             </div>

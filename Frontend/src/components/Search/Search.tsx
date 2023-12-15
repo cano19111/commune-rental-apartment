@@ -13,6 +13,7 @@ const Search: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
         id: 'rent-apartment',
         googleMapsApiKey: 'AIzaSyBqip7J60tcOjwbuPv7qege_NMoQoFyNag',
+        // googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
         libraries: ['maps', 'places'],
     });
 

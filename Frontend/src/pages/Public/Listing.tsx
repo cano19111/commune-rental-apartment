@@ -15,6 +15,7 @@ const Listing: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
         id: 'rent-apartment',
         googleMapsApiKey: 'AIzaSyBqip7J60tcOjwbuPv7qege_NMoQoFyNag',
+        // googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
         libraries: ['maps', 'places'],
     });
     const [searchParams, setSearchParams] = useSearchParams();
@@ -247,6 +248,7 @@ const Listing: React.FC = () => {
                                                         endDate: searchParams.get('endDate'),
                                                         numberOfGuest: numberOfGuest.toString(),
                                                         room: roomNumber.toString(),
+                                                        roomId: room.roomId,
                                                     });
                                                     navigate(`/apartment/${room._id}/?${queryParams.toString()}`);
                                                 }}

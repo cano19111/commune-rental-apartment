@@ -17,7 +17,7 @@ div[style*='background-color: white; font-weight: 500; font-family: Roboto, sans
     display: none;
 }
 
-th {
+.table-apartment-detail th {
     background: #3c7cb1 !important;
     color: white !important;
 }
