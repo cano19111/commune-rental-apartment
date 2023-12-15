@@ -84,7 +84,7 @@ const ApartmentDetail: React.FC = () => {
             <Spin spinning={isFetching} fullscreen={isFetching} />
         </div>
     ) : (
-        <div className="w-full flex justify-center font-main">
+        <div className="w-full flex justify-center font-main apartment-detail">
             <form
                 onSubmit={handleSubmit(handleBooking)}
                 className="max-w-main w-full flex flex-col justify-center gap-5"
@@ -143,7 +143,7 @@ const ApartmentDetail: React.FC = () => {
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-4 gap-3">
+                        <div className="grid grid-cols-3 gap-3 list-image-room">
                             {Array.from({ length: 3 }, (_, columnIndex) => (
                                 <div className="col-span-1" key={columnIndex}>
                                     {roomImages
