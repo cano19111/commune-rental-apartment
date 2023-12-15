@@ -40,6 +40,7 @@ const ApartmentDetail: React.FC = () => {
         queryFn: () => apiApartmentDetail(apartmentId, searchParams.toString()),
         staleTime: 0,
     });
+
     const [isShowAll, setIsShowAll] = useState(false);
     const [selectedRoomIndex, setSelectedRoomIndex] = useState<number | null>(null);
 

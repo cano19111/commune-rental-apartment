@@ -35,7 +35,7 @@ div[style*='background-color: white; font-weight: 500; font-family: Roboto, sans
 .gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom > .gm-svpc {
     display: none;
 }
-.apartment-detail,
+.apartment-detail .ant-image-mask-info,
 .list-image-room .ant-image-mask-info {
     display: none;
 }

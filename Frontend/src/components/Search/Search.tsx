@@ -12,8 +12,7 @@ const { PiUserThin } = icons;
 const Search: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
         id: 'rent-apartment',
-        googleMapsApiKey: 'AIzaSyBqip7J60tcOjwbuPv7qege_NMoQoFyNag',
-        // googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
+        googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
         libraries: ['maps', 'places'],
     });
 
@@ -50,14 +49,12 @@ const Search: React.FC = () => {
                     }}
                     render={({ field }) => (
                         <Tooltip title={errors?.searchText?.message as string} color="red" open={!!errors.searchText}>
-                            <Autocomplete>
-                                <Input
-                                    size="large"
-                                    placeholder="Search"
-                                    className="rounded-full py-3 px-5 w-[200px]"
-                                    {...field}
-                                />
-                            </Autocomplete>
+                            <Input
+                                size="large"
+                                placeholder="Search"
+                                className="rounded-full py-3 px-5 w-[200px]"
+                                {...field}
+                            />
                         </Tooltip>
                     )}
                 />

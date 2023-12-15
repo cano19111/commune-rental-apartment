@@ -14,8 +14,7 @@ const { GoLocation, PiUserThin } = icons;
 const Listing: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
         id: 'rent-apartment',
-        googleMapsApiKey: 'AIzaSyBqip7J60tcOjwbuPv7qege_NMoQoFyNag',
-        // googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
+        googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
         libraries: ['maps', 'places'],
     });
     const [searchParams, setSearchParams] = useSearchParams();
@@ -80,14 +79,12 @@ const Listing: React.FC = () => {
                                         open={!!errors.searchText}
                                         placement="right"
                                     >
-                                        <Autocomplete>
-                                            <Input
-                                                size="large"
-                                                placeholder="Search"
-                                                className="rounded-xl py-3 px-5 w-full border"
-                                                {...field}
-                                            />
-                                        </Autocomplete>
+                                        <Input
+                                            size="large"
+                                            placeholder="Search"
+                                            className="rounded-xl py-3 px-5 w-full border"
+                                            {...field}
+                                        />
                                     </Tooltip>
                                 )}
                             />
@@ -234,6 +231,13 @@ const Listing: React.FC = () => {
                                 </>
                             ) : (
                                 <>
+                                    {data?.data?.apartments.length === 0 && (
+                                        <div className="flex items-center justify-center">
+                                            <h2 className="font-main text-2xl">
+                                                Please enter your destination and arrival time
+                                            </h2>
+                                        </div>
+                                    )}
                                     {(data?.data?.apartments || []).map((room) => {
                                         const numDate = !numberOfDays || numberOfDays === 0 ? 1 : +numberOfDays;
                                         const price = +roomNumber * +room.price * numDate;
