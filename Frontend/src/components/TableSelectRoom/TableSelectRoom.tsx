@@ -1,4 +1,3 @@
-// Trong component TableSelectRoom
 import React from 'react';
 import { Button, Table, Tag } from 'antd';
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -24,10 +23,15 @@ const TableSelectRoom: React.FC<{
     onChange: (updatedRooms: DataTypeRooms[]) => void;
     value: DataTypeRooms[];
 }> = ({ numberOfDay, onChange, value }) => {
+    const [selectedRoomKey, setSelectedRoomKey] = React.useState<string | null>(
+        value.some((room) => room.roomNumber > 0) ? value.find((room) => room.roomNumber > 0)?.key : null,
+    );
+
     const increaseRoom = (roomId: string) => {
         const updatedRooms = value.map((room) => {
             if (room.key === roomId) {
                 const newRoomNumber = room.roomNumber + 1;
+                setSelectedRoomKey(newRoomNumber > 0 ? roomId : null);
                 return newRoomNumber <= room.quantity ? { ...room, roomNumber: newRoomNumber } : room;
             }
             return room;
@@ -39,6 +43,7 @@ const TableSelectRoom: React.FC<{
         const updatedRooms = value.map((room) =>
             room.key === roomId && room.roomNumber > 0 ? { ...room, roomNumber: room.roomNumber - 1 } : room,
         );
+        setSelectedRoomKey(updatedRooms.some((room) => room.roomNumber > 0) ? roomId : null);
         onChange(updatedRooms);
     };
 
@@ -92,15 +97,17 @@ const TableSelectRoom: React.FC<{
                                 <Button
                                     type="primary"
                                     icon={<FiMinus size={18} />}
-                                    className="px-3 py-4 bg-blue-500 text-white rounded-none rounded-l-2xl flex items-center justify-center"
+                                    className={`px-3 py-4 bg-blue-500 text-white rounded-none rounded-l-2xl flex items-center justify-center`}
                                     onClick={() => decreaseRoom(record.key)}
+                                    disabled={selectedRoomKey !== null && selectedRoomKey !== record.key}
                                 />
                                 <span className="px-4 py-1.5 bg-gray-200">{record.roomNumber}</span>
                                 <Button
                                     type="primary"
                                     icon={<FiPlus size={18} />}
-                                    className="px-3 py-4 bg-blue-500 text-white rounded-none rounded-r-2xl flex items-center justify-center"
+                                    className={`px-3 py-4 bg-blue-500 text-white rounded-none rounded-r-2xl flex items-center justify-center`}
                                     onClick={() => increaseRoom(record.key)}
+                                    disabled={selectedRoomKey !== null && selectedRoomKey !== record.key}
                                 />
                             </div>
                         ),

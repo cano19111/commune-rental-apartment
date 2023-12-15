@@ -8,7 +8,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { DropDownItem } from '@/components';
 import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
-import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
+import { useJsApiLoader } from '@react-google-maps/api';
 const { GoLocation, PiUserThin } = icons;
 
 const Listing: React.FC = () => {

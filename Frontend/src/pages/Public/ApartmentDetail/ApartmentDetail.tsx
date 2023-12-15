@@ -258,7 +258,7 @@ const ApartmentDetail: React.FC = () => {
                                         >
                                             <DatePicker.RangePicker
                                                 format="DD-MM-YYYY"
-                                                className="font-main rounded-t-lg rounded-b-none border-b-0 border-700 py-3"
+                                                className="font-main rounded-t-lg rounded-b-none border-700 py-3 cursor-pointer"
                                                 inputReadOnly={true}
                                                 superNextIcon={null}
                                                 superPrevIcon={null}
@@ -281,12 +281,12 @@ const ApartmentDetail: React.FC = () => {
                                     )}
                                 />
 
-                                <Button className="font-main w-full h-[48px] bg-white rounded-b-lg border-700 rounded-t-none flex items-center gap-1 justify-center">
+                                <div className="font-main w-full h-[48px] border border-gray-300 bg-white rounded-b-lg border-t-0 border-700 rounded-t-none flex items-center gap-1 justify-center cursor-default font-normal select-none">
                                     <PiUserThin size={25} />
                                     <span className="">{`${getValues('searchGuest')?.guest || 1} adult · ${
                                         selectRoom?.roomNumber || 0
                                     } rooms`}</span>
-                                </Button>
+                                </div>
                                 <Button
                                     className="rounded-xl bg-blue-500 h-[48px] font-main text-md mt-3"
                                     htmlType="submit"
