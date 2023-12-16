@@ -11,10 +11,10 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import { path } from '@/utils/constant';
 const { FaLocationDot, CgMenuGridO, PiUserThin } = icons;
-const calculateTotalAmount = (numberOfDays, roomPrice, roomNumber) => {
-    const baseAmount = (numberOfDays === 0 ? 1 : +numberOfDays) * roomPrice * roomNumber;
-    const taxAmount = baseAmount * 0.11;
-    const totalAmount = baseAmount + taxAmount;
+const calculateTotalAmount = (numberOfDays: number, roomPrice: number, roomNumber: number) => {
+    const baseAmount: number = (numberOfDays === 0 ? 1 : +numberOfDays) * roomPrice * roomNumber;
+    const taxAmount: number = baseAmount * 0.11;
+    const totalAmount: number = baseAmount + taxAmount;
 
     return {
         baseAmount: baseAmount.toLocaleString(),
@@ -31,7 +31,7 @@ const ApartmentDetail: React.FC = () => {
     const {
         control,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isValid },
         getValues,
         watch,
     } = useForm();
@@ -70,8 +70,9 @@ const ApartmentDetail: React.FC = () => {
     const handleBooking = () => {
         navigate(`/${path.BOOKING_CONFIRM}`);
     };
-    const roomImages =
-        selectedRoomIndex === null ? rooms.flatMap((room) => room.images || []) : rooms[selectedRoomIndex].images;
+    const roomImages: string[] = !selectedRoomIndex
+        ? rooms.flatMap((room) => room.images || [])
+        : rooms[selectedRoomIndex].images;
     const imagesPerColumn = Math.ceil(roomImages.length / 3);
 
     const { baseAmount, taxAmount, totalAmount, roomNumber } = useMemo(() => {
@@ -103,57 +104,62 @@ const ApartmentDetail: React.FC = () => {
                         <Image className="rounded-br-md" height="100%" width="50%" src={rooms[0]?.images[4]} />
                     </div>
                     <Drawer placement="bottom" onClose={() => setIsShowAll(false)} open={isShowAll} height="100%">
-                        <div className="flex items-center mb-5 gap-3">
-                            <div
-                                className="flex flex-col w-[100px] h-[70px]"
-                                onClick={() => {
-                                    setIsShowAll(true);
-                                    setSelectedRoomIndex(null);
-                                }}
-                            >
-                                <Image
-                                    width="100%"
-                                    height="100%"
-                                    className="rounded-lg border hover:border-blue-500 cursor-pointer"
-                                    preview={false}
-                                    src={rooms[0].images[1]}
-                                />
-                                <span className="font-medium">Overview</span>
-                            </div>
-
-                            {rooms.map((room, index) => (
+                        <div className="flex flex-col justify-center">
+                            <div className="flex items-start gap-3">
                                 <div
-                                    className="flex flex-col w-[100px] h-[70px]"
-                                    key={index}
+                                    className="flex flex-col w-[100px]"
                                     onClick={() => {
                                         setIsShowAll(true);
-                                        setSelectedRoomIndex(index);
+                                        setSelectedRoomIndex(null);
                                     }}
                                 >
-                                    <Image
-                                        width="100%"
-                                        height="100%"
-                                        className={`rounded-lg border hover:border-blue-500 cursor-pointer ${
-                                            selectedRoomIndex === index && 'selected-room'
-                                        }`}
-                                        preview={false}
-                                        src={room.images[0]}
-                                    />
-                                    <span className="font-medium">{room.roomType}</span>
+                                    <div className="w-[100px] h-[70px]">
+                                        <Image
+                                            width="100%"
+                                            height="100%"
+                                            className="rounded-lg border hover:border-blue-500 cursor-pointer"
+                                            preview={false}
+                                            src={rooms[0].images[1]}
+                                        />
+                                    </div>
+                                    <span className="font-medium text-md">Overview</span>
                                 </div>
-                            ))}
-                        </div>
+                                {rooms.map((room, index: number) => (
+                                    <div
+                                        onClick={() => {
+                                            setIsShowAll(true);
+                                            setSelectedRoomIndex(index);
+                                        }}
+                                        key={index}
+                                        className="flex flex-col w-[100px]"
+                                    >
+                                        <div className="flex flex-col w-[100px] h-[70px]">
+                                            <Image
+                                                width="100%"
+                                                height="100%"
+                                                className={`rounded-lg border hover:border-blue-500 cursor-pointer ${
+                                                    selectedRoomIndex === index && 'selected-room'
+                                                }`}
+                                                preview={false}
+                                                src={room.images[0]}
+                                            />
+                                        </div>
+                                        <span className="font-medium text-md">{room.roomType}</span>
+                                    </div>
+                                ))}
+                            </div>
 
-                        <div className="grid grid-cols-3 gap-3 list-image-room">
-                            {Array.from({ length: 3 }, (_, columnIndex) => (
-                                <div className="col-span-1" key={columnIndex}>
-                                    {roomImages
-                                        .slice(columnIndex * imagesPerColumn, (columnIndex + 1) * imagesPerColumn)
-                                        .map((image, imageIndex) => (
-                                            <Image width="100%" src={image} key={imageIndex} />
-                                        ))}
-                                </div>
-                            ))}
+                            <div className="grid grid-cols-3 gap-3 list-image-room max-h-[80vh] overflow-auto">
+                                {Array.from({ length: 3 }, (_, columnIndex) => (
+                                    <div className="col-span-1" key={columnIndex}>
+                                        {roomImages
+                                            .slice(columnIndex * imagesPerColumn, (columnIndex + 1) * imagesPerColumn)
+                                            .map((image, imageIndex) => (
+                                                <Image width="100%" src={image} key={imageIndex} />
+                                            ))}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </Drawer>
 
@@ -219,18 +225,11 @@ const ApartmentDetail: React.FC = () => {
                                     },
                                 }}
                                 render={({ field }) => (
-                                    <Tooltip
-                                        title={errors.roomsData?.message as string}
-                                        color="red"
-                                        open={!!errors.roomsData}
-                                        placement="topRight"
-                                    >
-                                        <TableSelectRoom
-                                            numberOfDay={numberOfDays}
-                                            value={field.value}
-                                            onChange={(value) => field.onChange(value)}
-                                        />
-                                    </Tooltip>
+                                    <TableSelectRoom
+                                        numberOfDay={numberOfDays}
+                                        value={field.value}
+                                        onChange={(value) => field.onChange(value)}
+                                    />
                                 )}
                             />
                         </div>
@@ -291,6 +290,7 @@ const ApartmentDetail: React.FC = () => {
                                     className="rounded-xl bg-blue-500 h-[48px] font-main text-md mt-3"
                                     htmlType="submit"
                                     type="primary"
+                                    disabled={!isValid}
                                 >
                                     Booking
                                 </Button>
@@ -298,7 +298,7 @@ const ApartmentDetail: React.FC = () => {
                             <div className="w-full flex flex-col gap-3">
                                 <div className="w-full flex items-center justify-between font-light mt-3">
                                     <span>
-                                        <span>{baseAmount} VND</span>
+                                        <span>{(selectRoom?.price || 0).toLocaleString()} VND</span>
                                         <span>{` x ${numberOfDays === 0 ? 1 : +numberOfDays} night`}</span>
                                     </span>
                                     <span>{baseAmount} VND</span>
