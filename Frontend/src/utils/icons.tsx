@@ -1,4 +1,4 @@
-import { FaFacebookF, FaRegUser } from 'react-icons/fa';
+import { FaFacebookF, FaRegUser, FaUser } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 import {
     AiOutlineTwitter,
@@ -23,7 +23,7 @@ import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { TbBrandBooking } from 'react-icons/tb';
 import { IoCreateOutline } from 'react-icons/io5';
 import { GoLocation } from 'react-icons/go';
-
+import { CgMenuGridO } from 'react-icons/cg';
 const icons = {
     FaFacebookF,
     AiOutlineTwitter,
@@ -52,5 +52,7 @@ const icons = {
     AiOutlineClose,
     GoLocation,
     PiUserThin,
+    FaUser,
+    CgMenuGridO,
 };
 export default icons;

@@ -8,3 +8,6 @@ export { default as FormAddRoom } from './FormAddRoom/FormAddRoom';
 export { default as MenuAccount } from './MenuAccount/MenuAccount';
 export { default as InputForm } from './Input/InputForm';
 export { default as SelectForm } from './Input/SelectForm';
+export { default as GoogleMap } from './GoogleMap/GoogleMap';
+export { default as Reviews } from './Reviews/Reviews';
+export { default as TableSelectRoom } from './TableSelectRoom/TableSelectRoom';

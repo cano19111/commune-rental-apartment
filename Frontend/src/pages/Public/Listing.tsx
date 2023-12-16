@@ -3,20 +3,22 @@ import { Button, Checkbox, DatePicker, Dropdown, Flex, Image, Input, Skeleton, S
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiSearchRoom } from '@/apis';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
 import { DropDownItem } from '@/components';
 import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
-import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
+import { useJsApiLoader } from '@react-google-maps/api';
 const { GoLocation, PiUserThin } = icons;
 
 const Listing: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
+        id: 'rent-apartment',
         googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
-        libraries: ['places'],
+        libraries: ['maps', 'places'],
     });
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
     const {
         control,
         handleSubmit,
@@ -30,11 +32,11 @@ const Listing: React.FC = () => {
         queryFn: () => apiSearchRoom(searchParams.toString()),
         staleTime: 0,
     });
-    const roomNumber: number = +searchParams.get('room') ?? 1;
-    const numberOfGuest: number = +searchParams.get('numberOfGuest') ?? 1;
+    const roomNumber: number = +searchParams.get('room') !== 0 ? +searchParams.get('room') ?? 1 : 1;
+    const numberOfGuest: number =
+        +searchParams.get('numberOfGuest') !== 0 ? +searchParams.get('numberOfGuest') ?? 1 : 1;
     const startDate: string | null = searchParams.get('startDate');
     const endDate: string | null = searchParams.get('endDate');
-
     const checkIn: Date | null = startDate ? new Date(startDate) : null;
     const checkOut: Date | null = endDate ? new Date(endDate) : null;
     const numberOfDays: number =
@@ -77,14 +79,12 @@ const Listing: React.FC = () => {
                                         open={!!errors.searchText}
                                         placement="right"
                                     >
-                                        <Autocomplete>
-                                            <Input
-                                                size="large"
-                                                placeholder="Search"
-                                                className="rounded-xl py-3 px-5 w-full border"
-                                                {...field}
-                                            />
-                                        </Autocomplete>
+                                        <Input
+                                            size="large"
+                                            placeholder="Search"
+                                            className="rounded-xl py-3 px-5 w-full border"
+                                            {...field}
+                                        />
                                     </Tooltip>
                                 )}
                             />
@@ -231,13 +231,31 @@ const Listing: React.FC = () => {
                                 </>
                             ) : (
                                 <>
+                                    {data?.data?.apartments.length === 0 && (
+                                        <div className="flex items-center justify-center">
+                                            <h2 className="font-main text-2xl">
+                                                Please enter your destination and arrival time
+                                            </h2>
+                                        </div>
+                                    )}
                                     {(data?.data?.apartments || []).map((room) => {
                                         const numDate = !numberOfDays || numberOfDays === 0 ? 1 : +numberOfDays;
                                         const price = +roomNumber * +room.price * numDate;
                                         return (
                                             <div
                                                 key={room._id}
-                                                className="flex items-start gap-5 bg-white p-1 rounded-lg"
+                                                className="flex items-start gap-5 bg-white p-1 rounded-lg cursor-pointer"
+                                                onClick={() => {
+                                                    const queryParams = new URLSearchParams({
+                                                        province: searchParams.get('province'),
+                                                        startDate: searchParams.get('startDate'),
+                                                        endDate: searchParams.get('endDate'),
+                                                        numberOfGuest: numberOfGuest.toString(),
+                                                        room: roomNumber.toString(),
+                                                        roomId: room.roomId,
+                                                    });
+                                                    navigate(`/apartment/${room._id}/?${queryParams.toString()}`);
+                                                }}
                                             >
                                                 <div className="w-2/5">
                                                     <Image

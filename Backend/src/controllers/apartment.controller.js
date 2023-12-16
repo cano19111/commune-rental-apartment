@@ -45,43 +45,150 @@ const getAllApartment = async (req, res, next) => {
 const getApartment = async (req, res, next) => {
     try {
         const { apartmentId } = req.params;
+        const { startDate, endDate, numberOfGuest, quantity, minPrice: rawMinPrice, maxPrice: rawMaxPrice } = req.query;
+
+        const parsedStartDay = new Date(startDate);
+        const parsedEndDay = new Date(endDate);
+        const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
+
+        if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid start or end date',
+            });
+        }
+
+        const parsedNumberOfGuest = parseInt(numberOfGuest, 10) || 1;
+        const parsedQuantity = parseInt(quantity, 10) || 1;
+        const minPrice = parseInt(rawMinPrice, 10) || 0;
+        const maxPrice = parseInt(rawMaxPrice, 10) || 1000000000;
 
         const [err, apartment] = await to(
-            Apartment.findById(apartmentId)
-                .populate({
-                    path: 'rooms.services',
-                })
-                .populate({
-                    path: 'createBy',
-                })
-                .exec(),
+            Apartment.aggregate([
+                { $match: { _id: new mongoose.Types.ObjectId(apartmentId) } },
+                { $unwind: '$rooms' },
+                {
+                    $match: {
+                        'rooms.numberOfGuest': { $gte: parsedNumberOfGuest },
+                        'rooms.quantity': { $gte: parsedQuantity },
+                        $or: [
+                            { 'rooms.unavailableDateRanges': null },
+                            {
+                                'rooms.unavailableDateRanges': {
+                                    $not: {
+                                        $elemMatch: {
+                                            startDay: { $lt: parsedEndDay },
+                                            endDay: { $gt: parsedStartDay },
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                        'rooms.price': { $gte: minPrice, $lte: maxPrice },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'services',
+                        localField: 'rooms.services',
+                        foreignField: '_id',
+                        as: 'rooms.services',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'createBy',
+                        foreignField: '_id',
+                        as: 'createBy',
+                    },
+                },
+                {
+                    $unwind: '$createBy',
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        title: { $first: '$title' },
+                        location: { $first: '$location' },
+                        createBy: { $first: '$createBy' },
+                        rooms: {
+                            $push: {
+                                $mergeObjects: [
+                                    '$rooms',
+                                    {
+                                        services: {
+                                            $map: {
+                                                input: '$rooms.services',
+                                                as: 'service',
+                                                in: {
+                                                    title: '$$service.title',
+                                                    image: '$$service.image',
+                                                },
+                                            },
+                                        },
+                                        images: {
+                                            $map: {
+                                                input: '$rooms.images',
+                                                as: 'image',
+                                                in: {
+                                                    $concat: [`${process.env.SERVER_URI}/api/image/`, '$$image'],
+                                                },
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                },
+
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        location: 1,
+                        'createBy._id': 1,
+                        'createBy.firstname': 1,
+                        'createBy.lastname': 1,
+                        'createBy.avatar': 1,
+                        rooms: 1,
+                    },
+                },
+                { $limit: 1 },
+            ]).exec(),
         );
 
         if (err) {
+            console.error(err);
             return res.status(500).json({
                 success: false,
                 message: 'Error retrieving apartment',
             });
         }
 
-        if (!apartment) {
+        if (!apartment || !apartment[0]) {
             return res.status(404).json({
                 success: false,
                 message: 'Apartment not found',
             });
         }
 
-        return res.status(200).json({
+        const result = {
             success: true,
             message: 'Apartment retrieved successfully',
             data: {
-                apartment,
+                apartment: apartment[0],
             },
-        });
+        };
+
+        return res.status(200).json(result);
     } catch (error) {
+        console.error(error);
         next(error);
     }
 };
+
 const createApartment = async (req, res, next) => {
     try {
         const { title, rooms, location } = req.body;
@@ -148,6 +255,10 @@ const createApartment = async (req, res, next) => {
 };
 
 const searchApartments = async (req, res, next) => {
+    function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    await delay(1200);
     try {
         const { numberOfGuest, quantity, province, district, ward, street, startDate, endDate, name } = req.query;
         const parsedStartDay = new Date(startDate);
@@ -211,6 +322,7 @@ const searchApartments = async (req, res, next) => {
                                     roomPriceMin: {
                                         $min: '$rooms.price',
                                     },
+                                    roomId: { $first: '$rooms._id' },
                                     title: { $first: '$title' },
                                     location: { $first: '$location' },
                                     numberOfGuest: { $first: '$rooms.numberOfGuest' },
@@ -223,6 +335,7 @@ const searchApartments = async (req, res, next) => {
                             {
                                 $project: {
                                     _id: 1,
+                                    roomId: '$roomId',
                                     name: '$title',
                                     address: {
                                         street: '$location.street',

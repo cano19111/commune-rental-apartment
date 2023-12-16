@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { Home, Listing, MainLayout } from '@/pages/Public';
+import { ApartmentDetail, Listing, Home, MainLayout, BookingConfirm } from '@/pages/Public';
 import { path } from '@/utils/constant';
 import { CreateApartment, ManageAccount, MyFavorites, ManagerApartment, PersonalInformation } from '@/pages/User';
 
@@ -20,6 +20,14 @@ const Router = () => {
         {
             path: path.FAVORITES,
             element: <MyFavorites />,
+        },
+        {
+            path: path.APARTMENT_DETAIL,
+            element: <ApartmentDetail />,
+        },
+        {
+            path: path.BOOKING_CONFIRM,
+            element: <BookingConfirm />,
         },
         {
             path: path.ACCOUNT_SETTINGS,
