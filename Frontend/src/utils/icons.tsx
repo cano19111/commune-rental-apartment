@@ -9,7 +9,7 @@ import {
     AiOutlineUser,
     AiOutlineClose,
 } from 'react-icons/ai';
-import { BsPinterest, BsPersonCircle, BsHouses } from 'react-icons/bs';
+import { BsPinterest, BsPersonCircle, BsHouses, BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { SlClose } from 'react-icons/sl';
 import { CgMenuLeft } from 'react-icons/cg';
@@ -54,5 +54,6 @@ const icons = {
     PiUserThin,
     FaUser,
     CgMenuGridO,
+    BsInfoCircle,
 };
 export default icons;
