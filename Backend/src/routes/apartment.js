@@ -13,5 +13,6 @@ router.get('/:apartmentId', controller.getApartment);
 router.put('/:apartmentId', verifyAccessToken, validateRequest(apartmentSchema), controller.updateApartment);
 router.delete('/:apartmentId', verifyAccessToken, controller.deleteApartment);
 router.delete('/room/:roomId', verifyAccessToken, controller.removeRoomFromApartment);
+router.post('/create-stripe-payment', controller.createStripePayment);
 
 module.exports = router;

@@ -24,6 +24,8 @@ import { TbBrandBooking } from 'react-icons/tb';
 import { IoCreateOutline } from 'react-icons/io5';
 import { GoLocation } from 'react-icons/go';
 import { CgMenuGridO } from 'react-icons/cg';
+import { CiCircleCheck } from 'react-icons/ci';
+
 const icons = {
     FaFacebookF,
     AiOutlineTwitter,
@@ -55,5 +57,6 @@ const icons = {
     FaUser,
     CgMenuGridO,
     BsInfoCircle,
+    CiCircleCheck,
 };
 export default icons;

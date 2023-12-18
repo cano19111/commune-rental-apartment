@@ -16,3 +16,8 @@ export const apiApartmentDetail = (apartmentId: string, params: string): Promise
         url: `/apartment/${apartmentId}?${params}`,
         method: 'get',
     });
+export const apiCreateStripePayment = (): Promise<Res> =>
+    axios({
+        url: `/apartment/create-stripe-payment`,
+        method: 'post',
+    });

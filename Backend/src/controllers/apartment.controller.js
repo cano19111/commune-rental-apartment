@@ -2,6 +2,7 @@ const User = require('../models/user.model');
 const { default: to } = require('await-to-js');
 const mongoose = require('mongoose');
 const Apartment = require('../models/apartment.model');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const getAllApartment = async (req, res, next) => {
     try {
@@ -569,6 +570,30 @@ const removeRoomFromApartment = async (req, res, next) => {
     }
 };
 
+const createStripePayment = async (req, res, next) => {
+    try {
+        const { amount, currency, description, source } = req.body;
+
+        const [error, paymentIntent] = await to(
+            stripe.paymentIntents.create({
+                currency: 'USD',
+                amount: 50,
+                automatic_payment_methods: { enabled: true },
+            }),
+        );
+
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Error creating payment' });
+        }
+
+        res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: 'Error creating payment' });
+    }
+};
+
 module.exports = {
     createApartment,
     updateApartment,
@@ -577,4 +602,5 @@ module.exports = {
     getApartment,
     getAllApartment,
     searchApartments,
+    createStripePayment,
 };
