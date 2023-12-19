@@ -571,27 +571,24 @@ const removeRoomFromApartment = async (req, res, next) => {
 };
 
 const createStripePayment = async (req, res, next) => {
-    try {
-        const { amount, currency, description, source } = req.body;
+    const { amount, description, source } = req.body;
 
-        const [error, paymentIntent] = await to(
-            stripe.paymentIntents.create({
-                currency: 'USD',
-                amount: 50,
-                automatic_payment_methods: { enabled: true },
-            }),
-        );
+    const [err, paymentIntent] = await to(
+        stripe.paymentIntents.create({
+            amount: amount,
+            currency: 'VND',
+            description: description,
+            source: source,
+            automatic_payment_methods: { enabled: true },
+        }),
+    );
 
-        if (error) {
-            console.error(error);
-            return res.status(500).json({ error: 'Error creating payment' });
-        }
-
-        res.status(200).json({ clientSecret: paymentIntent.client_secret });
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ error: 'Error creating payment' });
+    if (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: err.message });
     }
+
+    return res.status(200).json({ clientSecret: paymentIntent.client_secret });
 };
 
 module.exports = {

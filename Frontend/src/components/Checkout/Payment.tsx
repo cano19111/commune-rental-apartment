@@ -10,12 +10,8 @@ function Payment() {
 
     useEffect(() => {
         const getSecret = async () => {
-            try {
-                const secretKey = await apiCreateStripePayment();
-                setClientSecret(secretKey.clientSecret);
-            } catch (error) {
-                console.error('Error fetching client secret:', error);
-            }
+            const secretKey = await apiCreateStripePayment({ amount: 500000 });
+            setClientSecret(secretKey.clientSecret);
         };
         getSecret();
     }, []);

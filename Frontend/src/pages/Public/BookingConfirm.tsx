@@ -67,9 +67,9 @@ const BookingConfirm: React.FC = () => {
                                 <div className="font-semibold">1 room 2 adults</div>
                             </div>
                         </div>
-                        <div className="w-full rounded-lg border border-gray-400 overflow-hidden">
+                        <div className="w-full rounded-lg border border-gray-300 overflow-hidden">
                             <div className="w-full p-5">
-                                <div>Your price summary</div>
+                                <div className="font-semibold text-lg mb-3">Your price summary</div>
                                 <div className="flex items-center justify-between">
                                     <span>Original price</span>
                                     <span>300,000 VND</span>
