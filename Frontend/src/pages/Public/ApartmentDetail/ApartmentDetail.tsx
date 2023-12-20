@@ -67,8 +67,15 @@ const ApartmentDetail: React.FC = () => {
             roomNumber: searchParams.get('roomId') === room._id ? +searchParams.get('room') || 1 : 0,
         }));
     const selectRoom = roomsData?.find((room) => room.roomNumber > 0);
-    const handleBooking = () => {
-        navigate(`/${path.BOOKING_CONFIRM}`);
+    const handleBooking = (data) => {
+        const queryParams = new URLSearchParams({
+            start_date: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
+            end_date: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
+            number_of_guest: data.roomsData[0].numberOfGuest.toString(),
+            room_number: data.roomsData[0].roomNumber.toString(),
+            room_id: data.roomsData[0].key.toString(),
+        });
+        navigate(`/${path.BOOKING_CONFIRM}?${queryParams}`);
     };
     const roomImages: string[] = !selectedRoomIndex
         ? rooms.flatMap((room) => room.images || [])

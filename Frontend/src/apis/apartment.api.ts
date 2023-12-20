@@ -26,3 +26,8 @@ export const apiCreateStripePayment = (data: {
         method: 'post',
         data,
     });
+export const apiGetRoomCheckout = ({ roomId, params }: { roomId: string; params: string }): Promise<Res> =>
+    axios({
+        url: `/apartment/room/${roomId}?${params}`,
+        method: 'get',
+    });

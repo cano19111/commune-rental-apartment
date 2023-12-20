@@ -1,15 +1,20 @@
 import { PaymentElement } from '@stripe/react-stripe-js';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useStripe, useElements } from '@stripe/react-stripe-js';
 import { Button, Flex } from 'antd';
-
-export default function CheckoutForm() {
+import { path } from '@/utils/constant';
+import icons from '@/utils/icons';
+const { IoIosArrowBack, FaLock } = icons;
+interface CheckoutFormProps {
+    setActiveTab: (activeTab: string) => void;
+    setStep: (step: number) => void;
+}
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep }) => {
     const stripe = useStripe();
     const elements = useElements();
 
     const [message, setMessage] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -22,7 +27,7 @@ export default function CheckoutForm() {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/completion`,
+                return_url: `${window.location.origin}/${path.BOOKING_COMPLETION}`,
             },
         });
 
@@ -38,25 +43,39 @@ export default function CheckoutForm() {
     return (
         <span>
             <form onSubmit={handleSubmit} className="space-y-5">
-                <PaymentElement />
+                <div className="border border-gray-300 rounded-lg p-8">
+                    <div className="text-lg font-semibold mb-5">Please enter payment information</div>
+                    <PaymentElement />
+                    {message && <div className="text-red-500 font-normal">{message}</div>}
+                </div>
                 <Flex align="center" justify="space-between">
-                    <Button type="primary" size="large" className="bg-blue-500">
-                        Preview
-                    </Button>
+                    <Button
+                        size="large"
+                        shape="circle"
+                        type="primary"
+                        ghost
+                        className="flex items-center justify-center"
+                        onClick={() => {
+                            setActiveTab('customerInformation');
+                            setStep(1);
+                        }}
+                        icon={<IoIosArrowBack size={20} />}
+                    />
+
                     <Button
                         disabled={!stripe || !elements}
                         htmlType="submit"
                         type="primary"
                         size="large"
-                        className="bg-blue-500"
+                        className="bg-blue-500 flex items-center justify-center"
                         loading={isProcessing}
+                        icon={<FaLock />}
                     >
-                        Pay now
+                        Booking Completion
                     </Button>
                 </Flex>
-
-                {message && <div>{message}</div>}
             </form>
         </span>
     );
-}
+};
+export default CheckoutForm;

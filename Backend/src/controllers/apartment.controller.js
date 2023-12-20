@@ -531,7 +531,6 @@ const removeRoomFromApartment = async (req, res, next) => {
         const { _id: removedBy } = req.user;
 
         let err, updatedApartment;
-
         [err, updatedApartment] = await to(
             Apartment.findByIdAndUpdate(
                 apartmentId,
@@ -570,9 +569,73 @@ const removeRoomFromApartment = async (req, res, next) => {
     }
 };
 
+const findRoomById = async (req, res) => {
+    const roomId = req.params.roomId;
+    const { startDate, endDate, roomNumber } = req.query;
+    const parsedStartDay = new Date(startDate);
+    const parsedEndDay = new Date(endDate);
+    if (isNaN(parsedStartDay.getTime()) || isNaN(parsedEndDay.getTime())) {
+        return res.status(400).json({ success: false, message: 'Invalid start or end date' });
+    }
+    const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
+    if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
+        return res.status(400).json({
+            success: false,
+            message: 'The start date or end date cannot be earlier than the current date',
+        });
+    }
+    const query = {
+        'rooms._id': roomId,
+        'rooms.unavailableDateRanges': {
+            $not: {
+                $elemMatch: {
+                    startDay: { $lte: parsedEndDay },
+                    endDay: { $gte: parsedStartDay },
+                },
+            },
+        },
+        'rooms.quantity': { $gte: +roomNumber || 1 },
+    };
+    const [err, apartment] = await to(
+        Apartment.findOne(query)
+            .select(
+                'title location rooms._id rooms.services rooms.size rooms.price rooms.roomType rooms.numberOfGuest rooms.reviews rooms.quantity',
+            )
+            .populate({ path: 'rooms.services', select: 'title image', limit: 5 })
+            .exec(),
+    );
+
+    if (err) {
+        console.log(err.message);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    }
+
+    if (!apartment) {
+        return res.status(404).json({
+            success: false,
+            message: 'Room not found',
+        });
+    }
+
+    const room = apartment.rooms.find((room) => room._id.toString() === roomId);
+
+    const response = {
+        success: true,
+        data: {
+            name: apartment.title,
+            location: apartment.location,
+            ...room.toObject(),
+        },
+    };
+
+    res.json(response);
+};
+
 const createStripePayment = async (req, res, next) => {
     const { amount, description, source } = req.body;
-
     const [err, paymentIntent] = await to(
         stripe.paymentIntents.create({
             amount: amount,
@@ -600,4 +663,5 @@ module.exports = {
     getAllApartment,
     searchApartments,
     createStripePayment,
+    findRoomById,
 };

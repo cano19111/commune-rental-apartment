@@ -1,4 +1,4 @@
-interface Apartment {
+interface ApartmentType {
     title: string;
     location: Location;
     rooms: Room[];
@@ -18,7 +18,7 @@ interface Room {
     size: number;
     numberOfGuest: number;
     images: [];
-    roomType: number;
+    roomType: string;
     quantity: number;
 }
 interface SearchData {

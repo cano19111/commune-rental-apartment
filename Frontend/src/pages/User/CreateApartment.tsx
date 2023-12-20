@@ -1,7 +1,7 @@
 import { FormAddRoom, InputForm, SelectForm } from '@/components';
 import { Flex, Button, message, Spin } from 'antd';
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { apiCreateApartment } from '@/apis';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -20,7 +20,7 @@ const CreateApartment: React.FC = () => {
         reset,
         formState: { errors },
         setValue,
-    } = useForm({
+    } = useForm<ApartmentType>({
         defaultValues: {
             title: '',
             location: {
@@ -65,7 +65,7 @@ const CreateApartment: React.FC = () => {
         });
     };
 
-    const handleCreateApartment = async (data: Apartment) => {
+    const handleCreateApartment = async (data: ApartmentType) => {
         console.log(data.rooms[0].images);
         data.location.province = Provinces.find(
             (province) => String(province.code) === String(data.location.province),
@@ -108,7 +108,6 @@ const CreateApartment: React.FC = () => {
                     <h1 className="text-3xl font-bold mb-5">Create Apartment</h1>
                     <InputForm
                         control={control}
-                        error={errors?.title}
                         name="title"
                         rules={{ required: 'Name is required' }}
                         placeholder="Enter the name"
@@ -117,9 +116,7 @@ const CreateApartment: React.FC = () => {
 
                     <div className="flex gap-5 flex-col flex-wrap sm:flex-row lg:flex-nowrap items-center">
                         <SelectForm
-                            Controller={Controller}
                             control={control}
-                            error={errors?.location?.province}
                             name="location.province"
                             rules={{ required: 'Province is required' }}
                             placeholder="Enter the province"
@@ -134,9 +131,7 @@ const CreateApartment: React.FC = () => {
                             className="min-w-[250px] w-full"
                         />
                         <SelectForm
-                            Controller={Controller}
                             control={control}
-                            error={errors?.location?.district}
                             name="location.district"
                             rules={{ required: 'District is required' }}
                             placeholder="Enter the district"
@@ -151,9 +146,7 @@ const CreateApartment: React.FC = () => {
                             className="min-w-[250px] w-full"
                         />
                         <SelectForm
-                            Controller={Controller}
                             control={control}
-                            error={errors?.location?.ward}
                             name="location.ward"
                             rules={{ required: 'Ward is required' }}
                             placeholder="Enter the ward"
@@ -170,7 +163,6 @@ const CreateApartment: React.FC = () => {
                     <div>
                         <InputForm
                             control={control}
-                            error={errors?.location?.street}
                             name="location.street"
                             rules={{ required: 'Street is required' }}
                             placeholder="Enter the street"
@@ -181,7 +173,6 @@ const CreateApartment: React.FC = () => {
                     <Flex gap={20} align="center" className="flex-wrap sm:flex-nowrap">
                         <InputForm
                             control={control}
-                            error={errors?.location?.longitude}
                             name="location.longitude"
                             rules={{ required: 'Longitude is required' }}
                             placeholder="Enter the longitude"
@@ -191,7 +182,6 @@ const CreateApartment: React.FC = () => {
                         />
                         <InputForm
                             control={control}
-                            error={errors?.location?.latitude}
                             name="location.latitude"
                             rules={{ required: 'Latitude is required' }}
                             placeholder="Enter the latitude"
@@ -205,7 +195,6 @@ const CreateApartment: React.FC = () => {
                     {rooms.map((room, index) => (
                         <FormAddRoom
                             key={index}
-                            Controller={Controller}
                             control={control}
                             errors={errors}
                             indexRoom={index}

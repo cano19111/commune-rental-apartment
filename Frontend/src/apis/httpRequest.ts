@@ -25,7 +25,7 @@ instance.interceptors.response.use(
     },
     function (error) {
         message.error(error?.response.data.message || 'Error from server');
-        return error?.response;
+        return error?.response?.data;
     },
 );
 

@@ -1,35 +1,46 @@
-import { Flex, Input, InputNumber } from 'antd';
 import React from 'react';
+import { Control, Controller } from 'react-hook-form';
+import { Input, InputNumber } from 'antd';
 import clsx from 'clsx';
-import { Controller } from 'react-hook-form';
 
 interface InputFormProps {
-    control: any;
-    error?: any;
+    control: Control<ApartmentType>;
     name: string;
     rules?: object;
     placeholder: string;
-    type?: string;
+    type?: 'text' | 'number' | 'area';
     label: string;
     className?: string;
     rows?: number;
-    propsOther?: any;
     formatter?: (value: string) => string;
     parser?: (value: string) => string;
 }
 
 const InputForm: React.FC<InputFormProps> = ({
     control,
-    error,
     name,
     rules,
     type = 'text',
     label,
     placeholder,
     className,
-    ...propsOther
+    rows,
+    formatter,
+    parser,
 }) => {
-    const InputComponent = type === 'number' ? InputNumber : type === 'area' ? Input.TextArea : Input;
+    let InputComponent;
+
+    switch (type) {
+        case 'number':
+            InputComponent = InputNumber;
+            break;
+        case 'area':
+            InputComponent = Input.TextArea;
+            break;
+        default:
+            InputComponent = Input;
+    }
+
     return (
         <div className="flex flex-col">
             <label className="text-lg mb-1">
@@ -40,17 +51,19 @@ const InputForm: React.FC<InputFormProps> = ({
                 control={control}
                 name={name}
                 rules={rules}
-                render={({ field }) => (
-                    <Flex vertical gap={5}>
+                render={({ field, fieldState: { error } }) => (
+                    <div className="flex flex-col gap-2">
                         <InputComponent
-                            {...propsOther}
+                            rows={rows}
+                            formatter={formatter}
+                            parser={parser}
+                            {...field}
                             className={clsx('font-main', className)}
                             placeholder={placeholder}
-                            {...field}
-                            status={error && 'error'}
+                            status={error ? 'error' : ''}
                         />
                         {error && <span className="font-main text-red-600">{error.message}</span>}
-                    </Flex>
+                    </div>
                 )}
             />
         </div>

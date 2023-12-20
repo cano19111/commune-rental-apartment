@@ -15,7 +15,7 @@ export default {
                 'card-lg': '0 3px 10px rgba(0,0,0,0.1)',
             },
             maxWidth: {
-                main: '1128px',
+                main: '1140px',
             },
             borderRadius: {
                 score: '50% 50% 88% 12% / 42% 40% 60% 58% ',

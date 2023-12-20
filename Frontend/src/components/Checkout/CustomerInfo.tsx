@@ -1,28 +1,27 @@
 import icons from '@/utils/icons';
 import { Button, Input, Select } from 'antd';
 import React from 'react';
+import { Control, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 const { PiUserThin, BsInfoCircle, CiCircleCheck } = icons;
 interface CustomerInfoProps {
-    setActiveTab: (tab: string) => void;
-    setStep: (step: number) => void;
+    control: Control<CustomerBooking>;
 }
-const CustomerInfo: React.FC<CustomerInfoProps> = ({ setActiveTab, setStep }) => {
+const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
     return (
-        <div className="w-full">
+        <div className="w-full font-main font-light">
             <div className="w-full space-y-5">
                 <div className="w-full flex items-center gap-3 p-5 border border-gray-300 rounded-lg">
                     <PiUserThin size={20} />
                     <div>
                         <Link className="text-blue-500 hover:underline" to="">
                             Sign in
-                        </Link>{' '}
-                        to book with your saved details or
+                        </Link>
+                        <span> to book with your saved details or</span>
                         <Link className="text-blue-500 hover:underline" to="">
-                            {' '}
-                            register
-                        </Link>{' '}
-                        to manage your bookings on the go!
+                            <span> register</span>
+                        </Link>
+                        <span> to manage your bookings on the go!</span>
                     </div>
                 </div>
                 <div className="p-5 space-y-5 border border-gray-300 rounded-lg">
@@ -30,42 +29,113 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ setActiveTab, setStep }) =>
                     <div className="p-5 border border-gray-400 bg-gray-50 rounded-lg flex items-center gap-3">
                         <BsInfoCircle size={20} />
                         <div>
-                            Almost done! Just fill in the <span className="text-red-500">*</span> required info
+                            Almost done! Just fill in the <span className="text-red-700">*</span> required info
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="col-span-1 flex flex-col gap-4">
-                            <div>
-                                <div className="flex gap-1">
-                                    <label>First name</label>
-                                    <span className="text-red-500">*</span>
-                                </div>
-                                <Input size="large" />
-                            </div>
-                            <div className="">
-                                <div className="flex gap-1">
-                                    <label>Email address</label>
-                                    <span className="text-red-500">*</span>
-                                </div>
-                                <Input size="large" />
-                            </div>
+                            <Controller
+                                name="firstname"
+                                rules={{
+                                    required: 'Please fill in your first name',
+                                }}
+                                control={control}
+                                render={({ field, fieldState: { error } }) => (
+                                    <div>
+                                        {error ? (
+                                            <span className="text-red-700 font-normal text-sm">
+                                                {error.message as string}
+                                            </span>
+                                        ) : (
+                                            <div className="flex gap-1">
+                                                <label>First name</label>
+                                                <span className="text-red-700">*</span>
+                                            </div>
+                                        )}
+
+                                        <Input status={error && 'error'} {...field} size="large" />
+                                    </div>
+                                )}
+                            />
+                            <Controller
+                                name="email"
+                                control={control}
+                                rules={{
+                                    required: 'Please fill in your email',
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: 'Please enter email in correct format',
+                                    },
+                                }}
+                                render={({ field, fieldState: { error } }) => (
+                                    <div>
+                                        {error ? (
+                                            <span className="text-red-700 font-normal text-sm">
+                                                {error.message as string}
+                                            </span>
+                                        ) : (
+                                            <div className="flex gap-1">
+                                                <label>Email address</label>
+                                                <span className="text-red-700">*</span>
+                                            </div>
+                                        )}
+
+                                        <Input status={error && 'error'} {...field} size="large" />
+                                    </div>
+                                )}
+                            />
                         </div>
                         <div className="col-span-1 flex flex-col gap-4">
-                            <div className="">
-                                <div className="flex">
-                                    <label>First name</label>
-                                    <span className="text-red-500">*</span>
-                                </div>
-                                <Input size="large" />
-                            </div>
+                            <Controller
+                                name="lastname"
+                                control={control}
+                                rules={{
+                                    required: 'Please fill in your last name',
+                                }}
+                                render={({ field, fieldState: { error } }) => (
+                                    <div>
+                                        {error ? (
+                                            <span className="text-red-700 font-normal text-sm">
+                                                {error.message as string}
+                                            </span>
+                                        ) : (
+                                            <div className="flex gap-1">
+                                                <label>Last name</label>
+                                                <span className="text-red-700">*</span>
+                                            </div>
+                                        )}
 
-                            <div className="">
-                                <div className="flex gap-1">
-                                    <label>Phone number</label>
-                                    <span className="text-red-500">*</span>
-                                </div>
-                                <Input size="large" />
-                            </div>
+                                        <Input status={error && 'error'} {...field} size="large" />
+                                    </div>
+                                )}
+                            />
+                            <Controller
+                                name="phone"
+                                control={control}
+                                rules={{
+                                    required: 'Phone number is required',
+                                    pattern: {
+                                        value: /^0\d{9}$/,
+                                        message: 'Please enter phone in correct format',
+                                    },
+                                }}
+                                render={({ field, fieldState: { error } }) => (
+                                    <div>
+                                        {error ? (
+                                            <span className="text-red-700 font-normal text-sm">
+                                                {error.message as string}
+                                            </span>
+                                        ) : (
+                                            <div className="flex gap-1">
+                                                <label>Phone number</label>
+                                                <span className="text-red-700">*</span>
+                                            </div>
+                                        )}
+
+                                        <Input status={error && 'error'} {...field} size="large" />
+                                    </div>
+                                )}
+                            />
                         </div>
                     </div>
                 </div>
@@ -74,49 +144,57 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ setActiveTab, setStep }) =>
                     <div>
                         <div className="flex items-center gap-3">
                             <CiCircleCheck size={20} color="green" />
-                            <span>You can check in between 14:00 and 00:00</span>
+                            <span>You can check in between 14:00 and 22:00</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <CiCircleCheck size={20} color="green" />
                             <span>24-hour front desk – Help whenever you need it!</span>
                         </div>
                     </div>
-                    <div className="flex flex-col">
-                        <label>
-                            Add your estimated arrival time <span className="text-red-500">*</span>
-                        </label>
-                        <Select
-                            className="max-w-[50%]"
-                            defaultValue={''}
-                            options={[
-                                { value: '', label: 'Please select' },
-                                { value: '-1', label: "I don't know" },
-                                { value: '14', label: '14:00 – 15:00' },
-                                { value: '15', label: '15:00 – 16:00' },
-                                { value: '16', label: '16:00 – 17:00' },
-                                { value: '17', label: '17:00 – 18:00' },
-                                { value: '18', label: '18:00 – 19:00' },
-                                { value: '19', label: '19:00 – 20:00' },
-                                { value: '20', label: '20:00 – 21:00' },
-                                { value: '21', label: '21:00 – 22:00' },
-                                { value: '22', label: '22:00 – 23:00' },
-                                { value: '23', label: '23:00 – 00:00' },
-                                { value: '24', label: '00:00 – 01:00 (the next day)' },
-                                { value: '25', label: '01:00 – 02:00 (the next day)' },
-                            ]}
-                        ></Select>
-                    </div>
+                    <Controller
+                        name="arrivalTime"
+                        control={control}
+                        rules={{ required: 'Estimated arrival time is required' }}
+                        render={({ field, fieldState: { error } }) => (
+                            <div className="flex flex-col gap-1">
+                                {error ? (
+                                    <span className="text-red-700 font-normal text-sm">{error.message}</span>
+                                ) : (
+                                    <label className="font-main">
+                                        Add your estimated arrival time <span className="text-red-700">*</span>
+                                    </label>
+                                )}
+                                <Select
+                                    {...field}
+                                    className="max-w-[50%]"
+                                    size="large"
+                                    placeholder="Please select"
+                                    defaultValue={''}
+                                    onChange={(value) => field.onChange(value)}
+                                    status={error ? 'error' : ''}
+                                    options={[
+                                        { value: '', label: 'Please select' },
+                                        { value: '-1', label: "I don't know" },
+                                        { value: '14:00 – 15:00', label: '14:00 – 15:00' },
+                                        { value: '15:00 – 16:00', label: '15:00 – 16:00' },
+                                        { value: '16:00 – 17:00', label: '16:00 – 17:00' },
+                                        { value: '17:00 – 18:00', label: '17:00 – 18:00' },
+                                        { value: '18:00 – 19:00', label: '18:00 – 19:00' },
+                                        { value: '19:00 – 20:00', label: '19:00 – 20:00' },
+                                        { value: '20:00 – 21:00', label: '20:00 – 21:00' },
+                                        { value: '21:00 – 22:00', label: '21:00 – 22:00' },
+                                        { value: '22:00 – 23:00', label: '22:00 – 23:00' },
+                                        { value: '23:00 – 00:00', label: '23:00 – 00:00' },
+                                        { value: '00:00 – 01:00', label: '00:00 – 01:00 (the next day)' },
+                                        { value: '01:00 – 02:00', label: '01:00 – 02:00 (the next day)' },
+                                    ]}
+                                />
+                            </div>
+                        )}
+                    />
                 </div>
                 <div className="flex justify-end">
-                    <Button
-                        type="primary"
-                        size="large"
-                        className="bg-blue-500"
-                        onClick={() => {
-                            setActiveTab('checkout');
-                            setStep(2);
-                        }}
-                    >
+                    <Button type="primary" size="large" className="bg-blue-500" htmlType="submit">
                         Next: Payment
                     </Button>
                 </div>

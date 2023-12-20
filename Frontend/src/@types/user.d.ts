@@ -21,3 +21,11 @@ interface EditUser {
     address: string;
     personalId: string;
 }
+
+interface CustomerBooking {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    arrivalTime: string;
+}

@@ -6,7 +6,7 @@ import { DropDownItem } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
-import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
+import { useJsApiLoader } from '@react-google-maps/api';
 const { PiUserThin } = icons;
 
 const Search: React.FC = () => {

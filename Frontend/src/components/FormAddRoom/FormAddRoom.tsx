@@ -6,18 +6,17 @@ import { apiGetServices } from '@/apis';
 import { InputForm } from '..';
 import icons from '@/utils/icons';
 import clsx from 'clsx';
-import { Controller, FieldValues, DeepMap, FieldError } from 'react-hook-form';
+import { FieldValues, DeepMap, FieldError, Control, Controller } from 'react-hook-form';
 const { FiTrash, AiOutlineClose } = icons;
 
 interface AddRoomProps {
-    Controller: typeof Controller;
     errors: DeepMap<FieldValues, FieldError>;
-    control: any;
+    control: Control<ApartmentType>;
     indexRoom: number;
     onClose: (index: number) => void;
 }
 
-const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoom, onClose }) => {
+const AddRoom: React.FC<AddRoomProps> = ({ errors, control, indexRoom, onClose }) => {
     const { data: servicesData } = useQuery({
         queryKey: ['services'],
         queryFn: apiGetServices,
@@ -66,7 +65,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
 
             <InputForm
                 control={control}
-                error={errors?.rooms?.[indexRoom]?.description}
                 name={`rooms.${indexRoom}.description`}
                 rules={{ required: 'Description is required' }}
                 placeholder="Enter the description"
@@ -137,7 +135,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
             <Flex align="center" gap={20} wrap="wrap">
                 <InputForm
                     control={control}
-                    error={errors?.rooms?.[indexRoom]?.size}
                     name={`rooms.${indexRoom}.size`}
                     rules={{
                         required: 'Room size is required',
@@ -153,7 +150,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
 
                 <InputForm
                     control={control}
-                    error={errors?.rooms?.[indexRoom]?.price}
                     name={`rooms.${indexRoom}.price`}
                     rules={{
                         required: 'Price is required',
@@ -170,7 +166,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                 />
                 <InputForm
                     control={control}
-                    error={errors?.rooms?.[indexRoom]?.roomType}
                     name={`rooms.${indexRoom}.roomType`}
                     rules={{ required: 'Room type is required' }}
                     placeholder="Enter the room type"
@@ -180,7 +175,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
 
                 <InputForm
                     control={control}
-                    error={errors?.rooms?.[indexRoom]?.numberOfGuest}
                     name={`rooms.${indexRoom}.numberOfGuest`}
                     rules={{
                         required: 'Number of guests is required',
@@ -195,7 +189,6 @@ const AddRoom: React.FC<AddRoomProps> = ({ Controller, errors, control, indexRoo
                 />
                 <InputForm
                     control={control}
-                    error={errors?.rooms?.[indexRoom]?.quantity}
                     name={`rooms.${indexRoom}.quantity`}
                     rules={{
                         required: 'Quantity is required',
