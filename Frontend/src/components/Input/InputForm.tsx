@@ -4,7 +4,7 @@ import { Input, InputNumber } from 'antd';
 import clsx from 'clsx';
 
 interface InputFormProps {
-    control: Control<ApartmentType>;
+    control: Control<any>;
     name: string;
     rules?: object;
     placeholder: string;

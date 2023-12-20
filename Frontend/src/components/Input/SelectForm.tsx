@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Control, Controller } from 'react-hook-form';
 
 interface SelectFormProps {
-    control: Control<ApartmentType>;
+    control: Control<any>;
     name: string;
     rules?: object;
     placeholder: string;
