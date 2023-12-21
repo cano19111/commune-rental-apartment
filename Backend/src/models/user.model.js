@@ -53,6 +53,8 @@ const userSchema = new mongoose.Schema(
                 ref: 'Apartment',
             },
         ],
+        confirmationToken: { type: String },
+        emailConfirmed: { type: Boolean, default: false },
         refreshToken: {
             type: String,
         },

@@ -3,60 +3,68 @@ const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt');
 const jwt = require('jsonwebtoken');
 const to = require('await-to-js').default;
+const { generateToken, sendMail } = require('../utils/helpers');
 
 const hashPassword = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
     try {
-        const { email, password, firstname, lastname, phone } = req.body;
-        const [errExistingUser, existingUser] = await to(User.findOne({ email }));
-
-        if (errExistingUser) {
-            return res.status(500).json({
-                success: false,
-                message: 'Error find user',
-            });
-        }
-
+        const { email } = req.body;
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'Email has already been used!',
-            });
+            return res.status(400).json({ message: 'Email already in use' });
         }
 
-        const [errCreateUser, newUser] = await to(
-            User.create({
-                email,
-                password: hashPassword(password),
-                firstname,
-                lastname,
-                phone,
-            }),
-        );
-        if (errCreateUser) {
-            return res.status(500).json({
-                success: false,
-                message: 'Error user register',
-            });
-        }
-        return res.status(201).json({
-            success: true,
-            message: 'Register is successful!',
-            data: {
-                user: {
-                    _id: newUser._id,
-                    email: newUser.email,
-                    firstname: newUser.firstname,
-                    lastname: newUser.lastname,
-                    phone: newUser.phone,
-                },
-            },
-        });
+        const confirmationToken = generateToken();
+        const newUser = new User({ email, confirmationToken });
+        await newUser.save();
+
+        sendMail(email, confirmationToken, 'Confirm email');
+
+        res.status(201).json({ message: 'Registration successful. Please check your email to confirm.' });
     } catch (error) {
-        next(error);
+        res.status(500).json({ message: 'Error registering user' });
     }
 };
+
+const confirmEmail = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const user = await User.findOne({ confirmationToken: token });
+        if (!user) {
+            return res.status(400).send('Invalid or expired token.');
+        }
+
+        user.emailConfirmed = true;
+        await user.save();
+
+        res.redirect(`http://frontend-url/set-password/${user._id}`);
+    } catch (error) {
+        res.status(500).send('Internal server error');
+    }
+};
+
+const setPassword = async (req, res) => {
+    try {
+        const { userId, password } = req.body;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (!user.emailConfirmed) {
+            return res.status(400).json({ message: 'Email has not been confirmed' });
+        }
+
+        user.password = hashPassword(password); // Ensure this function securely hashes the password
+        await user.save();
+
+        res.status(200).json({ message: 'Password has been set successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error setting password' });
+    }
+};
+
 const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -197,4 +205,6 @@ module.exports = {
     login,
     logout,
     refreshAccessToken,
+    confirmEmail,
+    setPassword,
 };

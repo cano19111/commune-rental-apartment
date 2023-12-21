@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const mongoose = require('mongoose');
 const Booking = require('../models/booking.model');
 const Apartment = require('../models/apartment.model');
-const sendMail = require('../utils/sendMail');
+const { sendMail } = require('../utils/helpers');
 const to = require('await-to-js').default;
 
 const createBooking = async (req, res) => {
@@ -62,7 +62,7 @@ const createBooking = async (req, res) => {
         .replace('{{bookingId}}', newBooking._id.toString())
         .replace('{{checkInTime}}', checkInTime.toString())
         .replace('{{checkOutTime}}', checkOutTime.toString())
-        .replace('{{totalPrice}}', totalPrice.toLocaleString());
+        .replace('{{totalPrice}}', `${totalPrice.toLocaleString()} VND`);
 
     let [mailError] = await to(sendMail({ email, html: htmlToSend, subject: 'Booking Confirmation' }));
     if (mailError) {

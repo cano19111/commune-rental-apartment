@@ -572,66 +572,105 @@ const removeRoomFromApartment = async (req, res, next) => {
 const findRoomById = async (req, res) => {
     const roomId = req.params.roomId;
     const { startDate, endDate, roomNumber } = req.query;
+
+    const roomIdObj = new mongoose.Types.ObjectId(roomId);
+
     const parsedStartDay = new Date(startDate);
     const parsedEndDay = new Date(endDate);
+
     if (isNaN(parsedStartDay.getTime()) || isNaN(parsedEndDay.getTime())) {
         return res.status(400).json({ success: false, message: 'Invalid start or end date' });
     }
-    const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
+
+    const nowDate = new Date();
+    nowDate.setHours(0, 0, 0, 0);
     if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
         return res.status(400).json({
             success: false,
             message: 'The start date or end date cannot be earlier than the current date',
         });
     }
-    const query = {
-        'rooms._id': roomId,
-        'rooms.unavailableDateRanges': {
-            $not: {
-                $elemMatch: {
-                    startDay: { $lte: parsedEndDay },
-                    endDay: { $gte: parsedStartDay },
+
+    const pipeline = [
+        { $match: { 'rooms._id': roomIdObj } },
+        { $unwind: '$rooms' },
+        { $match: { 'rooms._id': roomIdObj } },
+        {
+            $match: {
+                $or: [
+                    {
+                        'rooms.unavailableDateRanges': {
+                            $not: {
+                                $elemMatch: { startDay: { $lte: parsedEndDay }, endDay: { $gte: parsedStartDay } },
+                            },
+                        },
+                    },
+                    { 'rooms.unavailableDateRanges': { $exists: false } },
+                ],
+            },
+        },
+        { $match: { 'rooms.quantity': { $gte: parseInt(roomNumber, 10) || 1 } } },
+        {
+            $lookup: {
+                from: 'services',
+                localField: 'rooms.services',
+                foreignField: '_id',
+                as: 'rooms.services',
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                title: 1,
+                location: 1,
+                room: {
+                    _id: '$rooms._id',
+                    price: '$rooms.price',
+                    size: '$rooms.size',
+                    roomType: '$rooms.roomType',
+                    numberOfGuest: '$rooms.numberOfGuest',
+                    quantity: '$rooms.quantity',
+                    reviews: '$rooms.reviews',
+                    services: {
+                        $slice: [
+                            {
+                                $map: {
+                                    input: '$rooms.services',
+                                    as: 'service',
+                                    in: {
+                                        title: '$$service.title',
+                                        image: '$$service.image',
+                                    },
+                                },
+                            },
+                            4,
+                        ],
+                    },
                 },
             },
         },
-        'rooms.quantity': { $gte: +roomNumber || 1 },
-    };
-    const [err, apartment] = await to(
-        Apartment.findOne(query)
-            .select(
-                'title location rooms._id rooms.services rooms.size rooms.price rooms.roomType rooms.numberOfGuest rooms.reviews rooms.quantity',
-            )
-            .populate({ path: 'rooms.services', select: 'title image', limit: 5 })
-            .exec(),
-    );
+        { $limit: 1 },
+    ];
 
-    if (err) {
-        console.log(err.message);
-        return res.status(500).json({
-            success: false,
-            message: 'Internal server error',
+    try {
+        const result = await Apartment.aggregate(pipeline).exec();
+
+        if (!result || result.length === 0) {
+            return res.status(404).json({ success: false, message: 'Room not found or unavailable' });
+        }
+        const { title, location, room } = result[0];
+        return res.json({
+            success: true,
+            data: {
+                title,
+                location,
+                ...room,
+            },
         });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-
-    if (!apartment) {
-        return res.status(404).json({
-            success: false,
-            message: 'Room not found',
-        });
-    }
-
-    const room = apartment.rooms.find((room) => room._id.toString() === roomId);
-
-    const response = {
-        success: true,
-        data: {
-            name: apartment.title,
-            location: apartment.location,
-            ...room.toObject(),
-        },
-    };
-
-    res.json(response);
 };
 
 const createStripePayment = async (req, res, next) => {

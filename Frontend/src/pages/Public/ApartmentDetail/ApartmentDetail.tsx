@@ -32,7 +32,6 @@ const ApartmentDetail: React.FC = () => {
         control,
         handleSubmit,
         formState: { errors, isValid },
-        getValues,
         watch,
     } = useForm();
     const { data: { data: { apartment } = {} } = {}, isFetching } = useQuery({
@@ -46,6 +45,8 @@ const ApartmentDetail: React.FC = () => {
 
     const startDate: string | null = searchParams.get('startDate');
     const endDate: string | null = searchParams.get('endDate');
+    const numberOfGuest: number =
+        +searchParams.get('numberOfGuest') !== 0 ? +searchParams.get('numberOfGuest') ?? 1 : 1;
     const checkIn: Date | null = startDate ? new Date(startDate) : null;
     const checkOut: Date | null = endDate ? new Date(endDate) : null;
     const numberOfDays: number =
@@ -72,7 +73,7 @@ const ApartmentDetail: React.FC = () => {
         const queryParams = new URLSearchParams({
             start_date: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
             end_date: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
-            number_of_guest: roomData.numberOfGuest.toString(),
+            number_of_guest: numberOfGuest.toString(),
             room_number: roomData.roomNumber.toString(),
             room_id: roomData.key.toString(),
         });
@@ -119,7 +120,7 @@ const ApartmentDetail: React.FC = () => {
             >
                 <div className="grid grid-cols-4 grid-rows-4 gap-2 mt-10 w-full max-h-[500px] lg:min-h-[450px] overflow-hidden relative">
                     <div className="col-span-2 row-span-4">
-                        <Image className="rounded-s-lg" height="100%" src={rooms[0]?.images[0]} />
+                        <Image className="rounded-s-lg" height="100%" width="100%" src={rooms[0]?.images[0]} />
                     </div>
                     <div className="flex col-span-2 row-span-2 gap-2">
                         <Image className="" height="100%" width="50%" src={rooms[0]?.images[1]} />
@@ -308,7 +309,7 @@ const ApartmentDetail: React.FC = () => {
 
                                 <div className="font-main w-full h-[48px] border border-gray-300 bg-white rounded-b-lg border-t-0 border-700 rounded-t-none flex items-center gap-1 justify-center cursor-default font-normal select-none">
                                     <PiUserThin size={25} />
-                                    <span className="">{`${getValues('searchGuest')?.guest || 1} adult · ${
+                                    <span className="">{`${numberOfGuest} adult · ${
                                         selectRoom?.roomNumber || 0
                                     } rooms`}</span>
                                 </div>

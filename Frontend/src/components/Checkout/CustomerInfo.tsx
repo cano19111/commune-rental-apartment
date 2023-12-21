@@ -3,19 +3,19 @@ import icons from '@/utils/icons';
 import { Avatar, Button, Input, Select } from 'antd';
 import React from 'react';
 import { Control, Controller } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+
 const { PiUserThin, BsInfoCircle, CiCircleCheck } = icons;
 interface CustomerInfoProps {
     control: Control<CustomerBooking>;
 }
 const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
-    const { user: currentUser, isAuthenticated } = useAuth();
+    const { user: currentUser, isAuthenticated, setAuthModel } = useAuth();
     return (
         <div className="w-full font-main font-light">
             <div className="w-full space-y-5">
                 {isAuthenticated ? (
                     <div className="w-full flex items-center gap-3 p-5 border border-gray-300 rounded-lg">
-                        <Avatar src={currentUser.avatar} className="border border-yellow-600" size={45} />
+                        <Avatar src={currentUser.avatar} className="border border-blue-600" size={45} />
                         <div className="flex flex-col">
                             <div className="font-medium text-md">You are signed in</div>
                             <div>{currentUser.email}</div>
@@ -25,13 +25,19 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                     <div className="w-full flex items-center gap-3 p-5 border border-gray-300 rounded-lg">
                         <PiUserThin size={20} />
                         <div>
-                            <Link className="text-blue-500 hover:underline" to="">
+                            <span
+                                className="text-blue-500 hover:underline"
+                                onClick={() => setAuthModel({ isOpen: true, activeTab: 'signin' })}
+                            >
                                 Sign in
-                            </Link>
-                            <span> to book with your saved details or</span>
-                            <Link className="text-blue-500 hover:underline" to="">
-                                <span> register</span>
-                            </Link>
+                            </span>
+                            <span> to book with your saved details or </span>
+                            <span
+                                className="text-blue-500 hover:underline"
+                                onClick={() => setAuthModel({ isOpen: true, activeTab: 'signup' })}
+                            >
+                                register
+                            </span>
                             <span> to manage your bookings on the go!</span>
                         </div>
                     </div>
@@ -55,7 +61,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                 control={control}
                                 defaultValue={currentUser?.firstname || ''}
                                 render={({ field, fieldState: { error } }) => (
-                                    <div>
+                                    <div className="font-normal">
                                         {error ? (
                                             <span className="text-red-700 font-normal text-sm">
                                                 {error.message as string}
@@ -83,7 +89,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                 }}
                                 defaultValue={currentUser?.email || ''}
                                 render={({ field, fieldState: { error } }) => (
-                                    <div>
+                                    <div className="font-normal">
                                         {error ? (
                                             <span className="text-red-700 font-normal text-sm">
                                                 {error.message as string}
@@ -109,7 +115,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                 }}
                                 defaultValue={currentUser?.lastname || ''}
                                 render={({ field, fieldState: { error } }) => (
-                                    <div>
+                                    <div className="font-normal">
                                         {error ? (
                                             <span className="text-red-700 font-normal text-sm">
                                                 {error.message as string}
@@ -137,7 +143,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                 }}
                                 defaultValue={currentUser?.phone || ''}
                                 render={({ field, fieldState: { error } }) => (
-                                    <div>
+                                    <div className="font-normal">
                                         {error ? (
                                             <span className="text-red-700 font-normal text-sm">
                                                 {error.message as string}
@@ -173,7 +179,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                         control={control}
                         rules={{ required: 'Estimated arrival time is required' }}
                         render={({ field, fieldState: { error } }) => (
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-1 font-normal">
                                 {error ? (
                                     <span className="text-red-700 font-normal text-sm">{error.message}</span>
                                 ) : (

@@ -103,7 +103,7 @@ const Payment: React.FC<PaymentProps> = ({ setActiveTab, setStep, amount, nameRo
                                 icon={<FaLock />}
                                 onClick={handleBooking}
                             >
-                                Booking Completion
+                                Complete booking
                             </Button>
                         </Flex>
                     </div>

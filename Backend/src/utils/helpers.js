@@ -1,6 +1,8 @@
-const nodemailer = require('nodemailer');
-const to = require('await-to-js').default;
+const crypto = require('crypto');
 
+const generateToken = () => {
+    return crypto.randomBytes(20).toString('hex');
+};
 const sendMail = async ({ email, html, subject }) => {
     let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -25,5 +27,7 @@ const sendMail = async ({ email, html, subject }) => {
     }
     return info;
 };
-
-module.exports = sendMail;
+exports.modulus = {
+    generateToken,
+    sendMail,
+};

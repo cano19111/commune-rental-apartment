@@ -3,44 +3,40 @@ import logo from '@/assets/header-logo1.png';
 import { navigates, path } from '@/utils/constant';
 import { MenuAccount, SignIn, SignUp } from '@/components';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Flex, Button, Modal, Tabs, Drawer, Image, Popover } from 'antd';
+import { Flex, Button, Modal, Tabs, Drawer, Image, Popover, Avatar } from 'antd';
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
 
 const Header: React.FC = () => {
-    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, BsPersonCircle, CgMenuLeft } = icons;
+    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, CgMenuLeft } = icons;
     const navigate = useNavigate();
-    const [modalOpen, setModalOpen] = useState<{ isOpen: boolean; activeTab: string }>({
-        isOpen: false,
-        activeTab: 'signin',
-    });
     const [openNavigate, setOpenNavigate] = useState(false);
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user: currentUser, authModel, setAuthModel } = useAuth();
     const tabItemsModal: TabsProps['items'] = [
         {
             key: 'signin',
             label: (
                 <div
                     className="font-main text-xl w-[120px] flex items-center justify-center lg:w-[390px] md:w-[350px] sm:w-[300px]"
-                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                    onClick={() => setAuthModel({ isOpen: true, activeTab: 'signin' })}
                 >
                     Sign In
                 </div>
             ),
-            children: <SignIn setModalOpen={setModalOpen} />,
+            children: <SignIn setModalOpen={setAuthModel} />,
         },
         {
             key: 'signup',
             label: (
                 <div
                     className="font-main text-xl w-[120px] flex items-center justify-center lg:w-[390px] md:w-[350px] sm:w-[300px]"
-                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                    onClick={() => setAuthModel({ isOpen: true, activeTab: 'signup' })}
                 >
                     Sign Up
                 </div>
             ),
-            children: <SignUp setModalOpen={setModalOpen} />,
+            children: <SignUp setModalOpen={setAuthModel} />,
         },
     ];
     return (
@@ -67,18 +63,18 @@ const Header: React.FC = () => {
                     </div>
 
                     <Flex gap={10} align="center">
-                        {!isAuthenticated ? (
+                        {!isAuthenticated && !currentUser ? (
                             <>
                                 <Button
                                     type="primary"
                                     className="font-main h-10 px-2 md:px-7 hidden lg:block bg-blue-500 text-white"
-                                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                                    onClick={() => setAuthModel({ isOpen: true, activeTab: 'signin' })}
                                 >
                                     Sign in
                                 </Button>
                                 <Button
                                     className="font-main h-10 px-2 md:px-7 hidden lg:block"
-                                    onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                                    onClick={() => setAuthModel({ isOpen: true, activeTab: 'signup' })}
                                 >
                                     Sign up
                                 </Button>
@@ -91,7 +87,7 @@ const Header: React.FC = () => {
                                 trigger={['click', 'contextMenu']}
                             >
                                 <span className="mt-3 mx-5 cursor-pointer pb-3">
-                                    <BsPersonCircle size={25} />
+                                    <Avatar size={40} src={currentUser?.avatar} className="border border-blue-500" />
                                 </span>
                             </Popover>
                         )}
@@ -101,9 +97,9 @@ const Header: React.FC = () => {
 
             <Modal
                 centered
-                open={modalOpen.isOpen}
-                onOk={() => setModalOpen({ isOpen: false, activeTab: 'signin' })}
-                onCancel={() => setModalOpen({ isOpen: false, activeTab: 'signin' })}
+                open={authModel.isOpen}
+                onOk={() => setAuthModel({ isOpen: false, activeTab: 'signin' })}
+                onCancel={() => setAuthModel({ isOpen: false, activeTab: 'signin' })}
                 width={840}
                 footer={null}
                 closeIcon={<SlClose size={25} />}
@@ -113,7 +109,7 @@ const Header: React.FC = () => {
                     },
                 }}
             >
-                <Tabs centered={true} activeKey={modalOpen.activeTab} items={tabItemsModal} tabBarGutter={0} />
+                <Tabs centered={true} activeKey={authModel.activeTab} items={tabItemsModal} tabBarGutter={0} />
             </Modal>
             <Drawer
                 title={
@@ -147,14 +143,14 @@ const Header: React.FC = () => {
                         <Flex gap={20} vertical>
                             <span
                                 className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
-                                onClick={() => setModalOpen({ isOpen: true, activeTab: 'signin' })}
+                                onClick={() => setAuthModel({ isOpen: true, activeTab: 'signin' })}
                             >
                                 <PiSignInBold />
                                 <span>Sign in</span>
                             </span>
                             <span
                                 className="font-main cursor-pointer text-[22px] font-medium flex items-center gap-5"
-                                onClick={() => setModalOpen({ isOpen: true, activeTab: 'signup' })}
+                                onClick={() => setAuthModel({ isOpen: true, activeTab: 'signup' })}
                             >
                                 <span>
                                     <AiOutlineUsergroupAdd />
