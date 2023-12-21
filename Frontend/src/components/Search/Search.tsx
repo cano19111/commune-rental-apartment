@@ -6,7 +6,8 @@ import { DropDownItem } from '@/components';
 import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
-import { Autocomplete, useJsApiLoader } from '@react-google-maps/api';
+import { useJsApiLoader } from '@react-google-maps/api';
+import moment from 'moment';
 const { PiUserThin } = icons;
 
 const Search: React.FC = () => {
@@ -77,6 +78,7 @@ const Search: React.FC = () => {
                                 popupClassName="show-card-md rounded-full"
                                 {...field}
                                 onChange={(dates) => field.onChange(dates)}
+                                disabledDate={(current) => current && current < moment().startOf('day')}
                             />
                         </Tooltip>
                     )}

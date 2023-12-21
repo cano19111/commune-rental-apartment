@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, FC, useEffect, useReducer } from 'react';
+import React, { createContext, Dispatch, FC, useEffect, useReducer, useState } from 'react';
 import { AuthActionType } from './types';
 import { initialize, reducer } from './reduces';
 import { apiGetCurrentUser } from '@/apis';
@@ -17,6 +17,8 @@ export interface PayloadAction<T> {
 
 export interface AuthContextType extends AuthState {
     dispatch: Dispatch<PayloadAction<AuthState>>;
+    authModel: { isOpen: boolean; activeTab: string };
+    setAuthModel: Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
 }
 
 const initialState: AuthState = {
@@ -28,32 +30,33 @@ const initialState: AuthState = {
 export const AuthContext = createContext<AuthContextType>({
     ...initialState,
     dispatch: () => null,
+    authModel: { isOpen: false, activeTab: 'signin' },
+    setAuthModel: () => {},
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-
-    const {
-        data: currentUser,
-        isError,
-        isLoading,
-    } = useQuery({
+    const [authModel, setAuthModel] = useState<{ isOpen: boolean; activeTab: string }>({
+        isOpen: false,
+        activeTab: 'signin',
+    });
+    const { data, isError, isLoading } = useQuery({
         queryKey: ['currentUser'],
         queryFn: apiGetCurrentUser,
         enabled: !!localStorage.getItem('ACCESS_TOKEN'),
     });
 
     useEffect(() => {
-        if (!currentUser && !isLoading) {
+        if (!data && !data?.success && !isLoading) {
             dispatch(initialize({ isAuthenticated: false, accessToken: null, user: null }));
-        } else if (currentUser && !isError && !!localStorage.getItem('ACCESS_TOKEN')) {
+        } else if (data && !isError && !!localStorage.getItem('ACCESS_TOKEN')) {
             const token = JSON.parse(localStorage.getItem('ACCESS_TOKEN') as string);
-            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: currentUser?.data?.user }));
+            dispatch(initialize({ isAuthenticated: true, accessToken: token, user: data?.data?.user }));
         }
-    }, [currentUser, isError, isLoading, state.accessToken]);
+    }, [data, isError, isLoading, state.accessToken]);
 
     return (
-        <AuthContext.Provider value={{ ...state, dispatch }}>
+        <AuthContext.Provider value={{ ...state, dispatch, authModel, setAuthModel }}>
             <Spin spinning={isLoading} fullscreen={isLoading} size="large">
                 {children}
             </Spin>

@@ -2,6 +2,7 @@ const User = require('../models/user.model');
 const { default: to } = require('await-to-js');
 const mongoose = require('mongoose');
 const Apartment = require('../models/apartment.model');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const getAllApartment = async (req, res, next) => {
     try {
@@ -530,7 +531,6 @@ const removeRoomFromApartment = async (req, res, next) => {
         const { _id: removedBy } = req.user;
 
         let err, updatedApartment;
-
         [err, updatedApartment] = await to(
             Apartment.findByIdAndUpdate(
                 apartmentId,
@@ -569,6 +569,130 @@ const removeRoomFromApartment = async (req, res, next) => {
     }
 };
 
+const findRoomById = async (req, res) => {
+    const roomId = req.params.roomId;
+    const { startDate, endDate, roomNumber } = req.query;
+
+    const roomIdObj = new mongoose.Types.ObjectId(roomId);
+
+    const parsedStartDay = new Date(startDate);
+    const parsedEndDay = new Date(endDate);
+
+    if (isNaN(parsedStartDay.getTime()) || isNaN(parsedEndDay.getTime())) {
+        return res.status(400).json({ success: false, message: 'Invalid start or end date' });
+    }
+
+    const nowDate = new Date();
+    nowDate.setHours(0, 0, 0, 0);
+    if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
+        return res.status(400).json({
+            success: false,
+            message: 'The start date or end date cannot be earlier than the current date',
+        });
+    }
+
+    const pipeline = [
+        { $match: { 'rooms._id': roomIdObj } },
+        { $unwind: '$rooms' },
+        { $match: { 'rooms._id': roomIdObj } },
+        {
+            $match: {
+                $or: [
+                    {
+                        'rooms.unavailableDateRanges': {
+                            $not: {
+                                $elemMatch: { startDay: { $lte: parsedEndDay }, endDay: { $gte: parsedStartDay } },
+                            },
+                        },
+                    },
+                    { 'rooms.unavailableDateRanges': { $exists: false } },
+                ],
+            },
+        },
+        { $match: { 'rooms.quantity': { $gte: parseInt(roomNumber, 10) || 1 } } },
+        {
+            $lookup: {
+                from: 'services',
+                localField: 'rooms.services',
+                foreignField: '_id',
+                as: 'rooms.services',
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                title: 1,
+                location: 1,
+                room: {
+                    _id: '$rooms._id',
+                    price: '$rooms.price',
+                    size: '$rooms.size',
+                    roomType: '$rooms.roomType',
+                    numberOfGuest: '$rooms.numberOfGuest',
+                    quantity: '$rooms.quantity',
+                    reviews: '$rooms.reviews',
+                    services: {
+                        $slice: [
+                            {
+                                $map: {
+                                    input: '$rooms.services',
+                                    as: 'service',
+                                    in: {
+                                        title: '$$service.title',
+                                        image: '$$service.image',
+                                    },
+                                },
+                            },
+                            4,
+                        ],
+                    },
+                },
+            },
+        },
+        { $limit: 1 },
+    ];
+
+    try {
+        const result = await Apartment.aggregate(pipeline).exec();
+
+        if (!result || result.length === 0) {
+            return res.status(404).json({ success: false, message: 'Room not found or unavailable' });
+        }
+        const { title, location, room } = result[0];
+        return res.json({
+            success: true,
+            data: {
+                title,
+                location,
+                ...room,
+            },
+        });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+const createStripePayment = async (req, res, next) => {
+    const { amount, description, source } = req.body;
+    const [err, paymentIntent] = await to(
+        stripe.paymentIntents.create({
+            amount: amount,
+            currency: 'VND',
+            description: description,
+            source: source,
+            automatic_payment_methods: { enabled: true },
+        }),
+    );
+
+    if (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: err.message });
+    }
+
+    return res.status(200).json({ clientSecret: paymentIntent.client_secret });
+};
+
 module.exports = {
     createApartment,
     updateApartment,
@@ -577,4 +701,6 @@ module.exports = {
     getApartment,
     getAllApartment,
     searchApartments,
+    createStripePayment,
+    findRoomById,
 };

@@ -9,6 +9,7 @@ import { DropDownItem } from '@/components';
 import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { useJsApiLoader } from '@react-google-maps/api';
+import moment from 'moment';
 const { GoLocation, PiUserThin } = icons;
 
 const Listing: React.FC = () => {
@@ -112,6 +113,7 @@ const Listing: React.FC = () => {
                                             popupClassName="show-card-md rounded-full"
                                             {...field}
                                             onChange={(dates) => field.onChange(dates)}
+                                            disabledDate={(current) => current && current < moment().startOf('day')}
                                         />
                                     </Tooltip>
                                 )}

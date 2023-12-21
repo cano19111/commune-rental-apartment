@@ -8,7 +8,7 @@ interface ReqSignUp {
 interface AuthState {
     isAuthenticated?: boolean;
     accessToken?: string | null;
-    user?: object | null;
+    user?: UserType | null;
 }
 interface EditUser {
     firstname: string;
@@ -20,4 +20,25 @@ interface EditUser {
     gender: string;
     address: string;
     personalId: string;
+}
+
+interface UserType {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    avatar: string;
+    dateOfBirth: Date;
+    nationality: string;
+    gender: string;
+    address: string;
+    personalId: string;
+}
+
+interface CustomerBooking {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    arrivalTime: string;
 }

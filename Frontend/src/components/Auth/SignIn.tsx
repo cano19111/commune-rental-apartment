@@ -35,6 +35,7 @@ const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
                     dispatch(signIn({ accessToken, user }));
                     message.success('Login successfully');
                     reset();
+                    window.location.reload();
                 }
             },
             onError: () => {

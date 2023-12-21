@@ -3,6 +3,7 @@ const userRouter = require('./user');
 const serviceRouter = require('./service');
 const imageRouter = require('./image');
 const apartmentRouter = require('./apartment');
+const bookingRouter = require('./booking');
 
 const { notFound, errHandler } = require('../middlewares/errorHandler');
 
@@ -12,6 +13,7 @@ const initRoutes = (app) => {
     app.use('/api/service', serviceRouter);
     app.use('/api/image', imageRouter);
     app.use('/api/apartment', apartmentRouter);
+    app.use('/api/booking', bookingRouter);
 
     app.use(notFound);
     app.use(errHandler);

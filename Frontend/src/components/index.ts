@@ -11,3 +11,5 @@ export { default as SelectForm } from './Input/SelectForm';
 export { default as GoogleMap } from './GoogleMap/GoogleMap';
 export { default as Reviews } from './Reviews/Reviews';
 export { default as TableSelectRoom } from './TableSelectRoom/TableSelectRoom';
+export { default as CustomerInfo } from './Checkout/CustomerInfo';
+export { default as Payment } from './Checkout/Payment';

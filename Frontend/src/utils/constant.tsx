@@ -13,6 +13,7 @@ export const path: { [key: string]: string } = {
     CONTACT: 'contact',
     CREATE_APARTMENT: 'create-apartment',
     BOOKING_CONFIRM: 'booking-confirm',
+    BOOKING_COMPLETION: 'booking-completion',
     ACCOUNT_SETTINGS: 'account-settings',
     PERSONAL_INFORMATION: 'personal-information',
     MANAGE_APARTMENT: 'manage-apartment',
