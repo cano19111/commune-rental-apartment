@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Booking Confirmation</title>
+    </head>
+    <body style="background-color: #f4f4f4; color: #333; font-family: Arial, sans-serif; margin: 0; padding: 20px">
+        <div
+            style="
+                max-width: 600px;
+                margin: auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            "
+        >
+            <h1 style="text-align: center; color: #4a90e2">Booking Confirmation</h1>
+            <p>Dear <strong>{{firstname}} {{lastname}}</strong>,</p>
+            <p>Thank you for your booking. Here are the details of your reservation:</p>
+            <table style="width: 100%; border-collapse: collapse; background-color: #fafafa">
+                <tr>
+                    <th
+                        style="
+                            border: 1px solid #ddd;
+                            padding: 10px;
+                            text-align: left;
+                            background-color: #e7f2fa;
+                            color: #333;
+                        "
+                    >
+                        Item
+                    </th>
+                    <th
+                        style="
+                            border: 1px solid #ddd;
+                            padding: 10px;
+                            text-align: left;
+                            background-color: #e7f2fa;
+                            color: #333;
+                        "
+                    >
+                        Details
+                    </th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px">Booking ID</td>
+                    <td style="border: 1px solid #ddd; padding: 8px">{{bookingId}}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px">Check-in</td>
+                    <td style="border: 1px solid #ddd; padding: 8px">{{checkInTime}}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px">Check-out</td>
+                    <td style="border: 1px solid #ddd; padding: 8px">{{checkOutTime}}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px">Total Price</td>
+                    <td style="border: 1px solid #ddd; padding: 8px">{{totalPrice}}</td>
+                </tr>
+            </table>
+            <p>
+                If you have any questions, please do not hesitate to
+                <a href="mailto:support@rentapartment.com" style="color: #4a90e2; text-decoration: none">contact us</a>.
+            </p>
+            <p>Best regards,</p>
+            <p><strong>Rent Apartment Team</strong></p>
+        </div>
+    </body>
+</html>

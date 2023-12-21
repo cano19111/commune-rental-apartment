@@ -25,11 +25,9 @@ const BookingConfirm: React.FC = () => {
     const [step, setStep] = useState<number>(1);
     const { handleSubmit, control } = useForm<CustomerBooking>();
     const [searchParams] = useSearchParams();
+    const [CustomerInfoData, setCustomerInfo] = useState(null);
     const navigate = useNavigate();
-    const handleCompletion = () => {
-        setActiveTab('checkout');
-        setStep(2);
-    };
+
     const startDate: string | null = searchParams.get('start_date');
     const endDate: string | null = searchParams.get('end_date');
     const roomNumber: number = +searchParams.get('room_number') !== 0 ? +searchParams.get('room_number') ?? 1 : 1;
@@ -52,10 +50,22 @@ const BookingConfirm: React.FC = () => {
             }),
         staleTime: 0,
     });
+
     const { baseAmount, taxAmount, totalAmount } = useMemo(() => {
         const roomPrice = roomData?.price || 0;
         return calculateTotalAmount(numberOfDays, roomPrice, roomNumber);
     }, [numberOfDays, roomData, roomNumber]);
+    const handleCompletion = (data: CustomerBooking) => {
+        setCustomerInfo({
+            ...data,
+            roomId: searchParams.get('room_id'),
+            checkInTime: startDate,
+            checkOutTime: endDate,
+            totalPrice: totalAmount,
+        });
+        setActiveTab('checkout');
+        setStep(2);
+    };
     return (
         !isFetching &&
         (!roomData ? (
@@ -186,6 +196,7 @@ const BookingConfirm: React.FC = () => {
                                                 setStep={setStep}
                                                 amount={totalAmount}
                                                 nameRoom={roomData.name}
+                                                CustomerInfoData={CustomerInfoData}
                                             />
                                         ),
                                     },

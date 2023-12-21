@@ -4,17 +4,23 @@ import { useStripe, useElements } from '@stripe/react-stripe-js';
 import { Button, Flex } from 'antd';
 import { path } from '@/utils/constant';
 import icons from '@/utils/icons';
+import { useMutation } from '@tanstack/react-query';
+import { apiBooking } from '@/apis';
 const { IoIosArrowBack, FaLock } = icons;
 interface CheckoutFormProps {
     setActiveTab: (activeTab: string) => void;
     setStep: (step: number) => void;
+    CustomerInfoData: CustomerBooking;
 }
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep, CustomerInfoData }) => {
     const stripe = useStripe();
     const elements = useElements();
 
     const [message, setMessage] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const bookingMutation = useMutation({
+        mutationFn: apiBooking,
+    });
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -23,7 +29,6 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep }) =>
         }
 
         setIsProcessing(true);
-
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
@@ -33,10 +38,15 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep }) =>
 
         if (error.type === 'card_error' || error.type === 'validation_error') {
             setMessage(error.message);
-        } else {
-            setMessage('An unexpected error occured.');
+            return;
         }
-
+        if (error) {
+            setMessage('An unexpected error occured.');
+            return;
+        }
+        bookingMutation.mutate(CustomerInfoData, {
+            onSuccess: () => {},
+        });
         setIsProcessing(false);
     };
 

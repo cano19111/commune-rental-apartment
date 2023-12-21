@@ -5,13 +5,15 @@ const DOCUMENT = 'Booking';
 
 const userSchema = new mongoose.Schema(
     {
-        email: { type: String, require: true, unique: true },
+        email: { type: String, require: true },
         firstname: { type: String },
         lastname: { type: String },
-        apartments: {
+        phone: { type: String, require: true },
+        room: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Apartment.rooms',
         },
+        arrivalTime: { type: String, require: true },
         checkInTime: { type: Date, require: true },
         checkOutTime: { type: Date, require: true },
         totalPrice: { type: Number, require: true },

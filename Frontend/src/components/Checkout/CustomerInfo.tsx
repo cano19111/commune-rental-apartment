@@ -1,5 +1,6 @@
+import { useAuth } from '@/hooks';
 import icons from '@/utils/icons';
-import { Button, Input, Select } from 'antd';
+import { Avatar, Button, Input, Select } from 'antd';
 import React from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -8,22 +9,34 @@ interface CustomerInfoProps {
     control: Control<CustomerBooking>;
 }
 const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
+    const { user: currentUser, isAuthenticated } = useAuth();
     return (
         <div className="w-full font-main font-light">
             <div className="w-full space-y-5">
-                <div className="w-full flex items-center gap-3 p-5 border border-gray-300 rounded-lg">
-                    <PiUserThin size={20} />
-                    <div>
-                        <Link className="text-blue-500 hover:underline" to="">
-                            Sign in
-                        </Link>
-                        <span> to book with your saved details or</span>
-                        <Link className="text-blue-500 hover:underline" to="">
-                            <span> register</span>
-                        </Link>
-                        <span> to manage your bookings on the go!</span>
+                {isAuthenticated ? (
+                    <div className="w-full flex items-center gap-3 p-5 border border-gray-300 rounded-lg">
+                        <Avatar src={currentUser.avatar} className="border border-yellow-600" size={45} />
+                        <div className="flex flex-col">
+                            <div className="font-medium text-md">You are signed in</div>
+                            <div>{currentUser.email}</div>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="w-full flex items-center gap-3 p-5 border border-gray-300 rounded-lg">
+                        <PiUserThin size={20} />
+                        <div>
+                            <Link className="text-blue-500 hover:underline" to="">
+                                Sign in
+                            </Link>
+                            <span> to book with your saved details or</span>
+                            <Link className="text-blue-500 hover:underline" to="">
+                                <span> register</span>
+                            </Link>
+                            <span> to manage your bookings on the go!</span>
+                        </div>
+                    </div>
+                )}
+
                 <div className="p-5 space-y-5 border border-gray-300 rounded-lg">
                     <h2 className="font-semibold text-lg">Enter your details</h2>
                     <div className="p-5 border border-gray-400 bg-gray-50 rounded-lg flex items-center gap-3">
@@ -40,6 +53,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                     required: 'Please fill in your first name',
                                 }}
                                 control={control}
+                                defaultValue={currentUser?.firstname || ''}
                                 render={({ field, fieldState: { error } }) => (
                                     <div>
                                         {error ? (
@@ -67,6 +81,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                         message: 'Please enter email in correct format',
                                     },
                                 }}
+                                defaultValue={currentUser?.email || ''}
                                 render={({ field, fieldState: { error } }) => (
                                     <div>
                                         {error ? (
@@ -92,6 +107,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                 rules={{
                                     required: 'Please fill in your last name',
                                 }}
+                                defaultValue={currentUser?.lastname || ''}
                                 render={({ field, fieldState: { error } }) => (
                                     <div>
                                         {error ? (
@@ -119,6 +135,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                         message: 'Please enter phone in correct format',
                                     },
                                 }}
+                                defaultValue={currentUser?.phone || ''}
                                 render={({ field, fieldState: { error } }) => (
                                     <div>
                                         {error ? (
@@ -174,7 +191,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ control }) => {
                                     status={error ? 'error' : ''}
                                     options={[
                                         { value: '', label: 'Please select' },
-                                        { value: '-1', label: "I don't know" },
+                                        { value: "I don't know", label: "I don't know" },
                                         { value: '14:00 – 15:00', label: '14:00 – 15:00' },
                                         { value: '15:00 – 16:00', label: '15:00 – 16:00' },
                                         { value: '16:00 – 17:00', label: '16:00 – 17:00' },

@@ -1,6 +1,6 @@
 import { GoogleMap, Reviews, TableSelectRoom } from '@/components';
 import icons from '@/utils/icons';
-import { Button, DatePicker, Drawer, Image, Spin, Tooltip } from 'antd';
+import { Button, DatePicker, Drawer, Image, Result, Spin, Tooltip } from 'antd';
 import React, { useMemo, useState } from 'react';
 import './ApartmentDetail.css';
 import { Controller, useForm } from 'react-hook-form';
@@ -68,12 +68,13 @@ const ApartmentDetail: React.FC = () => {
         }));
     const selectRoom = roomsData?.find((room) => room.roomNumber > 0);
     const handleBooking = (data) => {
+        const roomData = data.roomsData.find((room) => room.roomNumber > 0);
         const queryParams = new URLSearchParams({
             start_date: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
             end_date: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
-            number_of_guest: data.roomsData[0].numberOfGuest.toString(),
-            room_number: data.roomsData[0].roomNumber.toString(),
-            room_id: data.roomsData[0].key.toString(),
+            number_of_guest: roomData.numberOfGuest.toString(),
+            room_number: roomData.roomNumber.toString(),
+            room_id: roomData.key.toString(),
         });
         navigate(`/${path.BOOKING_CONFIRM}?${queryParams}`);
     };
@@ -91,6 +92,24 @@ const ApartmentDetail: React.FC = () => {
     return isFetching ? (
         <div className="min-h-screen">
             <Spin spinning={isFetching} fullscreen={isFetching} />
+        </div>
+    ) : !apartment ? (
+        <div className="min-h-screen flex items-center justify-center">
+            <Result
+                status="500"
+                title="500"
+                subTitle="Sorry, something went wrong."
+                extra={
+                    <Button
+                        size="large"
+                        className="bg-blue-500"
+                        type="primary"
+                        onClick={() => navigate(`/${path.HOME}`)}
+                    >
+                        Back Home
+                    </Button>
+                }
+            />
         </div>
     ) : (
         <div className="w-full flex justify-center font-main apartment-detail">
