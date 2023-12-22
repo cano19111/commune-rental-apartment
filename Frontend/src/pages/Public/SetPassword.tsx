@@ -2,11 +2,16 @@ import React from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import { apiSetPassword } from '@/apis';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { KeyOutlined, LockOutlined } from '@ant-design/icons';
+import { path } from '@/utils/constant';
+import { useAuth } from '@/hooks';
+import { signIn } from '@/contexts/auth/reduces';
 
 const SetPasswordPage: React.FC = () => {
     const { userId } = useParams();
+    const navigate = useNavigate();
+    const { dispatch } = useAuth();
     const setPasswordMutation = useMutation({
         mutationFn: apiSetPassword,
     });
@@ -17,9 +22,13 @@ const SetPasswordPage: React.FC = () => {
             {
                 onSuccess: (response) => {
                     if (response.success) {
+                        const { accessToken, user } = response.data || {};
+                        dispatch(signIn({ accessToken, user }));
                         notification.success({
                             message: 'Password set successfully!',
                         });
+                        navigate(`/${path.HOME}`);
+                        window.location.reload();
                     }
                 },
             },

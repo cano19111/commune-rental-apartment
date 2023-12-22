@@ -9,11 +9,13 @@ import { apiSignUp } from '@/apis';
 interface SignInProps {
     setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
 }
-const SignUp: React.FC<SignInProps> = () => {
+const SignUp: React.FC<SignInProps> = ({ setModalOpen }) => {
     const { FaRegUser, FcGoogle, SiFacebook } = icons;
+
     const {
         handleSubmit,
         control,
+        reset,
         formState: { errors },
     } = useForm({
         defaultValues: {
@@ -28,6 +30,8 @@ const SignUp: React.FC<SignInProps> = () => {
             onSuccess: (response) => {
                 if (response.success) {
                     message.success(response.message);
+                    reset();
+                    setModalOpen({ isOpen: false, activeTab: 'signin' });
                 }
             },
         });

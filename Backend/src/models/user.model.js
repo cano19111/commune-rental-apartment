@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
         password: { type: String },
         avatar: {
             type: String,
-            default: 'https://www.drupal.org/files/issues/default-avatar.png',
+            default: '7c8710012256c2b60f621e0849cc94d8.png',
         },
         phone: {
             type: String,

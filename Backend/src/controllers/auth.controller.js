@@ -92,14 +92,32 @@ const setPassword = async (req, res, next) => {
             return res.status(400).json({ success: false, message: 'Email has not been confirmed' });
         }
 
-        user.password = hashPassword(password);
-
-        [err] = await to(user.save());
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error setting password' });
+        const passwordHash = hashPassword(password);
+        const { isAdmin } = user.toObject();
+        const accessToken = generateAccessToken(user._id, isAdmin);
+        const newRefreshToken = generateRefreshToken(user._id);
+        const [errUpdate, updateUser] = await to(
+            User.findByIdAndUpdate(
+                user._id,
+                { refreshToken: newRefreshToken, password: passwordHash },
+                { new: true },
+            ).select('-password -refreshToken'),
+        );
+        if (errUpdate) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error updating user',
+            });
         }
 
-        res.status(200).json({ success: true, message: 'Password has been set successfully' });
+        res.status(200).json({
+            success: true,
+            message: 'Password has been set successfully',
+            data: {
+                accessToken,
+                user: updateUser,
+            },
+        });
     } catch (error) {
         next(error);
     }
