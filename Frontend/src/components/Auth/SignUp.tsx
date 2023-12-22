@@ -1,8 +1,10 @@
 import React from 'react';
 import registerImage from '@/assets/register.jpg';
-import { Button, Flex, Input } from 'antd';
+import { Button, Flex, Input, message } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
 import icons from '@/utils/icons';
+import { useMutation } from '@tanstack/react-query';
+import { apiSignUp } from '@/apis';
 
 interface SignInProps {
     setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
@@ -18,7 +20,18 @@ const SignUp: React.FC<SignInProps> = () => {
             email: '',
         },
     });
-    const handleRegister = () => {};
+    const signUpMutation = useMutation({
+        mutationFn: apiSignUp,
+    });
+    const handleRegister = (data: ReqSignUp) => {
+        signUpMutation.mutate(data, {
+            onSuccess: (response) => {
+                if (response.success) {
+                    message.success(response.message);
+                }
+            },
+        });
+    };
     return (
         <form onSubmit={handleSubmit(handleRegister)}>
             <div className="w-full flex gap-5">
@@ -76,6 +89,7 @@ const SignUp: React.FC<SignInProps> = () => {
                         htmlType="submit"
                         danger
                         className="px-10 font-main py-6 flex justify-center items-center font-semibold text-base mt-10"
+                        loading={signUpMutation.isPending}
                     >
                         Sign Up
                     </Button>

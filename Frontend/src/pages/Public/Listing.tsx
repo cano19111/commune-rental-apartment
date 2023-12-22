@@ -79,6 +79,7 @@ const Listing: React.FC = () => {
                                         color="red"
                                         open={!!errors.searchText}
                                         placement="right"
+                                        zIndex={5}
                                     >
                                         <Input
                                             size="large"
@@ -102,6 +103,7 @@ const Listing: React.FC = () => {
                                         color="red"
                                         open={!!errors.searchDate}
                                         placement="right"
+                                        zIndex={5}
                                     >
                                         <DatePicker.RangePicker
                                             format="DD-MM-YYYY"
@@ -131,6 +133,7 @@ const Listing: React.FC = () => {
                                         color="red"
                                         open={!!errors.searchGuest}
                                         placement="left"
+                                        zIndex={5}
                                     >
                                         <Dropdown
                                             dropdownRender={() => (

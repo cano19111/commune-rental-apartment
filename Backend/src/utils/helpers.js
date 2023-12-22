@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const to = require('await-to-js').default;
 
 const generateToken = () => {
     return crypto.randomBytes(20).toString('hex');
@@ -27,7 +29,7 @@ const sendMail = async ({ email, html, subject }) => {
     }
     return info;
 };
-exports.modulus = {
+module.exports = {
     generateToken,
     sendMail,
 };

@@ -4,3 +4,4 @@ export { default as Listing } from './Listing';
 export { default as ApartmentDetail } from './ApartmentDetail/ApartmentDetail';
 export { default as BookingConfirm } from './BookingConfirm';
 export { default as BookingCompletion } from './BookingCompletion';
+export { default as SetPassword } from './SetPassword';

@@ -1,3 +1,4 @@
+const fs = require('fs').promises;
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt');
@@ -8,60 +9,99 @@ const { generateToken, sendMail } = require('../utils/helpers');
 const hashPassword = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 
 const register = async (req, res) => {
-    try {
-        const { email } = req.body;
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already in use' });
-        }
+    const { email } = req.body;
+    let err, existingUser, newUser;
 
-        const confirmationToken = generateToken();
-        const newUser = new User({ email, confirmationToken });
-        await newUser.save();
-
-        sendMail(email, confirmationToken, 'Confirm email');
-
-        res.status(201).json({ message: 'Registration successful. Please check your email to confirm.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error registering user' });
+    [err, existingUser] = await to(User.findOne({ email }));
+    if (err) {
+        return res.status(500).json({ success: false, message: 'Error checking existing user' });
     }
+
+    if (existingUser) {
+        return res.status(400).json({ success: false, message: 'Email already in use' });
+    }
+
+    const confirmationToken = generateToken();
+    newUser = new User({ email, confirmationToken });
+
+    [err] = await to(newUser.save());
+    if (err) {
+        return res.status(500).json({ success: false, message: 'Error registering user' });
+    }
+
+    const [readError, htmlTemplate] = await to(fs.readFile('src/template/confirmMailTemplate.html', 'utf-8'));
+    if (readError) {
+        return res
+            .status(500)
+            .json({ success: false, message: 'Error reading email template', error: readError.message });
+    }
+    const emailHtml = htmlTemplate.replace(
+        '{{confirmationUrl}}',
+        `${process.env.SERVER_URI}/api/auth/confirm-email?token=${confirmationToken}`,
+    );
+    let [mailError] = await to(sendMail({ email, html: emailHtml, subject: 'Confirm email' }));
+    if (mailError) {
+        console.log(mailError);
+        return res.status(500).json({ success: false, message: 'Error sending email', error: mailError.message });
+    }
+
+    res.status(201).json({
+        success: true,
+        message: 'Registration successful. Please check your email to confirm',
+    });
 };
 
 const confirmEmail = async (req, res) => {
-    try {
-        const { token } = req.params;
-        const user = await User.findOne({ confirmationToken: token });
-        if (!user) {
-            return res.status(400).send('Invalid or expired token.');
-        }
+    const { token } = req.query;
+    let err, user;
 
-        user.emailConfirmed = true;
-        await user.save();
-
-        res.redirect(`http://frontend-url/set-password/${user._id}`);
-    } catch (error) {
-        res.status(500).send('Internal server error');
+    [err, user] = await to(User.findOne({ confirmationToken: token }));
+    if (err) {
+        return res.status(500).send('Internal server error');
     }
+
+    if (!user) {
+        return res.status(400).send('Invalid or expired token');
+    }
+
+    user.emailConfirmed = true;
+
+    [err] = await to(user.save());
+    if (err) {
+        return res.status(500).send('Internal server error');
+    }
+
+    res.redirect(`${process.env.CLIENT_URI}/set-password/${user._id}`);
 };
 
-const setPassword = async (req, res) => {
+const setPassword = async (req, res, next) => {
     try {
         const { userId, password } = req.body;
-        const user = await User.findById(userId);
+        let err, user;
+
+        [err, user] = await to(User.findById(userId));
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error finding user' });
+        }
+
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
         if (!user.emailConfirmed) {
-            return res.status(400).json({ message: 'Email has not been confirmed' });
+            return res.status(400).json({ success: false, message: 'Email has not been confirmed' });
         }
 
-        user.password = hashPassword(password); // Ensure this function securely hashes the password
-        await user.save();
+        user.password = hashPassword(password);
 
-        res.status(200).json({ message: 'Password has been set successfully' });
+        [err] = await to(user.save());
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error setting password' });
+        }
+
+        res.status(200).json({ success: true, message: 'Password has been set successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Error setting password' });
+        next(error);
     }
 };
 

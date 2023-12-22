@@ -1,5 +1,13 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import { ApartmentDetail, Listing, Home, MainLayout, BookingConfirm, BookingCompletion } from '@/pages/Public';
+import {
+    ApartmentDetail,
+    Listing,
+    Home,
+    MainLayout,
+    BookingConfirm,
+    BookingCompletion,
+    SetPassword,
+} from '@/pages/Public';
 import { path } from '@/utils/constant';
 import { CreateApartment, ManageAccount, MyFavorites, ManagerApartment, PersonalInformation } from '@/pages/User';
 
@@ -32,6 +40,10 @@ const Router = () => {
         {
             path: path.BOOKING_COMPLETION,
             element: <BookingCompletion />,
+        },
+        {
+            path: path.SET_PASSWORD,
+            element: <SetPassword />,
         },
         {
             path: path.ACCOUNT_SETTINGS,

@@ -1,11 +1,7 @@
 const yup = require('yup');
 
-const userSchema = yup.object({
+const userSignUpSchema = yup.object({
     email: yup.string().email().required(),
-    password: yup.string().min(6).required(),
-    phone: yup.string().required(),
-    firstname: yup.string().required(),
-    lastname: yup.string().required(),
 });
 
 const userLoginSchema = yup.object({
@@ -37,7 +33,7 @@ const apartmentSchema = yup.object({
 });
 
 module.exports = {
-    userSchema,
+    userSignUpSchema,
     userLoginSchema,
     serviceSchema,
     apartmentSchema,

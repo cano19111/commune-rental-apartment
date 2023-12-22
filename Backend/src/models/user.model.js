@@ -8,14 +8,14 @@ const userSchema = new mongoose.Schema(
         email: { type: String, require: true, unique: true },
         firstname: { type: String },
         lastname: { type: String },
-        password: { type: String, require: true },
+        password: { type: String },
         avatar: {
             type: String,
             default: 'https://www.drupal.org/files/issues/default-avatar.png',
         },
         phone: {
             type: String,
-            require: true,
+
             unique: true,
         },
         dateOfBirth: {

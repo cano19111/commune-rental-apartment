@@ -49,7 +49,12 @@ const Search: React.FC = () => {
                         required: 'Please enter a destination',
                     }}
                     render={({ field }) => (
-                        <Tooltip title={errors?.searchText?.message as string} color="red" open={!!errors.searchText}>
+                        <Tooltip
+                            title={errors?.searchText?.message as string}
+                            color="red"
+                            open={!!errors.searchText}
+                            zIndex={5}
+                        >
                             <Input
                                 size="large"
                                 placeholder="Search"
@@ -67,7 +72,12 @@ const Search: React.FC = () => {
                         required: 'Please select the time',
                     }}
                     render={({ field }) => (
-                        <Tooltip title={errors?.searchDate?.message as string} color="red" open={!!errors.searchDate}>
+                        <Tooltip
+                            title={errors?.searchDate?.message as string}
+                            color="red"
+                            open={!!errors.searchDate}
+                            zIndex={5}
+                        >
                             <DatePicker.RangePicker
                                 format="DD-MM-YYYY"
                                 className="font-main rounded-full px-5 py-3 min-w-[200px] max-w-[270px]"
