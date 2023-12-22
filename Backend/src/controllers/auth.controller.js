@@ -26,6 +26,7 @@ const register = async (req, res) => {
 
         [err, newUser] = await to(User.create({ email, confirmationToken: confirmationToken }));
         if (err) {
+            console.log(err.message);
             return res.status(500).json({ success: false, message: 'Error registering user' });
         }
 
