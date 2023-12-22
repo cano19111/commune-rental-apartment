@@ -9,46 +9,49 @@ const { generateToken, sendMail } = require('../utils/helpers');
 const hashPassword = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 
 const register = async (req, res) => {
-    const { email } = req.body;
-    let err, existingUser, newUser;
+    try {
+        const { email } = req.body;
+        let err, existingUser, newUser;
 
-    [err, existingUser] = await to(User.findOne({ email }));
-    if (err) {
-        return res.status(500).json({ success: false, message: 'Error checking existing user' });
+        [err, existingUser] = await to(User.findOne({ email }));
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error checking existing user' });
+        }
+
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: 'Email already in use' });
+        }
+
+        const confirmationToken = generateToken();
+
+        [err, newUser] = await to(User.create({ email, confirmationToken: confirmationToken }));
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error registering user' });
+        }
+
+        const [readError, htmlTemplate] = await to(fs.readFile('src/template/confirmMailTemplate.html', 'utf-8'));
+        if (readError) {
+            return res
+                .status(500)
+                .json({ success: false, message: 'Error reading email template', error: readError.message });
+        }
+        const emailHtml = htmlTemplate.replace(
+            '{{confirmationUrl}}',
+            `${process.env.SERVER_URI}/api/auth/confirm-email?token=${confirmationToken}`,
+        );
+        let [mailError] = await to(sendMail({ email, html: emailHtml, subject: 'Confirm email' }));
+        if (mailError) {
+            console.log(mailError);
+            return res.status(500).json({ success: false, message: 'Error sending email', error: mailError.message });
+        }
+
+        res.status(201).json({
+            success: true,
+            message: 'Registration successful. Please check your email to confirm',
+        });
+    } catch (error) {
+        next(error);
     }
-
-    if (existingUser) {
-        return res.status(400).json({ success: false, message: 'Email already in use' });
-    }
-
-    const confirmationToken = generateToken();
-    newUser = new User({ email, confirmationToken });
-
-    [err] = await to(newUser.save());
-    if (err) {
-        return res.status(500).json({ success: false, message: 'Error registering user' });
-    }
-
-    const [readError, htmlTemplate] = await to(fs.readFile('src/template/confirmMailTemplate.html', 'utf-8'));
-    if (readError) {
-        return res
-            .status(500)
-            .json({ success: false, message: 'Error reading email template', error: readError.message });
-    }
-    const emailHtml = htmlTemplate.replace(
-        '{{confirmationUrl}}',
-        `${process.env.SERVER_URI}/api/auth/confirm-email?token=${confirmationToken}`,
-    );
-    let [mailError] = await to(sendMail({ email, html: emailHtml, subject: 'Confirm email' }));
-    if (mailError) {
-        console.log(mailError);
-        return res.status(500).json({ success: false, message: 'Error sending email', error: mailError.message });
-    }
-
-    res.status(201).json({
-        success: true,
-        message: 'Registration successful. Please check your email to confirm',
-    });
 };
 
 const confirmEmail = async (req, res) => {
