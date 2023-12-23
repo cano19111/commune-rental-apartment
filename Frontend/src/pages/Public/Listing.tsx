@@ -1,5 +1,17 @@
 import icons from '@/utils/icons';
-import { Button, Checkbox, DatePicker, Dropdown, Flex, Image, Input, Skeleton, Slider, Tooltip } from 'antd';
+import {
+    Button,
+    Checkbox,
+    DatePicker,
+    Dropdown,
+    Flex,
+    Image,
+    Input,
+    Pagination,
+    Skeleton,
+    Slider,
+    Tooltip,
+} from 'antd';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiSearchRoom } from '@/apis';
@@ -55,6 +67,11 @@ const Listing: React.FC = () => {
             queryParams.set('maxPrice', data.searchPrice[1].toString());
         }
         setSearchParams(queryParams);
+    };
+    const handleChangePage = (page: number) => {
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+        newSearchParams.set('page', page.toString());
+        setSearchParams(newSearchParams);
     };
     return (
         isLoaded && (
@@ -173,7 +190,7 @@ const Listing: React.FC = () => {
                                     <div className="font-light">{`VND ${(
                                         watch('searchPrice')?.[0] || 100000
                                     ).toLocaleString()} - VND ${(
-                                        watch('searchPrice')?.[1] || 5000000
+                                        watch('searchPrice')?.[1] || 5000000 + '+'
                                     ).toLocaleString()}${watch('searchPrice')?.[1] === 5000000 ? '+' : ''}`}</div>
                                     <Controller
                                         name="searchPrice"
@@ -321,6 +338,12 @@ const Listing: React.FC = () => {
                                 </>
                             )}
                         </div>
+                        <Pagination
+                            defaultCurrent={1}
+                            total={data?.data?.totalResults || 0}
+                            defaultPageSize={1}
+                            onChange={handleChangePage}
+                        />
                     </div>
                 </form>
             </div>
