@@ -107,6 +107,58 @@ const setPassword = async (req, res, next) => {
                 { new: true },
             ).select('-password -refreshToken'),
         );
+
+        res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+        if (errUpdate) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error updating user',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Password has been set successfully',
+            data: {
+                accessToken,
+                user: updateUser,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const googleLoginSuccess = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const [errFind, user] = await to(User.findById(userId));
+
+        if (errFind) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error finding user',
+            });
+        }
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        const { isAdmin } = user.toObject();
+        const accessToken = generateAccessToken(user._id, isAdmin);
+        const newRefreshToken = generateRefreshToken(user._id);
+
+        const [errUpdate, updateUser] = await to(
+            User.findByIdAndUpdate(user._id, { refreshToken: newRefreshToken }, { new: true }).select(
+                '-password -refreshToken',
+            ),
+        );
+
+        res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
         if (errUpdate) {
             return res.status(500).json({
                 success: false,
@@ -269,4 +321,5 @@ module.exports = {
     refreshAccessToken,
     confirmEmail,
     setPassword,
+    googleLoginSuccess,
 };

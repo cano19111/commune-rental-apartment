@@ -55,6 +55,11 @@ const userSchema = new mongoose.Schema(
         refreshToken: {
             type: String,
         },
+        provider: {
+            type: String,
+            enum: ['Email', 'Google', 'Facebook'],
+            default: 'Email',
+        },
     },
     {
         timestamps: true,

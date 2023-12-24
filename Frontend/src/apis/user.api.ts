@@ -1,4 +1,4 @@
-import axios from './httpRequest';
+import axios from './axiosConfig';
 
 export const apiGetCurrentUser = (): Promise<Res> =>
     axios({

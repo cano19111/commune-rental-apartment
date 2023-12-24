@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const { dbConnect } = require('./config/db.config');
 const initRoutes = require('./routes');
+require('./config/passport.config.js');
 const server = require('http').createServer(app);
 app.use(
     cors({

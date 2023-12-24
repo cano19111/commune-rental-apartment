@@ -28,10 +28,10 @@ const Search: React.FC = () => {
     const handleSearch = (data: SearchData) => {
         const queryParams = new URLSearchParams({
             province: data.searchText,
-            startDate: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
-            endDate: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
-            numberOfGuest: data.searchGuest.guest.toString(),
-            room: data.searchGuest.room.toString(),
+            start_date: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
+            end_date: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
+            number_of_guest: data.searchGuest.guest.toString(),
+            room_number: data.searchGuest.room.toString(),
         });
         navigate(`/listing?${queryParams.toString()}`);
     };

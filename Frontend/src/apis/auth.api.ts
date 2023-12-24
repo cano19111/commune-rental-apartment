@@ -1,4 +1,4 @@
-import axios from './httpRequest';
+import axios from './axiosConfig';
 
 export const apiSignUp = (data: ReqSignUp): Promise<Res> =>
     axios({
@@ -17,4 +17,9 @@ export const apiLogin = (data: ReqSignIn): Promise<Res> =>
         url: '/auth/login',
         method: 'post',
         data,
+    });
+export const apiLoginGoogleSuccess = (data: { userId: string }): Promise<Res> =>
+    axios({
+        url: `/auth/signin-success/${data.userId}`,
+        method: 'get',
     });

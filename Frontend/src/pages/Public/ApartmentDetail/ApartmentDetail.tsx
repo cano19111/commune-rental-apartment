@@ -43,10 +43,10 @@ const ApartmentDetail: React.FC = () => {
     const [isShowAll, setIsShowAll] = useState(false);
     const [selectedRoomIndex, setSelectedRoomIndex] = useState<number | null>(null);
 
-    const startDate: string | null = searchParams.get('startDate');
-    const endDate: string | null = searchParams.get('endDate');
+    const startDate: string | null = searchParams.get('start_date');
+    const endDate: string | null = searchParams.get('end_date');
     const numberOfGuest: number =
-        +searchParams.get('numberOfGuest') !== 0 ? +searchParams.get('numberOfGuest') ?? 1 : 1;
+        +searchParams.get('number_of_guest') !== 0 ? +searchParams.get('number_of_guest') ?? 1 : 1;
     const checkIn: Date | null = startDate ? new Date(startDate) : null;
     const checkOut: Date | null = endDate ? new Date(endDate) : null;
     const numberOfDays: number =
@@ -65,7 +65,7 @@ const ApartmentDetail: React.FC = () => {
             numberOfGuest: room.numberOfGuest,
             price: room.price,
             quantity: room.quantity,
-            roomNumber: searchParams.get('roomId') === room._id ? +searchParams.get('room') || 1 : 0,
+            roomNumber: searchParams.get('room_id') === room._id ? +searchParams.get('room_number') || 1 : 0,
         }));
     const selectRoom = roomsData?.find((room) => room.roomNumber > 0);
     const handleBooking = (data) => {
@@ -240,7 +240,9 @@ const ApartmentDetail: React.FC = () => {
                                     price: room.price,
                                     quantity: room.quantity,
                                     roomNumber:
-                                        searchParams.get('roomId') === room._id ? +searchParams.get('room') || 1 : 0,
+                                        searchParams.get('room_id') === room._id
+                                            ? +searchParams.get('room_number') || 1
+                                            : 0,
                                 }))}
                                 rules={{
                                     validate: (value) => {
@@ -295,8 +297,8 @@ const ApartmentDetail: React.FC = () => {
                                                     const currentParams = Object.fromEntries(searchParams.entries());
                                                     const newParams = {
                                                         ...currentParams,
-                                                        startDate: dates[0]?.format('YYYY-MM-DD'),
-                                                        endDate: dates[1]?.format('YYYY-MM-DD'),
+                                                        start_date: dates[0]?.format('YYYY-MM-DD'),
+                                                        end_date: dates[1]?.format('YYYY-MM-DD'),
                                                     };
                                                     setSearchParams(newParams);
                                                     field.onChange(dates);

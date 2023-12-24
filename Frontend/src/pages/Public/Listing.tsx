@@ -45,11 +45,11 @@ const Listing: React.FC = () => {
         queryFn: () => apiSearchRoom(searchParams.toString()),
         staleTime: 0,
     });
-    const roomNumber: number = +searchParams.get('room') !== 0 ? +searchParams.get('room') ?? 1 : 1;
+    const roomNumber: number = +searchParams.get('room') !== 0 ? +searchParams.get('room_number') ?? 1 : 1;
     const numberOfGuest: number =
-        +searchParams.get('numberOfGuest') !== 0 ? +searchParams.get('numberOfGuest') ?? 1 : 1;
-    const startDate: string | null = searchParams.get('startDate');
-    const endDate: string | null = searchParams.get('endDate');
+        +searchParams.get('number_of_guest') !== 0 ? +searchParams.get('number_of_guest') ?? 1 : 1;
+    const startDate: string | null = searchParams.get('start_date');
+    const endDate: string | null = searchParams.get('end_date');
     const checkIn: Date | null = startDate ? new Date(startDate) : null;
     const checkOut: Date | null = endDate ? new Date(endDate) : null;
     const numberOfDays: number =
@@ -57,10 +57,10 @@ const Listing: React.FC = () => {
     const handleSearch = (data: SearchData) => {
         const queryParams = new URLSearchParams({
             province: data.searchText,
-            startDate: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
-            endDate: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
-            numberOfGuest: data.searchGuest.guest.toString(),
-            room: data.searchGuest.room.toString(),
+            start_date: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
+            end_date: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
+            number_of_guest: data.searchGuest.guest.toString(),
+            room_number: data.searchGuest.room.toString(),
         });
         if (data.searchPrice && data.searchPrice[0] !== undefined && data.searchPrice[1] !== undefined) {
             queryParams.set('minPrice', data.searchPrice[0].toString());
@@ -270,11 +270,11 @@ const Listing: React.FC = () => {
                                                 onClick={() => {
                                                     const queryParams = new URLSearchParams({
                                                         province: searchParams.get('province'),
-                                                        startDate: searchParams.get('startDate'),
-                                                        endDate: searchParams.get('endDate'),
-                                                        numberOfGuest: numberOfGuest.toString(),
-                                                        room: roomNumber.toString(),
-                                                        roomId: room.roomId,
+                                                        start_date: searchParams.get('start_date'),
+                                                        end_date: searchParams.get('end_date'),
+                                                        number_of_guest: numberOfGuest.toString(),
+                                                        room_number: roomNumber.toString(),
+                                                        room_id: room.roomId,
                                                     });
                                                     navigate(`/apartment/${room._id}/?${queryParams.toString()}`);
                                                 }}
