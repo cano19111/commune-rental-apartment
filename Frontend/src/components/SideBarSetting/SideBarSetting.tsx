@@ -2,33 +2,37 @@ import { NavLink } from 'react-router-dom';
 import { path } from '@/utils/constant';
 import React from 'react';
 import clsx from 'clsx';
+import icons from '@/utils/icons';
+const { FaUser, FaEdit } = icons;
 
 const SideBarSetting: React.FC = () => {
     return (
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col items-start gap-3 border-r pr-5 h-full border-gray-300 font-main min-w-[250px]">
             <NavLink
                 to={`/${path.ACCOUNT_SETTINGS}/${path.PERSONAL_INFORMATION}`}
                 end
                 className={({ isActive }) =>
                     clsx(
-                        'w-full py-5 px-4 rounded-3xl hover:bg-gray-100 font-semibold text-xl',
-                        isActive ? ' bg-gray-200 text-blue-400' : 'text-gray-700 ',
+                        'w-full py-1 px-4 font-normal text-lg flex items-center gap-2',
+                        isActive ? ' text-blue-600' : 'text-gray-700 ',
                     )
                 }
             >
-                Personal Information
+                <FaUser size={20} />
+                <span>Personal Information</span>
             </NavLink>
 
             <NavLink
                 to={`/${path.ACCOUNT_SETTINGS}/${path.MANAGE_APARTMENT}`}
                 className={({ isActive }) =>
                     clsx(
-                        'w-full py-5 px-4 rounded-3xl hover:bg-gray-100 font-semibold text-xl',
-                        isActive ? ' bg-gray-200 text-blue-400' : 'text-gray-700 ',
+                        'w-full py-1 px-4 font-normal text-lg flex items-center gap-2',
+                        isActive ? ' text-blue-600' : 'text-gray-700 ',
                     )
                 }
             >
-                Manage Apartment
+                <FaEdit size={20} />
+                <span>Manage Apartment</span>
             </NavLink>
         </div>
     );

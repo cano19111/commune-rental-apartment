@@ -1,5 +1,4 @@
 import { RiHome4Line, RiContactsFill } from 'react-icons/ri';
-import { AiOutlineUnorderedList } from 'react-icons/ai';
 import { GrFavorite } from 'react-icons/gr';
 import React from 'react';
 
@@ -19,11 +18,11 @@ export const path: { [key: string]: string } = {
     MANAGE_APARTMENT: 'manage-apartment',
     SET_PASSWORD: 'set-password/:userId',
     SIGNIN_GOOGLE_SUCCESS: 'signin-success/:userId',
+    EDIT_APARTMENT: 'apartment/edit/:apartmentId',
 };
 
 export const navigates: { title: string; path: string; icon: React.ReactNode }[] = [
     { title: 'Home', path: path.HOME, icon: <RiHome4Line /> },
-    { title: 'Listing', path: path.LISTING, icon: <AiOutlineUnorderedList /> },
     { title: 'My favorites', path: path.FAVORITES, icon: <GrFavorite /> },
     { title: 'Contact', path: path.CONTACT, icon: <RiContactsFill /> },
 ];

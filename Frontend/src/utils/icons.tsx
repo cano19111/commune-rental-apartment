@@ -1,4 +1,4 @@
-import { FaFacebookF, FaRegUser, FaUser } from 'react-icons/fa';
+import { FaFacebookF, FaRegUser, FaUser, FaEdit, FaArrowRight } from 'react-icons/fa';
 import { FaLocationDot, FaLock } from 'react-icons/fa6';
 import {
     AiOutlineTwitter,
@@ -26,6 +26,8 @@ import { GoLocation } from 'react-icons/go';
 import { CgMenuGridO } from 'react-icons/cg';
 import { CiCircleCheck } from 'react-icons/ci';
 import { IoIosArrowBack } from 'react-icons/io';
+import { IoHeartSharp } from 'react-icons/io5';
+import { HiMenu } from 'react-icons/hi';
 
 const icons = {
     FaFacebookF,
@@ -45,6 +47,7 @@ const icons = {
     SiFacebook,
     FcGoogle,
     FaRegUser,
+    FaEdit,
     HiOutlineLockClosed,
     AiOutlineUser,
     LiaSignOutAltSolid,
@@ -61,5 +64,8 @@ const icons = {
     CiCircleCheck,
     IoIosArrowBack,
     FaLock,
+    FaArrowRight,
+    IoHeartSharp,
+    HiMenu,
 };
 export default icons;

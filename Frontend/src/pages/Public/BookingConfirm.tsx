@@ -195,7 +195,7 @@ const BookingConfirm: React.FC = () => {
                                                 setActiveTab={setActiveTab}
                                                 setStep={setStep}
                                                 amount={totalAmount}
-                                                nameRoom={roomData.name}
+                                                nameRoom={roomData.title}
                                                 CustomerInfoData={CustomerInfoData}
                                             />
                                         ),

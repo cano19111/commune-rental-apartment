@@ -2,7 +2,6 @@ import { GoogleMap, Reviews, TableSelectRoom } from '@/components';
 import icons from '@/utils/icons';
 import { Button, DatePicker, Drawer, Image, Result, Spin, Tooltip } from 'antd';
 import React, { useMemo, useState } from 'react';
-import './ApartmentDetail.css';
 import { Controller, useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -321,7 +320,7 @@ const ApartmentDetail: React.FC = () => {
                                     type="primary"
                                     disabled={!isValid}
                                 >
-                                    Booking
+                                    Booking now
                                 </Button>
                             </div>
                             <div className="w-full flex flex-col gap-3">

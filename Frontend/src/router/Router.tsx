@@ -10,7 +10,14 @@ import {
     LoginSuccess,
 } from '@/pages/Public';
 import { path } from '@/utils/constant';
-import { CreateApartment, ManageAccount, MyFavorites, ManagerApartment, PersonalInformation } from '@/pages/User';
+import {
+    CreateApartment,
+    ManageAccount,
+    MyFavorites,
+    ManagerApartment,
+    PersonalInformation,
+    EditApartment,
+} from '@/pages/User';
 
 const Router = () => {
     const routes: RouteObject[] = [
@@ -50,7 +57,10 @@ const Router = () => {
             path: path.SIGNIN_GOOGLE_SUCCESS,
             element: <LoginSuccess />,
         },
-
+        {
+            path: path.EDIT_APARTMENT,
+            element: <EditApartment />,
+        },
         {
             path: path.ACCOUNT_SETTINGS,
             element: <ManageAccount />,

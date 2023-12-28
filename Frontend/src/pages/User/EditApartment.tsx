@@ -9,7 +9,7 @@ import { Provinces } from '@/utils/location/provinces';
 import { Districts } from '@/utils/location/districts';
 import { Wards } from '@/utils/location/wards';
 
-const CreateApartment: React.FC = () => {
+const EditApartment: React.FC = () => {
     const createApartmentMutation = useMutation({ mutationFn: apiCreateApartment });
     const [districtsOption, setDistrictsOption] = useState([]);
     const [rooms, setRooms] = useState([{}]);
@@ -66,6 +66,7 @@ const CreateApartment: React.FC = () => {
     };
 
     const handleCreateApartment = async (data: ApartmentType) => {
+        console.log(data.rooms[0].images);
         data.location.province = Provinces.find(
             (province) => String(province.code) === String(data.location.province),
         )?.name;
@@ -215,4 +216,4 @@ const CreateApartment: React.FC = () => {
     );
 };
 
-export default CreateApartment;
+export default EditApartment;
