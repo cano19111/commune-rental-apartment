@@ -109,7 +109,7 @@ const CreateApartment: React.FC = () => {
         </div>
     ) : (
         <form onSubmit={handleSubmit(handleCreateApartment)}>
-            <div className="max-w-main mx-auto p-10 flex flex-col gap-3">
+            <div className="max-w-main mx-auto mb-10 flex flex-col gap-3">
                 <h1 className="text-3xl font-bold mb-5">Create Apartment</h1>
                 <InputForm
                     control={control}
