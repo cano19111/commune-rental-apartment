@@ -147,6 +147,9 @@ const AddRoom: React.FC<AddRoomProps> = ({ errors, control, indexRoom, onClose }
                     type="number"
                     label="Room size"
                     className="md:min-w-[250px] min-w-[200px]"
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    addonAfter="m²"
+                    parser={(value) => value.replace(/m²\s?|,/g, '')}
                 />
 
                 <InputForm
@@ -162,8 +165,9 @@ const AddRoom: React.FC<AddRoomProps> = ({ errors, control, indexRoom, onClose }
                     type="number"
                     label="Price"
                     className="md:min-w-[250px] min-w-[200px]"
-                    formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    addonAfter="VND"
+                    parser={(value) => value.replace(/VND\s?|,/g, '')}
                 />
                 <InputForm
                     control={control}

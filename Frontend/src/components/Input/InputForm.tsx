@@ -12,6 +12,7 @@ interface InputFormProps {
     label: string;
     className?: string;
     rows?: number;
+    addonAfter?: string;
     formatter?: (value: string) => string;
     parser?: (value: string) => string;
 }
@@ -27,6 +28,7 @@ const InputForm: React.FC<InputFormProps> = ({
     rows,
     formatter,
     parser,
+    addonAfter,
 }) => {
     let InputComponent;
 
@@ -61,6 +63,7 @@ const InputForm: React.FC<InputFormProps> = ({
                             className={clsx('font-main', className)}
                             placeholder={placeholder}
                             status={error ? 'error' : ''}
+                            addonAfter={addonAfter}
                         />
                         {error && <span className="text-red-600">{error.message}</span>}
                     </div>

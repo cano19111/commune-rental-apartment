@@ -348,9 +348,10 @@ const Listing: React.FC = () => {
                         <Pagination
                             defaultCurrent={1}
                             total={data?.data?.totalResults || 0}
-                            defaultPageSize={10}
+                            defaultPageSize={4}
                             onChange={handleChangePage}
                             className="flex justify-center"
+                            current={+searchParams.get('page') || 1}
                         />
                     </div>
                 </form>
