@@ -7,12 +7,13 @@ import { apiLogin } from '@/apis';
 import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
 import { signIn } from '@/contexts/auth/reduces';
+import ButtonSignIn from './ButtonSignIn';
 
 interface SignInProps {
     setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
 }
 const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
-    const { FaRegUser, HiOutlineLockClosed, FcGoogle, SiFacebook } = icons;
+    const { FaRegUser, HiOutlineLockClosed } = icons;
     const { dispatch } = useAuth();
     const {
         handleSubmit,
@@ -53,18 +54,7 @@ const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
                         <img src={loginImage} />
                     </div>
                     <div className="flex-1 pt-10 flex gap-6 flex-col">
-                        <Button
-                            className="w-full flex items-center justify-center gap-2 px-10 font-main py-7 border-red-500 text-red-500"
-                            icon={<FcGoogle size={23} />}
-                        >
-                            Sign in with Google
-                        </Button>
-                        <Button
-                            className="w-full flex items-center justify-center gap-2 px-10 font-main py-7 border-blue-500 text-blue-500"
-                            icon={<SiFacebook size={22} />}
-                        >
-                            Sign in with Facebook
-                        </Button>
+                        <ButtonSignIn />
                         <div className="relative my-5">
                             <div className="h-0 border-black border"></div>
                             <span className="absolute top-[-10px] left-[45%] bg-white px-3">Or</span>

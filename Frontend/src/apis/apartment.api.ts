@@ -1,4 +1,4 @@
-import axios from './httpRequest';
+import axios from './axiosConfig';
 
 export const apiCreateApartment = (data: FormData): Promise<Res> =>
     axios({
@@ -8,7 +8,7 @@ export const apiCreateApartment = (data: FormData): Promise<Res> =>
     });
 export const apiSearchRoom = (params: string): Promise<Res> =>
     axios({
-        url: `/apartment/search?${params}`,
+        url: `/apartment/search?limit=1&${params}`,
         method: 'get',
     });
 export const apiApartmentDetail = (apartmentId: string, params: string): Promise<Res> =>

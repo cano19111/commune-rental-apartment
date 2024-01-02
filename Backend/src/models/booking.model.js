@@ -6,8 +6,8 @@ const DOCUMENT = 'Booking';
 const userSchema = new mongoose.Schema(
     {
         email: { type: String, require: true },
-        firstname: { type: String },
-        lastname: { type: String },
+        firstname: { type: String, require: true },
+        lastname: { type: String, require: true },
         phone: { type: String, require: true },
         room: {
             type: mongoose.Schema.Types.ObjectId,

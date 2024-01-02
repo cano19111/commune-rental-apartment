@@ -17,6 +17,8 @@ export const path: { [key: string]: string } = {
     ACCOUNT_SETTINGS: 'account-settings',
     PERSONAL_INFORMATION: 'personal-information',
     MANAGE_APARTMENT: 'manage-apartment',
+    SET_PASSWORD: 'set-password/:userId',
+    SIGNIN_GOOGLE_SUCCESS: 'signin-success/:userId',
 };
 
 export const navigates: { title: string; path: string; icon: React.ReactNode }[] = [

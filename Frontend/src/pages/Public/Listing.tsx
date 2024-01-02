@@ -1,5 +1,17 @@
 import icons from '@/utils/icons';
-import { Button, Checkbox, DatePicker, Dropdown, Flex, Image, Input, Skeleton, Slider, Tooltip } from 'antd';
+import {
+    Button,
+    Checkbox,
+    DatePicker,
+    Dropdown,
+    Flex,
+    Image,
+    Input,
+    Pagination,
+    Skeleton,
+    Slider,
+    Tooltip,
+} from 'antd';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiSearchRoom } from '@/apis';
@@ -33,11 +45,11 @@ const Listing: React.FC = () => {
         queryFn: () => apiSearchRoom(searchParams.toString()),
         staleTime: 0,
     });
-    const roomNumber: number = +searchParams.get('room') !== 0 ? +searchParams.get('room') ?? 1 : 1;
+    const roomNumber: number = +searchParams.get('room') !== 0 ? +searchParams.get('room_number') ?? 1 : 1;
     const numberOfGuest: number =
-        +searchParams.get('numberOfGuest') !== 0 ? +searchParams.get('numberOfGuest') ?? 1 : 1;
-    const startDate: string | null = searchParams.get('startDate');
-    const endDate: string | null = searchParams.get('endDate');
+        +searchParams.get('number_of_guest') !== 0 ? +searchParams.get('number_of_guest') ?? 1 : 1;
+    const startDate: string | null = searchParams.get('start_date');
+    const endDate: string | null = searchParams.get('end_date');
     const checkIn: Date | null = startDate ? new Date(startDate) : null;
     const checkOut: Date | null = endDate ? new Date(endDate) : null;
     const numberOfDays: number =
@@ -45,16 +57,21 @@ const Listing: React.FC = () => {
     const handleSearch = (data: SearchData) => {
         const queryParams = new URLSearchParams({
             province: data.searchText,
-            startDate: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
-            endDate: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
-            numberOfGuest: data.searchGuest.guest.toString(),
-            room: data.searchGuest.room.toString(),
+            start_date: dayjs(data.searchDate[0]).format('YYYY-MM-DD'),
+            end_date: dayjs(data.searchDate[1]).format('YYYY-MM-DD'),
+            number_of_guest: data.searchGuest.guest.toString(),
+            room_number: data.searchGuest.room.toString(),
         });
         if (data.searchPrice && data.searchPrice[0] !== undefined && data.searchPrice[1] !== undefined) {
             queryParams.set('minPrice', data.searchPrice[0].toString());
             queryParams.set('maxPrice', data.searchPrice[1].toString());
         }
         setSearchParams(queryParams);
+    };
+    const handleChangePage = (page: number) => {
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+        newSearchParams.set('page', page.toString());
+        setSearchParams(newSearchParams);
     };
     return (
         isLoaded && (
@@ -79,6 +96,7 @@ const Listing: React.FC = () => {
                                         color="red"
                                         open={!!errors.searchText}
                                         placement="right"
+                                        zIndex={5}
                                     >
                                         <Input
                                             size="large"
@@ -102,6 +120,7 @@ const Listing: React.FC = () => {
                                         color="red"
                                         open={!!errors.searchDate}
                                         placement="right"
+                                        zIndex={5}
                                     >
                                         <DatePicker.RangePicker
                                             format="DD-MM-YYYY"
@@ -131,6 +150,7 @@ const Listing: React.FC = () => {
                                         color="red"
                                         open={!!errors.searchGuest}
                                         placement="left"
+                                        zIndex={5}
                                     >
                                         <Dropdown
                                             dropdownRender={() => (
@@ -170,7 +190,7 @@ const Listing: React.FC = () => {
                                     <div className="font-light">{`VND ${(
                                         watch('searchPrice')?.[0] || 100000
                                     ).toLocaleString()} - VND ${(
-                                        watch('searchPrice')?.[1] || 5000000
+                                        watch('searchPrice')?.[1] || 5000000 + '+'
                                     ).toLocaleString()}${watch('searchPrice')?.[1] === 5000000 ? '+' : ''}`}</div>
                                     <Controller
                                         name="searchPrice"
@@ -250,11 +270,11 @@ const Listing: React.FC = () => {
                                                 onClick={() => {
                                                     const queryParams = new URLSearchParams({
                                                         province: searchParams.get('province'),
-                                                        startDate: searchParams.get('startDate'),
-                                                        endDate: searchParams.get('endDate'),
-                                                        numberOfGuest: numberOfGuest.toString(),
-                                                        room: roomNumber.toString(),
-                                                        roomId: room.roomId,
+                                                        start_date: searchParams.get('start_date'),
+                                                        end_date: searchParams.get('end_date'),
+                                                        number_of_guest: numberOfGuest.toString(),
+                                                        room_number: roomNumber.toString(),
+                                                        room_id: room.roomId,
                                                     });
                                                     navigate(`/apartment/${room._id}/?${queryParams.toString()}`);
                                                 }}
@@ -318,6 +338,12 @@ const Listing: React.FC = () => {
                                 </>
                             )}
                         </div>
+                        <Pagination
+                            defaultCurrent={1}
+                            total={data?.data?.totalResults || 0}
+                            defaultPageSize={1}
+                            onChange={handleChangePage}
+                        />
                     </div>
                 </form>
             </div>

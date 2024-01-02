@@ -1,24 +1,42 @@
 import React from 'react';
 import registerImage from '@/assets/register.jpg';
-import { Button, Flex, Input } from 'antd';
+import { Button, Flex, Input, message } from 'antd';
 import { useForm, Controller } from 'react-hook-form';
 import icons from '@/utils/icons';
+import { useMutation } from '@tanstack/react-query';
+import { apiSignUp } from '@/apis';
+import ButtonSignIn from './ButtonSignIn';
 
 interface SignInProps {
     setModalOpen: React.Dispatch<React.SetStateAction<{ isOpen: boolean; activeTab: string }>>;
 }
-const SignUp: React.FC<SignInProps> = () => {
-    const { FaRegUser, FcGoogle, SiFacebook } = icons;
+const SignUp: React.FC<SignInProps> = ({ setModalOpen }) => {
+    const { FaRegUser, SiFacebook } = icons;
+
     const {
         handleSubmit,
         control,
+        reset,
         formState: { errors },
     } = useForm({
         defaultValues: {
             email: '',
         },
     });
-    const handleRegister = () => {};
+    const signUpMutation = useMutation({
+        mutationFn: apiSignUp,
+    });
+    const handleRegister = (data: ReqSignUp) => {
+        signUpMutation.mutate(data, {
+            onSuccess: (response) => {
+                if (response.success) {
+                    message.success(response.message);
+                    reset();
+                    setModalOpen({ isOpen: false, activeTab: 'signin' });
+                }
+            },
+        });
+    };
     return (
         <form onSubmit={handleSubmit(handleRegister)}>
             <div className="w-full flex gap-5">
@@ -26,18 +44,8 @@ const SignUp: React.FC<SignInProps> = () => {
                     <img src={registerImage} />
                 </div>
                 <div className="flex-1 pt-10 flex gap-6 flex-col">
-                    <Button
-                        className="w-full flex items-center justify-center gap-2 px-10 font-main py-7 border-red-500 text-red-500"
-                        icon={<FcGoogle size={23} />}
-                    >
-                        Sign in with Google
-                    </Button>
-                    <Button
-                        className="w-full flex items-center justify-center gap-2 px-10 font-main py-7 border-blue-500 text-blue-500"
-                        icon={<SiFacebook size={22} />}
-                    >
-                        Sign in with Facebook
-                    </Button>
+                    <ButtonSignIn />
+
                     <div className="relative my-5">
                         <div className="h-0 border-black border"></div>
                         <span className="absolute top-[-10px] left-[45%] bg-white px-3">Or</span>
@@ -76,6 +84,7 @@ const SignUp: React.FC<SignInProps> = () => {
                         htmlType="submit"
                         danger
                         className="px-10 font-main py-6 flex justify-center items-center font-semibold text-base mt-10"
+                        loading={signUpMutation.isPending}
                     >
                         Sign Up
                     </Button>

@@ -18,7 +18,10 @@ const getCurrentUser = async (req, res, next) => {
                 message: 'User not found',
             });
         }
-        const avatarUrl = `${process.env.SERVER_URI}/api/image/${user.avatar}`;
+        let avatarUrl = user.avatar;
+        if (!avatarUrl.startsWith('http')) {
+            avatarUrl = `${process.env.SERVER_URI}/api/image/${avatarUrl}`;
+        }
         return res.status(200).json({
             success: true,
             data: {

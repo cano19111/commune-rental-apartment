@@ -102,7 +102,7 @@ const BookingConfirm: React.FC = () => {
                     <div className="grid grid-cols-10 gap-7 mt-7 font-light">
                         <div className="col-span-4 flex flex-col items-center justify-center gap-5">
                             <div className="w-full flex flex-col items-start gap-3 border border-gray-300 rounded-lg p-4">
-                                <div className="font-semibold text-lg">{roomData.name}</div>
+                                <div className="font-semibold text-lg">{roomData.title}</div>
                                 <div>
                                     {`${roomData.location.street} ${roomData.location.ward} ${roomData.location.district} ${roomData.location.province}`}
                                 </div>

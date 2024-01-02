@@ -8,15 +8,13 @@ const userSchema = new mongoose.Schema(
         email: { type: String, require: true, unique: true },
         firstname: { type: String },
         lastname: { type: String },
-        password: { type: String, require: true },
+        password: { type: String },
         avatar: {
             type: String,
-            default: 'https://www.drupal.org/files/issues/default-avatar.png',
+            default: '7c8710012256c2b60f621e0849cc94d8.png',
         },
         phone: {
             type: String,
-            require: true,
-            unique: true,
         },
         dateOfBirth: {
             type: Date,
@@ -33,7 +31,6 @@ const userSchema = new mongoose.Schema(
         isAdmin: {
             type: Boolean,
             default: false,
-            require: true,
         },
         address: {
             type: String,
@@ -57,6 +54,11 @@ const userSchema = new mongoose.Schema(
         emailConfirmed: { type: Boolean, default: false },
         refreshToken: {
             type: String,
+        },
+        provider: {
+            type: String,
+            enum: ['Email', 'Google', 'Facebook'],
+            default: 'Email',
         },
     },
     {
