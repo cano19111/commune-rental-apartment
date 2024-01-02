@@ -5,9 +5,8 @@ import CheckoutForm from './CheckoutForm';
 import { apiBooking, apiCreateStripePayment } from '@/apis';
 import { Button, Flex, Radio, Spin } from 'antd';
 import icons from '@/utils/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { path } from '@/utils/constant';
 const { IoIosArrowBack, FaLock } = icons;
 
 interface PaymentProps {
@@ -19,6 +18,7 @@ interface PaymentProps {
 }
 const Payment: React.FC<PaymentProps> = ({ setActiveTab, setStep, amount, nameRoom, CustomerInfoData }) => {
     const [clientSecret, setClientSecret] = useState('');
+    const queryClient = useQueryClient();
     const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
     const [selectTypePayment, setSelectTypePayment] = useState('before');
     const navigate = useNavigate();
@@ -36,7 +36,10 @@ const Payment: React.FC<PaymentProps> = ({ setActiveTab, setStep, amount, nameRo
         bookingMutation.mutate(CustomerInfoData, {
             onSuccess: (response: Res) => {
                 if (response.success) {
-                    navigate(`/${path.BOOKING_COMPLETION}/${response.data.booking._id}`);
+                    queryClient.invalidateQueries({
+                        queryKey: ['my-booking'],
+                    });
+                    navigate(`/booking-completion/${response.data.booking._id}`);
                 }
             },
         });

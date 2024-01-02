@@ -132,14 +132,14 @@ const ApartmentDetail: React.FC = () => {
                     <Drawer placement="bottom" onClose={() => setIsShowAll(false)} open={isShowAll} height="100%">
                         <div className="flex flex-col justify-center">
                             <div className="flex items-start gap-3">
-                                <div
-                                    className="flex flex-col w-[100px]"
-                                    onClick={() => {
-                                        setIsShowAll(true);
-                                        setSelectedRoomIndex(null);
-                                    }}
-                                >
-                                    <div className="w-[100px] h-[70px]">
+                                <div className="flex flex-col w-[100px]">
+                                    <div
+                                        className="w-[100px] h-[70px]"
+                                        onClick={() => {
+                                            setIsShowAll(true);
+                                            setSelectedRoomIndex(null);
+                                        }}
+                                    >
                                         <Image
                                             width="100%"
                                             height="100%"

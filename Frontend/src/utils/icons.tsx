@@ -24,8 +24,8 @@ import { TbBrandBooking } from 'react-icons/tb';
 import { IoCreateOutline } from 'react-icons/io5';
 import { GoLocation } from 'react-icons/go';
 import { CiCircleCheck, CiCreditCard1 } from 'react-icons/ci';
-import { IoIosArrowBack } from 'react-icons/io';
-import { IoHeartSharp } from 'react-icons/io5';
+import { IoIosArrowBack, IoMdNotificationsOutline } from 'react-icons/io';
+import { IoHeartSharp, IoSettingsOutline } from 'react-icons/io5';
 import { HiMenu } from 'react-icons/hi';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { RiMoonLine } from 'react-icons/ri';
@@ -71,5 +71,7 @@ const icons = {
     IoCalendarOutline,
     CiCreditCard1,
     RiMoonLine,
+    IoMdNotificationsOutline,
+    IoSettingsOutline,
 };
 export default icons;

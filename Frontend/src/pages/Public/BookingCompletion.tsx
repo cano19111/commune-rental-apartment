@@ -24,7 +24,7 @@ const BookingCompletion: React.FC = () => {
                                 alt={data.booking.name}
                             />
                             <div className="font-semibold text-xl mb-2 flex items-baseline">{data.booking.name}</div>
-                            <p className="text-gray-700">Address: 3-star hotel located in the heart of Copenhagen</p>
+                            <p className="text-gray-700">{`${data.booking.address.street}, ${data.booking.address.ward}, ${data.booking.address.district}, ${data.booking.address.province}`}</p>
                             <div className="flex">
                                 <div className="w-[100px] font-semibold">Check-in</div>
                                 <div>{moment(data.booking.checkIn).format('dddd, DD MMMM YYYY')}</div>
@@ -68,10 +68,16 @@ const BookingCompletion: React.FC = () => {
                         title="Booking successfully!"
                         subTitle="Your booking details are shown on the left."
                         extra={[
-                            <Button type="primary" size="large" onClick={() => navigate('/')} className="bg-blue-500">
+                            <Button
+                                key={1}
+                                type="primary"
+                                size="large"
+                                onClick={() => navigate('/')}
+                                className="bg-blue-500"
+                            >
                                 Go home
                             </Button>,
-                            <Button size="large" type="primary" ghost onClick={() => navigate('/my-booking')}>
+                            <Button key={2} size="large" type="primary" ghost onClick={() => navigate('/my-booking')}>
                                 View bookings and trips
                             </Button>,
                         ]}

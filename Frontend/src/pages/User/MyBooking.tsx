@@ -8,7 +8,7 @@ const { FaArrowRight, IoCalendarOutline, CiCreditCard1, RiMoonLine } = icons;
 
 const MyBooking: React.FC = () => {
     const { data: { data = {} } = {}, isFetching } = useQuery({
-        queryKey: ['booking'],
+        queryKey: ['my-booking'],
         queryFn: apiGetMyBookings,
     });
     const calculateNights = (checkIn: string, checkOut: string) => {

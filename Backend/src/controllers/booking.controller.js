@@ -131,7 +131,7 @@ const getBooking = async (req, res, next) => {
         const bookingDetails = {
             _id: booking._id,
             name: apartment.title,
-            address: booking.location,
+            address: apartment.location,
             image: `${process.env.SERVER_URI}/api/image/${room.images[0]}`,
             checkIn: booking.checkInTime,
             checkOut: booking.checkOutTime,

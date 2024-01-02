@@ -305,7 +305,7 @@ const Listing: React.FC = () => {
                                                                 <GoLocation size={15} />
                                                             </i>
                                                             <span className="hover:underline line-clamp-2 text-blue-800">
-                                                                {`${room.address.street} ${room.address.ward} ${room.address.district} ${room.address.province}`}
+                                                                {`${room.address.street}, ${room.address.ward}, ${room.address.district}, ${room.address.province}`}
                                                             </span>
                                                         </div>
                                                         <div className="font-light text-sm ml-3 flex items-center gap-1 flex-wrap">
