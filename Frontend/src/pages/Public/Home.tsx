@@ -8,10 +8,24 @@ import hochiminh from '@/assets/hochiminh.png';
 import hoian from '@/assets/hoian.webp';
 import nhatrang from '@/assets/nhatrang.jpg';
 import quynhon from '@/assets/quynhon.jpg';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 const { IoHeartSharp, MdOutlineKeyboardArrowRight } = icons;
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
+    function navigateToListing(province: string) {
+        const queryParams = new URLSearchParams({
+            province: province,
+            start_date: dayjs().format('YYYY-MM-DD'),
+            end_date: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+            number_of_guest: '1',
+            room_number: '1',
+        });
+        const url = `/listing?${queryParams.toString()}`;
+        navigate(url);
+    }
     return (
         <div className="font-main flex items-center justify-center">
             <div className="max-w-main w-full">
@@ -33,7 +47,10 @@ const Home: React.FC = () => {
                 <div className="mt-[60px]">
                     <div className="text-xl mb-5">Popular destination</div>
                     <div className="grid h-[390px] grid-cols-4 grid-rows-5 gap-5">
-                        <div className="col-span-1 row-span-5 relative cursor-pointer overflow-hidden rounded-2xl">
+                        <div
+                            className="col-span-1 row-span-5 relative cursor-pointer overflow-hidden rounded-2xl"
+                            onClick={() => navigateToListing('Quy nhơn, Bình Định')}
+                        >
                             <img
                                 src={quynhon}
                                 className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
@@ -43,7 +60,10 @@ const Home: React.FC = () => {
                             </span>
                         </div>
 
-                        <div className="col-span-1 row-span-3 relative cursor-pointer overflow-hidden rounded-2xl">
+                        <div
+                            className="col-span-1 row-span-3 relative cursor-pointer overflow-hidden rounded-2xl"
+                            onClick={() => navigateToListing('Đà Lạt, Lâm Đồng')}
+                        >
                             <img
                                 src={datlat}
                                 className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
@@ -53,7 +73,10 @@ const Home: React.FC = () => {
                             </span>
                         </div>
 
-                        <div className="col-span-1 row-span-5 relative cursor-pointer overflow-hidden rounded-2xl">
+                        <div
+                            className="col-span-1 row-span-5 relative cursor-pointer overflow-hidden rounded-2xl"
+                            onClick={() => navigateToListing('Đàa Nẵng')}
+                        >
                             <img
                                 src={danang}
                                 className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
@@ -63,7 +86,10 @@ const Home: React.FC = () => {
                             </span>
                         </div>
 
-                        <div className="col-span-1 row-span-2 relative cursor-pointer overflow-hidden rounded-2xl">
+                        <div
+                            className="col-span-1 row-span-2 relative cursor-pointer overflow-hidden rounded-2xl"
+                            onClick={() => navigateToListing('Hồ Chí Minh')}
+                        >
                             <img
                                 src={hochiminh}
                                 className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
@@ -72,7 +98,10 @@ const Home: React.FC = () => {
                                 Ho Chi Minh
                             </span>
                         </div>
-                        <div className="col-span-1 row-span-3 relative cursor-pointer overflow-hidden rounded-2xl">
+                        <div
+                            className="col-span-1 row-span-3 relative cursor-pointer overflow-hidden rounded-2xl"
+                            onClick={() => navigateToListing('Hội An')}
+                        >
                             <img
                                 src={hoian}
                                 className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
@@ -81,7 +110,10 @@ const Home: React.FC = () => {
                                 Hoi An
                             </span>
                         </div>
-                        <div className="col-span-1 row-span-2 relative cursor-pointer overflow-hidden rounded-2xl">
+                        <div
+                            className="col-span-1 row-span-2 relative cursor-pointer overflow-hidden rounded-2xl"
+                            onClick={() => navigateToListing('Nha Trang')}
+                        >
                             <img
                                 src={nhatrang}
                                 className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
@@ -120,7 +152,7 @@ const Home: React.FC = () => {
                         <div className="w-[250px] h-[295px] flex flex-col items-start opacity-100 bg-white rounded-3xl shadow-card-sm p-2 cursor-pointer">
                             <div className="relative">
                                 <img
-                                    src="https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMDUzMDJ8MHwxfHNlYXJjaHwxM3x8aG90ZWwlMjByb29tfGVufDF8fHx8MTY2MzE3MDUyNA&ixlib=rb-1.2.1&q=80&w=1080"
+                                    src="https://images.unsplash.com/photo-1455587734955-081b22074882?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMDUzMDJ8MHwxfHNlYXJjaHwzfHxob3RlbHxlbnwxfHx8fDE2NjMxNjIxODE&ixlib=rb-1.2.1&q=80&w=1080"
                                     className="rounded-3xl h-[185px]"
                                 />
                                 <span className="cursor-inherit absolute top-2 left-2 px-4 py-1.5 bg-green-200 rounded-full shadow-none overflow-visible text-xs uppercase text-center tracking-normal leading-4 whitespace-nowrap opacity-100 visible text-green-500">
@@ -142,7 +174,7 @@ const Home: React.FC = () => {
                         <div className="w-[250px] h-[295px] flex flex-col items-start opacity-100 bg-white rounded-3xl shadow-card-sm p-2 cursor-pointer">
                             <div className="relative">
                                 <img
-                                    src="https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMDUzMDJ8MHwxfHNlYXJjaHwxM3x8aG90ZWwlMjByb29tfGVufDF8fHx8MTY2MzE3MDUyNA&ixlib=rb-1.2.1&q=80&w=1080"
+                                    src="https://images.unsplash.com/photo-1527853787696-f7be74f2e39a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMDUzMDJ8MHwxfHNlYXJjaHw4MXx8SG90ZWx8ZW58MXx8fHwxNjYzMTYzMTI1&ixlib=rb-1.2.1&q=80&w=1080"
                                     className="rounded-3xl h-[185px]"
                                 />
                                 <span className="cursor-inherit absolute top-2 left-2 px-4 py-1.5 bg-green-200 rounded-full shadow-none overflow-visible text-xs uppercase text-center tracking-normal leading-4 whitespace-nowrap opacity-100 visible text-green-500">
@@ -164,7 +196,7 @@ const Home: React.FC = () => {
                         <div className="w-[250px] h-[295px] flex flex-col items-start opacity-100 bg-white rounded-3xl shadow-card-sm p-2 cursor-pointer">
                             <div className="relative">
                                 <img
-                                    src="https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMDUzMDJ8MHwxfHNlYXJjaHwxM3x8aG90ZWwlMjByb29tfGVufDF8fHx8MTY2MzE3MDUyNA&ixlib=rb-1.2.1&q=80&w=1080"
+                                    src="https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMDUzMDJ8MHwxfHNlYXJjaHw1fHxob3RlbHxlbnwxfHx8fDE2NjMxNjIxODE&ixlib=rb-1.2.1&q=80&w=1080"
                                     className="rounded-3xl h-[185px]"
                                 />
                                 <span className="cursor-inherit absolute top-2 left-2 px-4 py-1.5 bg-green-200 rounded-full shadow-none overflow-visible text-xs uppercase text-center tracking-normal leading-4 whitespace-nowrap opacity-100 visible text-green-500">

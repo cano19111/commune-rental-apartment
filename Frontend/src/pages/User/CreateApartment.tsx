@@ -104,7 +104,9 @@ const CreateApartment: React.FC = () => {
     };
 
     return createApartmentMutation.isPending ? (
-        <Spin size="large" spinning={true} fullscreen={createApartmentMutation.isPending} />
+        <div className="min-h-screen">
+            <Spin size="large" spinning={true} fullscreen={createApartmentMutation.isPending} />
+        </div>
     ) : (
         <form onSubmit={handleSubmit(handleCreateApartment)}>
             <div className="max-w-main mx-auto p-10 flex flex-col gap-3">
