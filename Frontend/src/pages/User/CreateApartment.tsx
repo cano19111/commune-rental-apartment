@@ -73,7 +73,6 @@ const CreateApartment: React.FC = () => {
             (district) => String(district.code) === String(data.location.district),
         )?.name;
         data.rooms = data.rooms.filter((room: Room) => room?.images !== undefined);
-        console.log(data);
         const formData = new FormData();
         data.rooms.forEach((room: Room, index: number) => {
             console.log(room?.images?.length);

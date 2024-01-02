@@ -17,7 +17,7 @@ const BookingDetail: React.FC = () => {
                 <div className="rounded max-w-[80%] w-full  overflow-hidden bg-white">
                     <div className="shadow-card-sm p-5 bg-white border rounded-2xl space-y-3">
                         <img
-                            className="w-full h-64 object-cover rounded-2xl"
+                            className="w-full h-80 object-cover rounded-2xl"
                             src={data.booking.image}
                             alt={data.booking.name}
                         />
@@ -33,7 +33,7 @@ const BookingDetail: React.FC = () => {
                         </div>
                         <div className="mb-4 pt-3 border-t">{data.booking.roomType}</div>
                     </div>
-                    <div className="mt-10 space-y-5 p-5">
+                    <div className="mt-3 space-y-5 p-5">
                         <div className="text-lg">Contact</div>
                         <div className="flex text-base">
                             <div className="w-[100px] font-semibold">Email</div>
