@@ -42,8 +42,8 @@ const InputForm: React.FC<InputFormProps> = ({
     }
 
     return (
-        <div className="flex flex-col">
-            <label className="text-lg mb-1">
+        <div className="flex flex-col font-main">
+            <label className="text-md mb-1">
                 <span className="text-red-500">* </span>
                 {label}
             </label>
@@ -62,7 +62,7 @@ const InputForm: React.FC<InputFormProps> = ({
                             placeholder={placeholder}
                             status={error ? 'error' : ''}
                         />
-                        {error && <span className="font-main text-red-600">{error.message}</span>}
+                        {error && <span className="text-red-600">{error.message}</span>}
                     </div>
                 )}
             />

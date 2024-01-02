@@ -2,11 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.ant-checkbox-wrapper.ant-checkbox-group-item {
-    font-size: 16px;
-    line-height: 1.7rem;
-    width: 24%;
-}
 
 .pac-container {
     background-color: #fff;
@@ -127,4 +122,19 @@ div[style*='background-color: white; font-weight: 500; font-family: Roboto, sans
 }
 .search-home > .ant-picker.ant-picker-range {
     box-shadow: none;
+}
+.navLink::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: rgb(44, 127, 206);
+    transition: width 0.5s ease-in-out;
+}
+
+.navLink-active::before {
+    width: 65%;
 }

@@ -7,6 +7,7 @@ import { Flex, Button, Modal, Tabs, Drawer, Image, Popover, Avatar } from 'antd'
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
+import clsx from 'clsx';
 
 const Header: React.FC = () => {
     const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, CgMenuLeft, HiMenu } = icons;
@@ -55,7 +56,17 @@ const Header: React.FC = () => {
                     <div className="hidden lg:block">
                         <Flex gap={15} align="center">
                             {navigates.map((navigate, index) => (
-                                <NavLink className="font-main text-[20px] font-medium" key={index} to={navigate.path}>
+                                <NavLink
+                                    key={index}
+                                    to={navigate.path}
+                                    className={({ isActive }) =>
+                                        clsx(
+                                            'relative font-main text-[20px] font-medium text-black transition duration-500 ease-in-out',
+                                            isActive ? 'navLink-active text-blue-500' : '',
+                                            'navLink',
+                                        )
+                                    }
+                                >
                                     {navigate.title}
                                 </NavLink>
                             ))}
@@ -84,7 +95,8 @@ const Header: React.FC = () => {
                                 placement="bottom"
                                 content={<MenuAccount />}
                                 arrow={true}
-                                trigger={['click', 'contextMenu']}
+                                mouseLeaveDelay={0.3}
+                                trigger={['hover']}
                             >
                                 <span className="mt-3 mx-5 mb-3 cursor-pointer px-3 py-1.5 flex items-center gap-1.5 border border-gray-300 rounded-full justify-center">
                                     <HiMenu size={17} />

@@ -22,7 +22,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep, Cust
         mutationFn: apiBooking,
         onSuccess: (response: Res) => {
             if (response.success) {
-                navigate(`/${path.BOOKING_COMPLETION}`);
+                navigate(`/${path.BOOKING_COMPLETION}/${response.data.booking._id}`);
             }
         },
         onError: (error) => {

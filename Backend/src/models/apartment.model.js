@@ -28,7 +28,7 @@ const apartmentsSchema = new mongoose.Schema(
                 reviews: [
                     {
                         score: { type: Number },
-                        comment: { type: Number },
+                        comment: { type: String },
                         postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
                     },
                 ],

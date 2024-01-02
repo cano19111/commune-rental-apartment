@@ -47,6 +47,7 @@ const Search: React.FC = () => {
                     rules={{
                         required: 'Please enter a destination',
                     }}
+                    defaultValue=""
                     render={({ field }) => (
                         <Tooltip
                             title={errors?.searchText?.message as string}
@@ -59,7 +60,7 @@ const Search: React.FC = () => {
                                 <span className="text-base font-medium">Where</span>
                                 <input
                                     placeholder="Where are you going?"
-                                    className="rounded-full py-2 outline-none bg-transparent text-lg"
+                                    className="py-2 outline-none bg-transparent text-lg"
                                     {...field}
                                 />
                             </div>

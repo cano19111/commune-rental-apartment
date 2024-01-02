@@ -9,7 +9,7 @@ import { apiApartmentDetail } from '@/apis';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { path } from '@/utils/constant';
-const { FaLocationDot, CgMenuGridO, PiUserThin } = icons;
+const { FaLocationDot, MdImage, PiUserThin } = icons;
 const calculateTotalAmount = (numberOfDays: number, roomPrice: number, roomNumber: number) => {
     const baseAmount: number = (numberOfDays === 0 ? 1 : +numberOfDays) * roomPrice * roomNumber;
     const taxAmount: number = baseAmount * 0.11;
@@ -190,10 +190,11 @@ const ApartmentDetail: React.FC = () => {
                     </Drawer>
 
                     <Button
-                        className="absolute bottom-3 right-3 bg-white border border-black flex items-center"
+                        className="absolute bottom-3 right-3 bg-white border border-black flex items-center gap-2"
                         onClick={() => setIsShowAll(true)}
+                        size="middle"
                     >
-                        <CgMenuGridO />
+                        <MdImage size={18} />
                         <span>Show all images</span>
                     </Button>
                 </div>
@@ -294,12 +295,15 @@ const ApartmentDetail: React.FC = () => {
                                                 {...field}
                                                 onChange={(dates) => {
                                                     const currentParams = Object.fromEntries(searchParams.entries());
-                                                    const newParams = {
-                                                        ...currentParams,
-                                                        start_date: dates[0]?.format('YYYY-MM-DD'),
-                                                        end_date: dates[1]?.format('YYYY-MM-DD'),
-                                                    };
-                                                    setSearchParams(newParams);
+                                                    if (dates) {
+                                                        const newParams = {
+                                                            ...currentParams,
+                                                            start_date: dates[0]?.format('YYYY-MM-DD'),
+                                                            end_date: dates[1]?.format('YYYY-MM-DD'),
+                                                        };
+                                                        setSearchParams(newParams);
+                                                    }
+
                                                     field.onChange(dates);
                                                 }}
                                                 disabledDate={(current) => current && current < moment().startOf('day')}

@@ -52,6 +52,7 @@ const AddRoom: React.FC<AddRoomProps> = ({ errors, control, indexRoom, onClose }
                                 }))}
                                 {...field}
                                 defaultValue={field.value}
+                                className="grid grid-cols-6 text-lg"
                             />
                             {errors?.rooms?.[indexRoom]?.services && (
                                 <span className="font-main text-red-600">

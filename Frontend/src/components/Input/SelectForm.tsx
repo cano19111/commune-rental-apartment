@@ -27,8 +27,8 @@ const SelectForm: React.FC<SelectFormProps> = ({
     onChangeSelected,
 }) => {
     return (
-        <div className="flex flex-col w-full">
-            <label className="text-lg mb-2">
+        <div className="flex flex-col w-full font-main">
+            <label className="text-md mb-2">
                 <span className="text-red-500">* </span>
                 {label}
             </label>
@@ -52,7 +52,7 @@ const SelectForm: React.FC<SelectFormProps> = ({
                             ref={ref}
                             status={error && 'error'}
                         />
-                        {error && <span className="font-main text-red-600">{error.message}</span>}
+                        {error && <span className="text-red-600">{error.message}</span>}
                     </Flex>
                 )}
             />

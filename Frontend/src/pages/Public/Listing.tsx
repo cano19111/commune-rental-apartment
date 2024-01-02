@@ -22,7 +22,7 @@ import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { useJsApiLoader } from '@react-google-maps/api';
 import moment from 'moment';
-const { GoLocation, PiUserThin } = icons;
+const { GoLocation, PiUserThin, IoHeartSharp } = icons;
 
 const Listing: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
@@ -63,8 +63,8 @@ const Listing: React.FC = () => {
             room_number: data.searchGuest.room.toString(),
         });
         if (data.searchPrice && data.searchPrice[0] !== undefined && data.searchPrice[1] !== undefined) {
-            queryParams.set('minPrice', data.searchPrice[0].toString());
-            queryParams.set('maxPrice', data.searchPrice[1].toString());
+            queryParams.set('min_price', data.searchPrice[0].toString());
+            queryParams.set('max_price', data.searchPrice[1].toString());
         }
         setSearchParams(queryParams);
     };
@@ -80,7 +80,7 @@ const Listing: React.FC = () => {
                     onSubmit={handleSubmit(handleSearch)}
                     className="max-w-main w-full min-h-screen flex mt-10 gap-5 mb-5"
                 >
-                    <div className="max-w-[350px] w-full bg-slate-100 rounded-lg px-7 py-5 pb-10">
+                    <div className="max-w-[350px] w-full bg-slate-100 rounded-lg px-10 py-5 pb-10">
                         <div className="flex flex-col gap-2">
                             <div className="text-lg mx-2">Search</div>
                             <Controller
@@ -182,7 +182,7 @@ const Listing: React.FC = () => {
                                 Search
                             </Button>
                         </div>
-                        <div className="w-full border mt-3 rounded-xl">
+                        <div className="w-full mt-3 rounded-xl">
                             <h2 className="text-lg m-2">Filter by</h2>
                             <div className="p-3 flex flex-col justify-center gap-3">
                                 <h2>Your budget (per night)</h2>
@@ -237,7 +237,9 @@ const Listing: React.FC = () => {
                     </div>
                     <div className="w-full flex flex-col gap-5">
                         <div className="h-[60px] bg-slate-100 flex items-center p-5 rounded-xl">
-                            <div>{`${data?.data?.totalResults || 0} Search results`}</div>
+                            <div className="font-normal text-lg">{`${
+                                data?.data?.totalResults || 0
+                            } Search results`}</div>
                         </div>
                         <div className="w-full h-full bg-slate-100 flex flex-col gap-5 p-2 rounded-lg">
                             {isFetching ? (
@@ -276,17 +278,22 @@ const Listing: React.FC = () => {
                                                         room_number: roomNumber.toString(),
                                                         room_id: room.roomId,
                                                     });
-                                                    navigate(`/apartment/${room._id}/?${queryParams.toString()}`);
+                                                    navigate(`/apartment/${room._id}?${queryParams.toString()}`);
                                                 }}
                                             >
                                                 <div className="w-4/12">
-                                                    <Image
-                                                        src={room.image}
-                                                        className="rounded-lg"
-                                                        preview={false}
-                                                        height={200}
-                                                        width="100%"
-                                                    />
+                                                    <div className="relative">
+                                                        <Image
+                                                            src={room.image}
+                                                            className="rounded-lg"
+                                                            preview={false}
+                                                            height={200}
+                                                            width="100%"
+                                                        />
+                                                        <span className="absolute top-2 right-2 text-white flex justify-center items-center p-1.5 cursor-inherit overflow-hidden opacity-100 bg-opacity-50 bg-white rounded-full cursor-pointer">
+                                                            <IoHeartSharp size={20} />
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <div className="w-8/12 flex h-full py-3">
                                                     <div className="w-7/12 flex flex-col mt-3 gap-3">

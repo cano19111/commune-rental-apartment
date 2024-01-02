@@ -2,6 +2,13 @@ import React from 'react';
 import background from '@/assets/background.avif';
 import { Search } from '@/components';
 import icons from '@/utils/icons';
+import datlat from '@/assets/dalat.jpg';
+import danang from '@/assets/danang.png';
+import hochiminh from '@/assets/hochiminh.png';
+import hoian from '@/assets/hoian.webp';
+import nhatrang from '@/assets/nhatrang.jpg';
+import quynhon from '@/assets/quynhon.jpg';
+
 const { IoHeartSharp, MdOutlineKeyboardArrowRight } = icons;
 
 const Home: React.FC = () => {
@@ -26,60 +33,60 @@ const Home: React.FC = () => {
                 <div className="mt-[60px]">
                     <div className="text-xl mb-5">Popular destination</div>
                     <div className="grid h-[390px] grid-cols-4 grid-rows-5 gap-5">
-                        <div className="col-span-1 row-span-5 relative cursor-pointer">
+                        <div className="col-span-1 row-span-5 relative cursor-pointer overflow-hidden rounded-2xl">
                             <img
-                                src="https://benhvienquynhon.gov.vn/wp-content/uploads/2023/05/bai-tam-quy-nhon.jpg"
-                                className="rounded-2xl object-cover w-full h-full"
+                                src={quynhon}
+                                className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
                             />
-                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none cursor-default px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
+                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none select-none px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
                                 Quy nhon
                             </span>
                         </div>
 
-                        <div className="col-span-1 row-span-3 relative cursor-pointer">
+                        <div className="col-span-1 row-span-3 relative cursor-pointer overflow-hidden rounded-2xl">
                             <img
-                                src="https://dalat.tours/vi/wp-content/uploads/2019/01/dalat_tours3.jpg"
-                                className="rounded-2xl object-cover w-full h-full"
+                                src={datlat}
+                                className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
                             />
-                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none cursor-default px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
+                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none select-none px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
                                 Da lat
                             </span>
                         </div>
 
-                        <div className="col-span-1 row-span-5 relative cursor-pointer">
+                        <div className="col-span-1 row-span-5 relative cursor-pointer overflow-hidden rounded-2xl">
                             <img
-                                src="https://nemtv.vn/wp-content/uploads/2019/03/cau-rong-da-nang-nemtv-03.jpg"
-                                className="rounded-2xl object-cover w-full h-full"
+                                src={danang}
+                                className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
                             />
-                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none cursor-default px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
+                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none select-none px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
                                 Da Nang
                             </span>
                         </div>
 
-                        <div className="col-span-1 row-span-2 relative cursor-pointer">
+                        <div className="col-span-1 row-span-2 relative cursor-pointer overflow-hidden rounded-2xl">
                             <img
-                                src="https://www.landmark81skyview.com/wp-content/uploads/2019/04/banner-day.png"
-                                className="rounded-2xl object-cover w-full h-full"
+                                src={hochiminh}
+                                className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
                             />
-                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none cursor-default px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
+                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none select-none px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
                                 Ho Chi Minh
                             </span>
                         </div>
-                        <div className="col-span-1 row-span-3 relative cursor-pointer">
+                        <div className="col-span-1 row-span-3 relative cursor-pointer overflow-hidden rounded-2xl">
                             <img
-                                src="https://kienviet.net/wp-content/uploads/2020/12/Picture2.png"
-                                className="rounded-2xl object-cover w-full h-full"
+                                src={hoian}
+                                className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
                             />
-                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none cursor-default px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
+                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none select-none px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
                                 Hoi An
                             </span>
                         </div>
-                        <div className="col-span-1 row-span-2 relative cursor-pointer">
+                        <div className="col-span-1 row-span-2 relative cursor-pointer overflow-hidden rounded-2xl">
                             <img
-                                src="https://static.vinwonders.com/production/nha-trang-o-dau-1.jpg"
-                                className="rounded-2xl object-cover w-full h-full"
+                                src={nhatrang}
+                                className="rounded-2xl object-cover w-full h-full transition-transform duration-500 hover:scale-125"
                             />
-                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none cursor-default px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
+                            <span className="absolute bottom-5 right-5 flex items-center justify-center box-border overflow-hidden outline-none select-none px-4 py-2 opacity-100 bg-white bg-opacity-70 rounded-full">
                                 Nha Trang
                             </span>
                         </div>

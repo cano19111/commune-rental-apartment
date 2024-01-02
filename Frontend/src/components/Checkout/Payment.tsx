@@ -36,7 +36,7 @@ const Payment: React.FC<PaymentProps> = ({ setActiveTab, setStep, amount, nameRo
         bookingMutation.mutate(CustomerInfoData, {
             onSuccess: (response: Res) => {
                 if (response.success) {
-                    navigate(`/${path.BOOKING_COMPLETION}`);
+                    navigate(`/${path.BOOKING_COMPLETION}/${response.data.booking._id}`);
                 }
             },
         });

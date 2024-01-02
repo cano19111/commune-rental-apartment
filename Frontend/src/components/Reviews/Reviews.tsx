@@ -1,49 +1,114 @@
-import { Avatar } from 'antd';
 import React from 'react';
-const reviews = [
+
+interface Review {
+    author: string;
+    date: string;
+    rating: number;
+    title: string;
+    content: string;
+    positives: string[];
+    negatives: string[];
+}
+
+interface RatingCategory {
+    category: string;
+    score: number;
+}
+
+const sampleReviews: Review[] = [
     {
-        author: 'Dino',
-        date: '5 days ago',
-        avatar: 'https://a0.muscache.com/im/pictures/user/733bd3c4-4b23-45f7-9ab6-1dbdd7092dbc.jpg?im_w=240',
-        comment:
-            'Nice hotel, near the beach, friendly staff, an ideal place to stay, everything is fine, delicious, fresh food.',
+        author: 'Mark M.',
+        date: '20 September, 2022',
+        rating: 10,
+        title: 'Excellent value for the price!',
+        content: 'We enjoyed our stay at this hotel. We will definitely come back!',
+        positives: ['Great location!', 'Service', 'Bottle of champagne in the room!'],
+        negatives: [],
     },
     {
-        author: 'Alice',
-        date: '1 week ago',
-        avatar: 'https://a0.muscache.com/im/pictures/user/User-214181514/original/1259fee2-b9db-418c-b813-43219460da90.jpeg?im_w=240',
-        comment:
-            'Great experience! The room was clean, and the view from the balcony was breathtaking. I highly recommend this place.',
-    },
-    {
-        author: 'Bob',
-        date: '2 weeks ago',
-        avatar: 'https://a0.muscache.com/im/pictures/user/733bd3c4-4b23-45f7-9ab6-1dbdd7092dbc.jpg?im_w=240',
-        comment:
-            'Amazing hospitality! The staff went above and beyond to make our stay memorable. Will definitely come back.',
+        author: 'Karena L.',
+        date: '10 September, 2022',
+        rating: 5.6,
+        title: 'Good hotel but noisy location',
+        content: 'Had room facing the street and it was super noisy. Unfortunately, we couldn’t change room.',
+        positives: [],
+        negatives: ['Noise'],
     },
 ];
+
+const ratingCategories: RatingCategory[] = [
+    { category: 'Cleanliness', score: 10 },
+    { category: 'Amenities', score: 7 },
+    { category: 'Location', score: 9 },
+    { category: 'Comfort', score: 8 },
+    { category: 'WiFi Connection', score: 9 },
+];
+
+const overallRating = ratingCategories.reduce((acc, { score }) => acc + score, 0) / ratingCategories.length;
+
+const getRatingColor = (rating: number): string => {
+    if (rating >= 9) return 'bg-green-200 text-green-500';
+    if (rating >= 7) return 'bg-yellow-200 text-yellow-500';
+    return 'bg-red-200 text-red-500';
+};
+
 const Reviews: React.FC = () => {
     return (
-        <div className="flex flex-col gap-4 mb-5">
-            <h3 className="text-2xl font-semibold mb-2">Guest Reviews</h3>
-            <div className="flex items-center">
-                <span className="p-2 text-md font-semibold bg-blue-500 text-white rounded-md mr-2">9.5</span>
-                <span className="text-sm">5 reviews</span>
+        <div className="bg-white rounded-lg mb-10">
+            <div className="mb-8">
+                <h2 className="text-xl font-normal text-gray-800">Reviews</h2>
+                <p className="text-xl font-normal text-blue-500">{overallRating.toFixed(1)}/10</p>
             </div>
-            <div className="flex flex-wrap justify-between">
-                {reviews.map((review, index) => (
-                    <div key={index} className="flex flex-col w-full md:w-[calc(50%-30px)] px-2 mb-4">
-                        <div className="flex items-center mb-2">
-                            <Avatar size={47} src={review.avatar} />
-                            <div className="flex flex-col ml-2">
-                                <span className="font-semibold text-md">{review.author}</span>
-                                <span className="text-xs">{review.date}</span>
+            <div className="flex items-start gap-10">
+                <div className="flex flex-col gap-1 w-1/4">
+                    {ratingCategories.map((rating, index) => (
+                        <div key={index} className="rounded-lg">
+                            <p className="font-semibold text-gray-800">{rating.category}</p>
+                            <div className="w-full bg-gray-300 rounded-full h-2">
+                                <div
+                                    className={`h-2 rounded-full ${getRatingColor(rating.score)}`}
+                                    style={{ width: `${(rating.score / 10) * 100}%` }}
+                                ></div>
+                            </div>
+                            <p className="text-right">{rating.score}/10</p>
+                        </div>
+                    ))}
+                </div>
+                <div className="w-3/4">
+                    {sampleReviews.map((review, index) => (
+                        <div
+                            key={index}
+                            className={`border-t pt-4 ${index < sampleReviews.length - 1 ? 'mb-4 border-none' : ''}`}
+                        >
+                            <div className="flex justify-between items-center mb-1">
+                                <h3 className="text-lg font-semibold">{review.title}</h3>
+                                <div
+                                    className={`w-12 py-1 rounded-full text-sm font-semibold flex items-center justify-center ${getRatingColor(
+                                        review.rating,
+                                    )}`}
+                                >
+                                    {review.rating}
+                                </div>
+                            </div>
+                            <p className="text-gray-600 text-sm mb-2">
+                                {review.author} - {review.date}
+                            </p>
+                            <p className="mb-2">{review.content}</p>
+                            <div className="flex flex-col">
+                                {review.positives.map((positive, idx) => (
+                                    <span key={idx} className="text-green-600 text-sm mr-2">
+                                        + {positive}
+                                    </span>
+                                ))}
+                                {review.negatives.map((negative, idx) => (
+                                    <span key={idx} className="text-red-600 text-sm mr-2">
+                                        - {negative}
+                                    </span>
+                                ))}
                             </div>
                         </div>
-                        <div className="text-sm font-light">{review.comment}</div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     );

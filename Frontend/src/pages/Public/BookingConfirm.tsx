@@ -43,9 +43,9 @@ const BookingConfirm: React.FC = () => {
             apiGetRoomCheckout({
                 roomId: searchParams.get('room_id'),
                 params: new URLSearchParams({
-                    startDate,
-                    endDate,
-                    roomNumber: roomNumber.toString(),
+                    start_date: startDate,
+                    end_date: endDate,
+                    room_number: roomNumber.toString(),
                 }).toString(),
             }),
         staleTime: 0,

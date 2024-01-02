@@ -10,7 +10,7 @@ import {
     AiOutlineClose,
 } from 'react-icons/ai';
 import { BsPinterest, BsPersonCircle, BsHouses, BsInfoCircle } from 'react-icons/bs';
-import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { MdOutlineKeyboardArrowRight, MdImage } from 'react-icons/md';
 import { SlClose } from 'react-icons/sl';
 import { CgMenuLeft } from 'react-icons/cg';
 import { PiSignInBold, PiUserThin } from 'react-icons/pi';
@@ -23,11 +23,12 @@ import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { TbBrandBooking } from 'react-icons/tb';
 import { IoCreateOutline } from 'react-icons/io5';
 import { GoLocation } from 'react-icons/go';
-import { CgMenuGridO } from 'react-icons/cg';
-import { CiCircleCheck } from 'react-icons/ci';
+import { CiCircleCheck, CiCreditCard1 } from 'react-icons/ci';
 import { IoIosArrowBack } from 'react-icons/io';
 import { IoHeartSharp } from 'react-icons/io5';
 import { HiMenu } from 'react-icons/hi';
+import { IoCalendarOutline } from 'react-icons/io5';
+import { RiMoonLine } from 'react-icons/ri';
 
 const icons = {
     FaFacebookF,
@@ -59,7 +60,6 @@ const icons = {
     GoLocation,
     PiUserThin,
     FaUser,
-    CgMenuGridO,
     BsInfoCircle,
     CiCircleCheck,
     IoIosArrowBack,
@@ -67,5 +67,9 @@ const icons = {
     FaArrowRight,
     IoHeartSharp,
     HiMenu,
+    MdImage,
+    IoCalendarOutline,
+    CiCreditCard1,
+    RiMoonLine,
 };
 export default icons;

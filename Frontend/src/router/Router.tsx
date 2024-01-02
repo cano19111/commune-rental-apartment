@@ -8,6 +8,7 @@ import {
     BookingCompletion,
     SetPassword,
     LoginSuccess,
+    NotFound,
 } from '@/pages/Public';
 import { path } from '@/utils/constant';
 import {
@@ -17,6 +18,7 @@ import {
     ManagerApartment,
     PersonalInformation,
     EditApartment,
+    MyBooking,
 } from '@/pages/User';
 
 const Router = () => {
@@ -62,6 +64,10 @@ const Router = () => {
             element: <EditApartment />,
         },
         {
+            path: path.MY_BOOKING,
+            element: <MyBooking />,
+        },
+        {
             path: path.ACCOUNT_SETTINGS,
             element: <ManageAccount />,
             children: [
@@ -77,7 +83,7 @@ const Router = () => {
         },
         {
             path: path.ALL,
-            element: <h1>404</h1>,
+            element: <NotFound />,
         },
     ];
 
@@ -89,7 +95,7 @@ const Router = () => {
         },
         {
             path: path.ALL,
-            element: <h1>404</h1>,
+            element: <NotFound />,
         },
     ]);
 

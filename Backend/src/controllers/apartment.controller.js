@@ -46,23 +46,23 @@ const getAllApartment = async (req, res, next) => {
 const getApartment = async (req, res, next) => {
     try {
         const { apartmentId } = req.params;
-        const { startDate, endDate, numberOfGuest, quantity, minPrice: rawMinPrice, maxPrice: rawMaxPrice } = req.query;
+        const { start_date, end_date, number_of_guest, room_number, min_price, max_price } = req.query;
 
-        const parsedStartDay = new Date(startDate);
-        const parsedEndDay = new Date(endDate);
-        const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
+        const startDay = new Date(start_date);
+        const endDay = new Date(end_date);
+        const today = new Date(Date.now()).setHours(0, 0, 0, 0);
 
-        if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
+        if (startDay < today || endDay < today) {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid start or end date',
             });
         }
 
-        const parsedNumberOfGuest = parseInt(numberOfGuest, 10) || 1;
-        const parsedQuantity = parseInt(quantity, 10) || 1;
-        const minPrice = parseInt(rawMinPrice, 10) || 0;
-        const maxPrice = parseInt(rawMaxPrice, 10) || 1000000000;
+        const numberOfGuest = parseInt(number_of_guest, 10) || 1;
+        const roomNumber = parseInt(room_number, 10) || 1;
+        const minPrice = parseInt(min_price, 10) || 0;
+        const maxPrice = parseInt(max_price, 10) || 1000000000;
 
         const [err, apartment] = await to(
             Apartment.aggregate([
@@ -70,16 +70,16 @@ const getApartment = async (req, res, next) => {
                 { $unwind: '$rooms' },
                 {
                     $match: {
-                        'rooms.numberOfGuest': { $gte: parsedNumberOfGuest },
-                        'rooms.quantity': { $gte: parsedQuantity },
+                        'rooms.numberOfGuest': { $gte: numberOfGuest },
+                        'rooms.quantity': { $gte: roomNumber },
                         $or: [
                             { 'rooms.unavailableDateRanges': null },
                             {
                                 'rooms.unavailableDateRanges': {
                                     $not: {
                                         $elemMatch: {
-                                            startDay: { $lt: parsedEndDay },
-                                            endDay: { $gt: parsedStartDay },
+                                            startDay: { $lt: endDay },
+                                            endDay: { $gt: startDay },
                                         },
                                     },
                                 },
@@ -161,7 +161,6 @@ const getApartment = async (req, res, next) => {
         );
 
         if (err) {
-            console.error(err);
             return res.status(500).json({
                 success: false,
                 message: 'Error retrieving apartment',
@@ -175,17 +174,14 @@ const getApartment = async (req, res, next) => {
             });
         }
 
-        const result = {
+        return res.status(200).json({
             success: true,
             message: 'Apartment retrieved successfully',
             data: {
                 apartment: apartment[0],
             },
-        };
-
-        return res.status(200).json(result);
+        });
     } catch (error) {
-        console.error(error);
         next(error);
     }
 };
@@ -256,29 +252,37 @@ const createApartment = async (req, res, next) => {
 };
 
 const searchApartments = async (req, res, next) => {
-    function delay(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-    await delay(1200);
     try {
-        const { numberOfGuest, quantity, province, district, ward, street, startDate, endDate, name } = req.query;
-        const parsedStartDay = new Date(startDate);
-        const parsedEndDay = new Date(endDate);
+        const {
+            number_of_guest,
+            room_number,
+            province,
+            district,
+            ward,
+            street,
+            start_date,
+            end_date,
+            name,
+            min_price,
+            max_price,
+        } = req.query;
+        const parsedStartDay = new Date(start_date);
+        const parsedEndDay = new Date(end_date);
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
-        const minPrice = parseInt(req.query.minPrice, 10) || 0;
-        const maxPrice = parseInt(req.query.maxPrice, 10) || 1000000000;
+        const minPrice = parseInt(min_price, 10) || 0;
+        const maxPrice = parseInt(max_price, 10) || 1000000000;
         const skip = (page - 1) * limit;
-        const nowDate = new Date(Date.now()).setHours(0, 0, 0, 0);
-        if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
+        const today = new Date(Date.now()).setHours(0, 0, 0, 0);
+        if (parsedStartDay < today || parsedEndDay < today) {
             return res.status(400).json({
                 success: false,
                 message: 'The start date or end date cannot be earlier than the current date',
             });
         }
 
-        const parsedNumberOfGuest = parseInt(numberOfGuest, 10) || 1;
-        const parsedQuantity = parseInt(quantity, 10) || 1;
+        const parsedNumberOfGuest = parseInt(number_of_guest, 10) || 1;
+        const parsedQuantity = parseInt(room_number, 10) || 1;
         const textSearchString = `${province} ${district} ${ward} ${street} ${name}`;
 
         const initialMatch = {
@@ -570,21 +574,21 @@ const removeRoomFromApartment = async (req, res, next) => {
 };
 
 const findRoomById = async (req, res) => {
-    const roomId = req.params.roomId;
-    const { startDate, endDate, roomNumber } = req.query;
+    const room_id = req.params.roomId;
+    const { start_date, end_date, room_number } = req.query;
 
-    const roomIdObj = new mongoose.Types.ObjectId(roomId);
+    const roomIdObj = new mongoose.Types.ObjectId(room_id);
 
-    const parsedStartDay = new Date(startDate);
-    const parsedEndDay = new Date(endDate);
+    const startDay = new Date(start_date);
+    const endDay = new Date(end_date);
 
-    if (isNaN(parsedStartDay.getTime()) || isNaN(parsedEndDay.getTime())) {
+    if (isNaN(startDay.getTime()) || isNaN(endDay.getTime())) {
         return res.status(400).json({ success: false, message: 'Invalid start or end date' });
     }
 
-    const nowDate = new Date();
-    nowDate.setHours(0, 0, 0, 0);
-    if (parsedStartDay < nowDate || parsedEndDay < nowDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (startDay < today || endDay < today) {
         return res.status(400).json({
             success: false,
             message: 'The start date or end date cannot be earlier than the current date',
@@ -601,7 +605,7 @@ const findRoomById = async (req, res) => {
                     {
                         'rooms.unavailableDateRanges': {
                             $not: {
-                                $elemMatch: { startDay: { $lte: parsedEndDay }, endDay: { $gte: parsedStartDay } },
+                                $elemMatch: { startDay: { $lte: startDay }, endDay: { $gte: endDay } },
                             },
                         },
                     },
@@ -609,7 +613,7 @@ const findRoomById = async (req, res) => {
                 ],
             },
         },
-        { $match: { 'rooms.quantity': { $gte: parseInt(roomNumber, 10) || 1 } } },
+        { $match: { 'rooms.quantity': { $gte: parseInt(room_number, 10) || 1 } } },
         {
             $lookup: {
                 from: 'services',
@@ -668,7 +672,6 @@ const findRoomById = async (req, res) => {
             },
         });
     } catch (err) {
-        console.error(err.message);
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
@@ -686,7 +689,6 @@ const createStripePayment = async (req, res, next) => {
     );
 
     if (err) {
-        console.error(err.message);
         return res.status(500).json({ error: err.message });
     }
 
