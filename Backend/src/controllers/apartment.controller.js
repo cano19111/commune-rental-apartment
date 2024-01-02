@@ -695,6 +695,40 @@ const createStripePayment = async (req, res, next) => {
     return res.status(200).json({ clientSecret: paymentIntent.client_secret });
 };
 
+const getApartmentsByUserId = async (req, res, next) => {
+    try {
+        const { _id: userId } = req.user;
+        const [err, apartments] = await to(
+            Apartment.find({ createBy: userId }).select('title location rooms.images rooms.price').lean(),
+        );
+
+        if (err) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+        if (!apartments || apartments.length === 0) {
+            return res.status(404).json({ success: false, message: 'No apartments found for this user.' });
+        }
+
+        const formattedApartments = apartments.map((apartment) => ({
+            title: apartment.title,
+            location: apartment.location,
+            image:
+                apartment.rooms.length > 0
+                    ? `${process.env.SERVER_URI}/api/image/${apartment.rooms[0].images[0]}`
+                    : undefined,
+            price: apartment.rooms.length > 0 ? apartment.rooms[0].price : undefined,
+        }));
+
+        res.status(200).json({
+            success: true,
+            data: {
+                apartments: formattedApartments,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 module.exports = {
     createApartment,
     updateApartment,
@@ -705,4 +739,5 @@ module.exports = {
     searchApartments,
     createStripePayment,
     findRoomById,
+    getApartmentsByUserId,
 };

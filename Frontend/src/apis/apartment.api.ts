@@ -31,3 +31,8 @@ export const apiGetRoomCheckout = ({ roomId, params }: { roomId: string; params:
         url: `/apartment/room/${roomId}?${params}`,
         method: 'get',
     });
+export const apiGetApartmentByUser = (): Promise<Res> =>
+    axios({
+        url: `/apartment/by-user`,
+        method: 'get',
+    });
