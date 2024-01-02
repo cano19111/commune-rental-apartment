@@ -20,6 +20,7 @@ export const path: { [key: string]: string } = {
     SIGNIN_GOOGLE_SUCCESS: 'signin-success/:userId',
     EDIT_APARTMENT: 'apartment/edit/:apartmentId',
     MY_BOOKING: 'my-booking',
+    BOOKING_DETAIL: 'my-booking/:bookingId',
 };
 
 export const navigates: { title: string; path: string; icon: React.ReactNode }[] = [

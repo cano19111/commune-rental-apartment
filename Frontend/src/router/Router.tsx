@@ -19,6 +19,7 @@ import {
     PersonalInformation,
     EditApartment,
     MyBooking,
+    BookingDetail,
 } from '@/pages/User';
 
 const Router = () => {
@@ -66,6 +67,10 @@ const Router = () => {
         {
             path: path.MY_BOOKING,
             element: <MyBooking />,
+        },
+        {
+            path: path.BOOKING_DETAIL,
+            element: <BookingDetail />,
         },
         {
             path: path.ACCOUNT_SETTINGS,

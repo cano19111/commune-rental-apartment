@@ -5,3 +5,4 @@ export { default as ManagerApartment } from './ManagerApartment';
 export { default as PersonalInformation } from './PersonalInformation';
 export { default as EditApartment } from './EditApartment';
 export { default as MyBooking } from './MyBooking';
+export { default as BookingDetail } from './BookingDetail';

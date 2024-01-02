@@ -73,12 +73,6 @@ const createBooking = async (req, res) => {
 };
 
 const getBookings = async (req, res, next) => {
-    function delay(milliseconds) {
-        return new Promise((resolve) => {
-            setTimeout(resolve, milliseconds);
-        });
-    }
-    await delay(1000);
     try {
         const [err, bookings] = await to(Booking.find({}));
         if (err) {

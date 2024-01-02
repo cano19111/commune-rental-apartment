@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Skeleton } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 const { FaArrowRight, IoCalendarOutline, CiCreditCard1, RiMoonLine } = icons;
 
 const MyBooking: React.FC = () => {
@@ -11,6 +12,7 @@ const MyBooking: React.FC = () => {
         queryKey: ['my-booking'],
         queryFn: apiGetMyBookings,
     });
+    const navigate = useNavigate();
     const calculateNights = (checkIn: string, checkOut: string) => {
         const checkInDate = moment(checkIn);
         const checkOutDate = moment(checkOut);
@@ -25,6 +27,7 @@ const MyBooking: React.FC = () => {
                     return (
                         <div
                             key={booking._id}
+                            onClick={() => navigate(`/my-booking/${booking._id}`)}
                             className="h-40 flex gap-10 p-2 rounded-lg shadow-sm hover:shadow-xs transition-shadow duration-300 bg-gray-100 cursor-pointer"
                         >
                             <img

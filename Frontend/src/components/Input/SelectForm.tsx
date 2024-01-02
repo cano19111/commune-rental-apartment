@@ -51,6 +51,7 @@ const SelectForm: React.FC<SelectFormProps> = ({
                             value={value}
                             ref={ref}
                             status={error && 'error'}
+                            showSearch={true}
                         />
                         {error && <span className="text-red-600">{error.message}</span>}
                     </Flex>
