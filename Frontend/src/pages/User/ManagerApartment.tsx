@@ -21,7 +21,7 @@ const ManagerApartment: React.FC = () => {
         </div>
     ) : (
         <div className="flex min-h-screen gap-5 w-full items-start flex-wrap font-main pb-10">
-            {data.apartments.map((apartment) => (
+            {(data?.apartments || []).map((apartment) => (
                 <div className="w-[350px] h-[460px] opacity-100 bg-white rounded-3xl shadow-card-sm p-2">
                     <div className="relative">
                         <img

@@ -2,7 +2,7 @@ import { FormAddRoom, InputForm, SelectForm } from '@/components';
 import { Flex, Button, message, Spin } from 'antd';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiCreateApartment } from '@/apis';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { Provinces } from '@/utils/location/provinces';
@@ -13,6 +13,7 @@ const CreateApartment: React.FC = () => {
     const createApartmentMutation = useMutation({ mutationFn: apiCreateApartment });
     const [districtsOption, setDistrictsOption] = useState([]);
     const [rooms, setRooms] = useState([{}]);
+    const queryClient = useQueryClient();
     const [wardsOption, setWardsOption] = useState([]);
     const {
         handleSubmit,
@@ -94,6 +95,9 @@ const CreateApartment: React.FC = () => {
             onSuccess: (response: Res) => {
                 if (response.success) {
                     message.success('Create apartment successfully');
+                    queryClient.invalidateQueries({
+                        queryKey: ['apartmentUser'],
+                    });
                     reset();
                 }
             },
