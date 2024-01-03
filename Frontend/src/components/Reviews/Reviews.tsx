@@ -47,7 +47,7 @@ const ratingCategories: RatingCategory[] = [
 const overallRating = ratingCategories.reduce((acc, { score }) => acc + score, 0) / ratingCategories.length;
 
 const getRatingColor = (rating: number): string => {
-    if (rating >= 9) return 'bg-green-200 text-green-500';
+    if (rating >= 9) return 'bg-green-300 text-green-500';
     if (rating >= 7) return 'bg-yellow-200 text-yellow-500';
     return 'bg-red-200 text-red-500';
 };

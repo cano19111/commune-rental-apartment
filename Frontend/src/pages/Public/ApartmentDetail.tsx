@@ -235,6 +235,7 @@ const ApartmentDetail: React.FC = () => {
                                     roomType: {
                                         roomType: room.roomType,
                                         services: room.services.map((service) => service.title),
+                                        sizeRoom: room.size,
                                     },
                                     numberOfGuest: room.numberOfGuest,
                                     price: room.price,
