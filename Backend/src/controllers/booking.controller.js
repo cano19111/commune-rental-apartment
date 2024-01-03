@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const mongoose = require('mongoose');
 const Booking = require('../models/booking.model');
 const Apartment = require('../models/apartment.model');
+const User = require('../models/user.model');
 const { sendMail } = require('../utils/helpers');
 const to = require('await-to-js').default;
 
@@ -74,7 +75,12 @@ const createBooking = async (req, res) => {
 
 const getBookings = async (req, res, next) => {
     try {
-        const [err, bookings] = await to(Booking.find({}));
+        const { _id: userId } = req.user;
+        const [errFindUser, user] = await to(User.findById(userId));
+        if (errFindUser) {
+            return res.status(500).json({ success: false, message: 'Error finding user' });
+        }
+        const [err, bookings] = await to(Booking.find({ email: user.email }));
         if (err) {
             return res.status(500).json({ success: false, message: 'Error finding booking' });
         }
