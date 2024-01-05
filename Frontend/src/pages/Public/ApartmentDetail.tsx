@@ -359,7 +359,7 @@ const ApartmentDetail: React.FC = () => {
                 </div>
                 <div className="border border-t mt-5"></div>
                 <div className="h-[500px] my-5 google-map">
-                    <h3 className="text-xl font-normal mb-5">Where you will go</h3>
+                    <h3 className="text-xl font-normal mb">Where you will go</h3>
                     <GoogleMap lat={apartment?.location.longitude} lng={apartment?.location.latitude} />
                 </div>
                 <div className="border border-t mt-10"></div>

@@ -80,7 +80,7 @@ const Listing: React.FC = () => {
                     onSubmit={handleSubmit(handleSearch)}
                     className="max-w-main w-full min-h-screen flex mt-10 gap-5 mb-5"
                 >
-                    <div className="max-w-[350px] w-full bg-slate-100 rounded-lg px-10 py-5 pb-10">
+                    <div className="max-w-[350px] w-full bg-slate-100 rounded-lg px-10 py-5 pb-10 sm:block hidden">
                         <div className="flex flex-col gap-2">
                             <div className="text-lg mx-2">Search</div>
                             <Controller
@@ -296,7 +296,7 @@ const Listing: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="w-8/12 flex h-full py-3">
-                                                    <div className="w-7/12 flex flex-col mt-3 gap-3">
+                                                    <div className="w-7/12 flex flex-col sm:mt-3 gap-3">
                                                         <div className="font-medium text-lg overflow-hidden line-clamp-2">
                                                             {room.name}
                                                         </div>
@@ -317,7 +317,7 @@ const Listing: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="w-5/12 flex flex-col justify-between items-end">
-                                                        <div className="flex gap-2 min-w-[150px]">
+                                                        <div className="gap-2 min-w-[150px] sm:flex hidden">
                                                             <div className="flex flex-col items-end">
                                                                 <span className=" font-medium">Review score</span>
                                                                 <span className=" font-light">{`${room.rating.totalRating} reviews`}</span>

@@ -34,12 +34,12 @@ const Search: React.FC = () => {
         });
         navigate(`/listing?${queryParams.toString()}`);
     };
-
+    const isMobile = window.innerWidth <= 767;
     return (
         isLoaded && (
             <form
                 onSubmit={handleSubmit(handleSearch)}
-                className="font-main max-w-[960px] w-full min-h-[50px] bg-white rounded-3xl mt-[30px] flex justify-between items-center px-10 flex-wrap py-4 lg:rounded-full shadow-md"
+                className="font-main max-w-[960px] w-full min-h-[50px] bg-white rounded-3xl mt-[30px] flex justify-between items-center lg:px-10 px-5 flex-wrap py-4 lg:rounded-full shadow-card-sm lg:shadow-lg border"
             >
                 <Controller
                     control={control}
@@ -60,14 +60,14 @@ const Search: React.FC = () => {
                                 <span className="text-base font-medium">Where</span>
                                 <input
                                     placeholder="Where are you going?"
-                                    className="py-2 outline-none bg-transparent text-lg"
+                                    className="py-0.5 lg:py-2 outline-none bg-transparent text-lg"
                                     {...field}
                                 />
                             </div>
                         </Tooltip>
                     )}
                 />
-                <div className="border-r border-gray-300 h-[50px]"></div>
+                <div className="border-r border-gray-300 h-[50px] hidden lg:block"></div>
                 <Controller
                     name="searchDate"
                     control={control}
@@ -85,18 +85,19 @@ const Search: React.FC = () => {
                             <div className="flex flex-col min-w-[200px] max-w-[300px] text-black search-home">
                                 <div className="text-base font-medium flex items-center ml-3">
                                     <span>Check-in</span>
-                                    <span className="ml-20">Check-out</span>
+                                    <span className="lg:ml-20 ml-16">Check-out</span>
                                 </div>
                                 <DatePicker.RangePicker
                                     size="large"
                                     format="DD-MM-YYYY"
-                                    className="font-main py-3 border-none outline-none shadow-none text-lg"
+                                    className="font-main lg:py-3 border-none outline-none shadow-none text-lg"
                                     inputReadOnly={true}
                                     superNextIcon={null}
                                     superPrevIcon={null}
                                     placeholder={['Add day', 'Add day']}
                                     suffixIcon={null}
                                     {...field}
+                                    showTime={isMobile}
                                     onChange={(dates) => field.onChange(dates)}
                                     disabledDate={(current) => current && current < moment().startOf('day')}
                                 />
@@ -104,7 +105,7 @@ const Search: React.FC = () => {
                         </Tooltip>
                     )}
                 />
-                <div className="border-r border-gray-300 h-[50px]"></div>
+                <div className="border-r border-gray-300 h-[50px] hidden lg:block"></div>
                 <Controller
                     name="searchGuest"
                     control={control}
@@ -128,7 +129,7 @@ const Search: React.FC = () => {
                                     placement="bottomLeft"
                                     trigger={['click']}
                                 >
-                                    <div className="font-main py-2 flex items-center gap-1 justify-center text-black cursor-pointer text-lg">
+                                    <div className="font-main lg:py-2 flex items-center gap-1 justify-center text-black cursor-pointer text-lg">
                                         <PiUserThin size={25} />
                                         <span>{`${getValues('searchGuest')?.guest} adult · ${
                                             getValues('searchGuest')?.room

@@ -21,31 +21,7 @@ const CreateApartment: React.FC = () => {
         reset,
         formState: { errors },
         setValue,
-    } = useForm<ApartmentType>({
-        defaultValues: {
-            title: '',
-            location: {
-                longitude: null,
-                latitude: null,
-                province: '',
-                district: '',
-                ward: '',
-                street: '',
-            },
-            rooms: [
-                {
-                    services: [],
-                    description: '',
-                    price: null,
-                    size: null,
-                    numberOfGuest: null,
-                    images: [],
-                    roomType: '',
-                    quantity: null,
-                },
-            ],
-        },
-    });
+    } = useForm<ApartmentType>();
     const handleProvinceChange = (selectedProvinceCode: number) => {
         const filteredDistricts = Districts.filter((district) => district.province_code === selectedProvinceCode);
         setDistrictsOption(filteredDistricts);
@@ -76,7 +52,6 @@ const CreateApartment: React.FC = () => {
         data.rooms = data.rooms.filter((room: Room) => room?.images !== undefined);
         const formData = new FormData();
         data.rooms.forEach((room: Room, index: number) => {
-            console.log(room?.images?.length);
             Object.entries(room).forEach(([key]) => {
                 if (key === 'images') {
                     room.images.forEach((image: UploadFile) => {

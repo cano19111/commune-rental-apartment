@@ -29,6 +29,7 @@ import { IoHeartSharp, IoSettingsOutline } from 'react-icons/io5';
 import { HiMenu } from 'react-icons/hi';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { RiMoonLine } from 'react-icons/ri';
+import { HiHome } from 'react-icons/hi2';
 
 const icons = {
     FaFacebookF,
@@ -74,5 +75,6 @@ const icons = {
     IoMdNotificationsOutline,
     IoSettingsOutline,
     BsHouse,
+    HiHome,
 };
 export default icons;

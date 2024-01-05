@@ -98,7 +98,7 @@ const Header: React.FC = () => {
                                 mouseLeaveDelay={0.3}
                                 trigger={['hover']}
                             >
-                                <span className="mt-3 mx-5 mb-3 cursor-pointer px-3 py-1.5 flex items-center gap-1.5 border border-gray-300 rounded-full justify-center">
+                                <span className="lg:mx-5 cursor-pointer px-3 py-1.5 flex items-center gap-1.5 border border-gray-300 rounded-full justify-center">
                                     <HiMenu size={17} />
                                     <Avatar size={30} src={currentUser?.avatar} className="border border-blue-500 " />
                                 </span>

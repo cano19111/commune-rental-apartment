@@ -1,5 +1,7 @@
-import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
 import React, { useEffect } from 'react';
+import { useJsApiLoader, GoogleMap, OverlayView } from '@react-google-maps/api';
+import icons from '@/utils/icons';
+const { HiHome } = icons;
 
 interface GoogleMapProps {
     lat: number;
@@ -11,6 +13,11 @@ const GoogleMapF: React.FC<GoogleMapProps> = ({ lat, lng }) => {
         id: 'rent-apartment',
         googleMapsApiKey: import.meta.env.VITE_API_GOOGLE_MAP,
         libraries: ['maps', 'places'],
+    });
+
+    const getPixelPositionOffset = (width: number, height: number) => ({
+        x: -(width / 2) - 20,
+        y: -(height / 2) - 35,
     });
     const googleMapRemap = () => {
         const langID = 'en-US';
@@ -45,35 +52,47 @@ const GoogleMapF: React.FC<GoogleMapProps> = ({ lat, lng }) => {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            googleMapRemap();
-        }, 1);
+        const userAgent = navigator.userAgent;
+        const isChrome = /Chrome/.test(userAgent) && !/Edg/.test(userAgent);
 
-        return () => clearInterval(intervalId);
+        if (!isChrome) {
+            const intervalId = setInterval(() => {
+                googleMapRemap();
+            }, 1);
+
+            return () => clearInterval(intervalId);
+        }
     }, []);
     return isLoaded ? (
-        <GoogleMap
-            mapContainerStyle={{
-                width: '100%',
-                height: '480px',
-                borderRadius: '10px',
-            }}
-            center={{
-                lat: lat,
-                lng: lng,
-            }}
-            zoom={14}
-            options={{
-                scrollwheel: false,
-            }}
-        >
-            <MarkerF
-                position={{
+        <div className="shadow-md">
+            <GoogleMap
+                mapContainerStyle={{
+                    width: '100%',
+                    height: '480px',
+                    borderRadius: '10px',
+                }}
+                center={{
                     lat: lat,
                     lng: lng,
                 }}
-            />
-        </GoogleMap>
+                zoom={14}
+                options={{
+                    scrollwheel: false,
+                }}
+            >
+                <OverlayView
+                    position={{ lat: lat, lng: lng }}
+                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                    getPixelPositionOffset={getPixelPositionOffset}
+                >
+                    <div className="flex items-center justify-center w-12 h-12 bg-blue-400 rounded-full">
+                        <i className="mb-1">
+                            <HiHome size={30} color="#fff" />
+                        </i>
+                    </div>
+                </OverlayView>
+            </GoogleMap>
+        </div>
     ) : (
         <></>
     );

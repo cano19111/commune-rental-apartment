@@ -138,3 +138,14 @@ div[style*='background-color: white; font-weight: 500; font-family: Roboto, sans
 .navLink-active::before {
     width: 65%;
 }
+
+/* disable next, prev date range picker  */
+.ant-picker-header-super-next-btn {
+    display: none;
+}
+.ant-picker-header-super-prev-btn {
+    display: none;
+}
+.ant-picker-time-panel {
+    display: none !important;
+}
