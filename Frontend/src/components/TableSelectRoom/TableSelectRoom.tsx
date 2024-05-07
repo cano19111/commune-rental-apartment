@@ -2,11 +2,12 @@ import React from 'react';
 import { Button, Table, Tag } from 'antd';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import icons from '@/utils/icons';
-const { FaUser } = icons;
+const { FaUser, BsHouse } = icons;
 
 interface RoomType {
     roomType: string;
     services: string[];
+    sizeRoom: number;
 }
 
 interface DataTypeRooms {
@@ -62,6 +63,11 @@ const TableSelectRoom: React.FC<{
                             <div className="flex flex-col gap-3">
                                 <h3 className="text-lg font-medium text-blue-600">{roomType.roomType}</h3>
                                 <div className="flex flex-wrap gap-2">
+                                    <Tag className="flex items-center gap-2">
+                                        <BsHouse />
+                                        {roomType.sizeRoom}
+                                        {' m²'}
+                                    </Tag>
                                     {(roomType.services || []).map((service: string, index: number) => (
                                         <Tag key={index}>{service}</Tag>
                                     ))}

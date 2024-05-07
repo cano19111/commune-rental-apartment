@@ -22,7 +22,7 @@ import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { useJsApiLoader } from '@react-google-maps/api';
 import moment from 'moment';
-const { GoLocation, PiUserThin } = icons;
+const { GoLocation, PiUserThin, IoHeartSharp } = icons;
 
 const Listing: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
@@ -63,8 +63,8 @@ const Listing: React.FC = () => {
             room_number: data.searchGuest.room.toString(),
         });
         if (data.searchPrice && data.searchPrice[0] !== undefined && data.searchPrice[1] !== undefined) {
-            queryParams.set('minPrice', data.searchPrice[0].toString());
-            queryParams.set('maxPrice', data.searchPrice[1].toString());
+            queryParams.set('min_price', data.searchPrice[0].toString());
+            queryParams.set('max_price', data.searchPrice[1].toString());
         }
         setSearchParams(queryParams);
     };
@@ -80,7 +80,7 @@ const Listing: React.FC = () => {
                     onSubmit={handleSubmit(handleSearch)}
                     className="max-w-main w-full min-h-screen flex mt-10 gap-5 mb-5"
                 >
-                    <div className="max-w-[270px] w-full bg-slate-100 rounded-lg px-3 py-5 pb-10">
+                    <div className="max-w-[350px] w-full bg-slate-100 rounded-lg px-10 py-5 pb-10 sm:block hidden">
                         <div className="flex flex-col gap-2">
                             <div className="text-lg mx-2">Search</div>
                             <Controller
@@ -124,7 +124,7 @@ const Listing: React.FC = () => {
                                     >
                                         <DatePicker.RangePicker
                                             format="DD-MM-YYYY"
-                                            className="font-main rounded-xl px-3 py-3 w-full"
+                                            className="font-main rounded-xl px-2 mt-2 py-3 w-full"
                                             inputReadOnly={true}
                                             superNextIcon={null}
                                             superPrevIcon={null}
@@ -164,8 +164,8 @@ const Listing: React.FC = () => {
                                         >
                                             <Button className="font-main w-full h-[48px] bg-white rounded-xl flex items-center gap-1 justify-center">
                                                 <PiUserThin size={25} />
-                                                <span className="">{`${getValues('searchGuest')?.guest || 1} adult · ${
-                                                    getValues('searchGuest')?.room || 1
+                                                <span className="">{`${getValues('searchGuest')?.guest} adult · ${
+                                                    getValues('searchGuest')?.room
                                                 } rooms`}</span>
                                             </Button>
                                         </Dropdown>
@@ -182,7 +182,7 @@ const Listing: React.FC = () => {
                                 Search
                             </Button>
                         </div>
-                        <div className="w-full border mt-3 rounded-md">
+                        <div className="w-full mt-3 rounded-xl">
                             <h2 className="text-lg m-2">Filter by</h2>
                             <div className="p-3 flex flex-col justify-center gap-3">
                                 <h2>Your budget (per night)</h2>
@@ -190,7 +190,7 @@ const Listing: React.FC = () => {
                                     <div className="font-light">{`VND ${(
                                         watch('searchPrice')?.[0] || 100000
                                     ).toLocaleString()} - VND ${(
-                                        watch('searchPrice')?.[1] || 5000000 + '+'
+                                        watch('searchPrice')?.[1] || 5000000
                                     ).toLocaleString()}${watch('searchPrice')?.[1] === 5000000 ? '+' : ''}`}</div>
                                     <Controller
                                         name="searchPrice"
@@ -237,7 +237,9 @@ const Listing: React.FC = () => {
                     </div>
                     <div className="w-full flex flex-col gap-5">
                         <div className="h-[60px] bg-slate-100 flex items-center p-5 rounded-xl">
-                            <div>{`${data?.data?.totalResults || 0} Search results`}</div>
+                            <div className="font-normal text-lg">{`${
+                                data?.data?.totalResults || 0
+                            } Search results`}</div>
                         </div>
                         <div className="w-full h-full bg-slate-100 flex flex-col gap-5 p-2 rounded-lg">
                             {isFetching ? (
@@ -266,7 +268,7 @@ const Listing: React.FC = () => {
                                         return (
                                             <div
                                                 key={room._id}
-                                                className="flex items-start gap-5 bg-white p-1 rounded-lg cursor-pointer"
+                                                className="flex items-start gap-5 bg-white p-1 rounded-lg cursor-pointer shadow-sm"
                                                 onClick={() => {
                                                     const queryParams = new URLSearchParams({
                                                         province: searchParams.get('province'),
@@ -276,20 +278,25 @@ const Listing: React.FC = () => {
                                                         room_number: roomNumber.toString(),
                                                         room_id: room.roomId,
                                                     });
-                                                    navigate(`/apartment/${room._id}/?${queryParams.toString()}`);
+                                                    navigate(`/apartment/${room._id}?${queryParams.toString()}`);
                                                 }}
                                             >
-                                                <div className="w-2/5">
-                                                    <Image
-                                                        src={room.image}
-                                                        className="rounded-lg"
-                                                        preview={false}
-                                                        height={200}
-                                                        width="100%"
-                                                    />
+                                                <div className="w-4/12">
+                                                    <div className="relative">
+                                                        <Image
+                                                            src={room.image}
+                                                            className="rounded-lg"
+                                                            preview={false}
+                                                            height={200}
+                                                            width="100%"
+                                                        />
+                                                        <span className="absolute top-2 right-2 text-white flex justify-center items-center p-1.5 cursor-inherit overflow-hidden opacity-100 bg-opacity-50 bg-white rounded-full cursor-pointer">
+                                                            <IoHeartSharp size={20} />
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div className="w-3/5 flex h-full py-3">
-                                                    <div className="w-7/12 flex flex-col mt-3 gap-3">
+                                                <div className="w-8/12 flex h-full py-3">
+                                                    <div className="w-7/12 flex flex-col sm:mt-3 gap-3">
                                                         <div className="font-medium text-lg overflow-hidden line-clamp-2">
                                                             {room.name}
                                                         </div>
@@ -298,7 +305,7 @@ const Listing: React.FC = () => {
                                                                 <GoLocation size={15} />
                                                             </i>
                                                             <span className="hover:underline line-clamp-2 text-blue-800">
-                                                                {`${room.address.street} ${room.address.ward} ${room.address.district} ${room.address.province}`}
+                                                                {`${room.address.street}, ${room.address.ward}, ${room.address.district}, ${room.address.province}`}
                                                             </span>
                                                         </div>
                                                         <div className="font-light text-sm ml-3 flex items-center gap-1 flex-wrap">
@@ -310,7 +317,7 @@ const Listing: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="w-5/12 flex flex-col justify-between items-end">
-                                                        <div className="flex gap-2 min-w-[150px]">
+                                                        <div className="gap-2 min-w-[150px] sm:flex hidden">
                                                             <div className="flex flex-col items-end">
                                                                 <span className=" font-medium">Review score</span>
                                                                 <span className=" font-light">{`${room.rating.totalRating} reviews`}</span>
@@ -341,8 +348,10 @@ const Listing: React.FC = () => {
                         <Pagination
                             defaultCurrent={1}
                             total={data?.data?.totalResults || 0}
-                            defaultPageSize={1}
+                            defaultPageSize={4}
                             onChange={handleChangePage}
+                            className="flex justify-center"
+                            current={+searchParams.get('page') || 1}
                         />
                     </div>
                 </form>

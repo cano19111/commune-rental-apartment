@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
         password: { type: String },
         avatar: {
             type: String,
-            default: '7c8710012256c2b60f621e0849cc94d8.png',
+            default: '30b64d2bf8fe39eb2576e10c939b6689.png',
         },
         phone: {
             type: String,

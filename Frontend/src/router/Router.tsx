@@ -8,9 +8,19 @@ import {
     BookingCompletion,
     SetPassword,
     LoginSuccess,
+    NotFound,
 } from '@/pages/Public';
 import { path } from '@/utils/constant';
-import { CreateApartment, ManageAccount, MyFavorites, ManagerApartment, PersonalInformation } from '@/pages/User';
+import {
+    CreateApartment,
+    ManageAccount,
+    MyFavorites,
+    ManagerApartment,
+    PersonalInformation,
+    EditApartment,
+    MyBooking,
+    BookingDetail,
+} from '@/pages/User';
 
 const Router = () => {
     const routes: RouteObject[] = [
@@ -50,7 +60,18 @@ const Router = () => {
             path: path.SIGNIN_GOOGLE_SUCCESS,
             element: <LoginSuccess />,
         },
-
+        {
+            path: path.EDIT_APARTMENT,
+            element: <EditApartment />,
+        },
+        {
+            path: path.MY_BOOKING,
+            element: <MyBooking />,
+        },
+        {
+            path: path.BOOKING_DETAIL,
+            element: <BookingDetail />,
+        },
         {
             path: path.ACCOUNT_SETTINGS,
             element: <ManageAccount />,
@@ -67,7 +88,7 @@ const Router = () => {
         },
         {
             path: path.ALL,
-            element: <h1>404</h1>,
+            element: <NotFound />,
         },
     ];
 
@@ -79,7 +100,7 @@ const Router = () => {
         },
         {
             path: path.ALL,
-            element: <h1>404</h1>,
+            element: <NotFound />,
         },
     ]);
 

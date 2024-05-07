@@ -2,7 +2,6 @@ import { GoogleMap, Reviews, TableSelectRoom } from '@/components';
 import icons from '@/utils/icons';
 import { Button, DatePicker, Drawer, Image, Result, Spin, Tooltip } from 'antd';
 import React, { useMemo, useState } from 'react';
-import './ApartmentDetail.css';
 import { Controller, useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -10,7 +9,7 @@ import { apiApartmentDetail } from '@/apis';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { path } from '@/utils/constant';
-const { FaLocationDot, CgMenuGridO, PiUserThin } = icons;
+const { FaLocationDot, MdImage, PiUserThin } = icons;
 const calculateTotalAmount = (numberOfDays: number, roomPrice: number, roomNumber: number) => {
     const baseAmount: number = (numberOfDays === 0 ? 1 : +numberOfDays) * roomPrice * roomNumber;
     const taxAmount: number = baseAmount * 0.11;
@@ -133,14 +132,14 @@ const ApartmentDetail: React.FC = () => {
                     <Drawer placement="bottom" onClose={() => setIsShowAll(false)} open={isShowAll} height="100%">
                         <div className="flex flex-col justify-center">
                             <div className="flex items-start gap-3">
-                                <div
-                                    className="flex flex-col w-[100px]"
-                                    onClick={() => {
-                                        setIsShowAll(true);
-                                        setSelectedRoomIndex(null);
-                                    }}
-                                >
-                                    <div className="w-[100px] h-[70px]">
+                                <div className="flex flex-col w-[100px]">
+                                    <div
+                                        className="w-[100px] h-[70px]"
+                                        onClick={() => {
+                                            setIsShowAll(true);
+                                            setSelectedRoomIndex(null);
+                                        }}
+                                    >
                                         <Image
                                             width="100%"
                                             height="100%"
@@ -191,10 +190,11 @@ const ApartmentDetail: React.FC = () => {
                     </Drawer>
 
                     <Button
-                        className="absolute bottom-3 right-3 bg-white border border-black flex items-center"
+                        className="absolute bottom-3 right-3 bg-white border border-black flex items-center gap-2"
                         onClick={() => setIsShowAll(true)}
+                        size="middle"
                     >
-                        <CgMenuGridO />
+                        <MdImage size={18} />
                         <span>Show all images</span>
                     </Button>
                 </div>
@@ -235,6 +235,7 @@ const ApartmentDetail: React.FC = () => {
                                     roomType: {
                                         roomType: room.roomType,
                                         services: room.services.map((service) => service.title),
+                                        sizeRoom: room.size,
                                     },
                                     numberOfGuest: room.numberOfGuest,
                                     price: room.price,
@@ -295,12 +296,15 @@ const ApartmentDetail: React.FC = () => {
                                                 {...field}
                                                 onChange={(dates) => {
                                                     const currentParams = Object.fromEntries(searchParams.entries());
-                                                    const newParams = {
-                                                        ...currentParams,
-                                                        start_date: dates[0]?.format('YYYY-MM-DD'),
-                                                        end_date: dates[1]?.format('YYYY-MM-DD'),
-                                                    };
-                                                    setSearchParams(newParams);
+                                                    if (dates) {
+                                                        const newParams = {
+                                                            ...currentParams,
+                                                            start_date: dates[0]?.format('YYYY-MM-DD'),
+                                                            end_date: dates[1]?.format('YYYY-MM-DD'),
+                                                        };
+                                                        setSearchParams(newParams);
+                                                    }
+
                                                     field.onChange(dates);
                                                 }}
                                                 disabledDate={(current) => current && current < moment().startOf('day')}
@@ -321,7 +325,7 @@ const ApartmentDetail: React.FC = () => {
                                     type="primary"
                                     disabled={!isValid}
                                 >
-                                    Booking
+                                    Booking now
                                 </Button>
                             </div>
                             <div className="w-full flex flex-col gap-3">
@@ -355,7 +359,7 @@ const ApartmentDetail: React.FC = () => {
                 </div>
                 <div className="border border-t mt-5"></div>
                 <div className="h-[500px] my-5 google-map">
-                    <h3 className="text-xl font-normal mb-5">Where you will go</h3>
+                    <h3 className="text-xl font-normal mb">Where you will go</h3>
                     <GoogleMap lat={apartment?.location.longitude} lng={apartment?.location.latitude} />
                 </div>
                 <div className="border border-t mt-10"></div>

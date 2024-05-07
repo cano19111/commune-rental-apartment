@@ -30,13 +30,16 @@ const MenuAccount: React.FC = () => {
                 </Flex>
                 <Flex align="center" gap={10}>
                     <BsHouses size={20} />
-                    <Link className="font-main w-full text-left p-0 m-0 text-base" to={`/${path.CREATE_APARTMENT}`}>
+                    <Link
+                        className="font-main w-full text-left p-0 m-0 text-base"
+                        to={`/${path.ACCOUNT_SETTINGS}/${path.MANAGE_APARTMENT}`}
+                    >
                         Manage Apartment
                     </Link>
                 </Flex>
                 <Flex align="center" gap={10}>
                     <TbBrandBooking size={20} />
-                    <Link className="font-main w-full text-left p-0 m-0 text-base" to={`/${path.MANAGE_APARTMENT}`}>
+                    <Link className="font-main w-full text-left p-0 m-0 text-base" to={`/${path.MY_BOOKING}`}>
                         Booking & trip
                     </Link>
                 </Flex>

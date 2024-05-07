@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Input, DatePicker, Dropdown, Tooltip } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Dropdown, Tooltip } from 'antd';
 import icons from '@/utils/icons';
 import { DropDownItem } from '@/components';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { useJsApiLoader } from '@react-google-maps/api';
 import moment from 'moment';
-const { PiUserThin } = icons;
+const { PiUserThin, FaArrowRight } = icons;
 
 const Search: React.FC = () => {
     const { isLoaded } = useJsApiLoader({
@@ -35,12 +34,12 @@ const Search: React.FC = () => {
         });
         navigate(`/listing?${queryParams.toString()}`);
     };
-
+    const isMobile = window.innerWidth <= 767;
     return (
         isLoaded && (
             <form
                 onSubmit={handleSubmit(handleSearch)}
-                className="max-w-[920px] w-full min-h-[100px] bg-slate-50 rounded-3xl mt-[30px] flex justify-start items-center px-10 gap-5 flex-wrap py-10 lg:rounded-full lg:shadow-card-xl"
+                className="font-main max-w-[960px] w-full min-h-[50px] bg-white rounded-3xl mt-[30px] flex justify-between items-center lg:px-10 px-5 flex-wrap py-4 lg:rounded-full shadow-card-sm lg:shadow-lg border"
             >
                 <Controller
                     control={control}
@@ -48,23 +47,27 @@ const Search: React.FC = () => {
                     rules={{
                         required: 'Please enter a destination',
                     }}
+                    defaultValue=""
                     render={({ field }) => (
                         <Tooltip
                             title={errors?.searchText?.message as string}
                             color="red"
                             open={!!errors.searchText}
+                            placement="bottom"
                             zIndex={5}
                         >
-                            <Input
-                                size="large"
-                                placeholder="Search"
-                                className="rounded-full py-3 px-5 w-[200px]"
-                                {...field}
-                            />
+                            <div className="flex flex-col w-[200px] text-black ml-3">
+                                <span className="text-base font-medium">Where</span>
+                                <input
+                                    placeholder="Where are you going?"
+                                    className="py-0.5 lg:py-2 outline-none bg-transparent text-lg"
+                                    {...field}
+                                />
+                            </div>
                         </Tooltip>
                     )}
                 />
-
+                <div className="border-r border-gray-300 h-[50px] hidden lg:block"></div>
                 <Controller
                     name="searchDate"
                     control={control}
@@ -75,25 +78,34 @@ const Search: React.FC = () => {
                         <Tooltip
                             title={errors?.searchDate?.message as string}
                             color="red"
+                            placement="bottom"
                             open={!!errors.searchDate}
                             zIndex={5}
                         >
-                            <DatePicker.RangePicker
-                                format="DD-MM-YYYY"
-                                className="font-main rounded-full px-5 py-3 min-w-[200px] max-w-[270px]"
-                                inputReadOnly={true}
-                                superNextIcon={null}
-                                superPrevIcon={null}
-                                placeholder={['Check in', 'Check out']}
-                                popupClassName="show-card-md rounded-full"
-                                {...field}
-                                onChange={(dates) => field.onChange(dates)}
-                                disabledDate={(current) => current && current < moment().startOf('day')}
-                            />
+                            <div className="flex flex-col min-w-[200px] max-w-[300px] text-black search-home">
+                                <div className="text-base font-medium flex items-center ml-3">
+                                    <span>Check-in</span>
+                                    <span className="lg:ml-20 ml-16">Check-out</span>
+                                </div>
+                                <DatePicker.RangePicker
+                                    size="large"
+                                    format="DD-MM-YYYY"
+                                    className="font-main lg:py-3 border-none outline-none shadow-none text-lg"
+                                    inputReadOnly={true}
+                                    superNextIcon={null}
+                                    superPrevIcon={null}
+                                    placeholder={['Add day', 'Add day']}
+                                    suffixIcon={null}
+                                    {...field}
+                                    showTime={isMobile}
+                                    onChange={(dates) => field.onChange(dates)}
+                                    disabledDate={(current) => current && current < moment().startOf('day')}
+                                />
+                            </div>
                         </Tooltip>
                     )}
                 />
-
+                <div className="border-r border-gray-300 h-[50px] hidden lg:block"></div>
                 <Controller
                     name="searchGuest"
                     control={control}
@@ -102,33 +114,41 @@ const Search: React.FC = () => {
                     }}
                     defaultValue={{ guest: 1, room: 1 }}
                     render={({ field }) => (
-                        <Tooltip title={errors?.searchGuest?.message as string} color="red" open={!!errors.searchGuest}>
-                            <Dropdown
-                                dropdownRender={() => (
-                                    <DropDownItem value={field.value} onChange={(value) => field.onChange(value)} />
-                                )}
-                                placement="bottomLeft"
-                                trigger={['click']}
-                            >
-                                <Button className="font-main px-5 h-[50px] rounded-full flex items-center gap-1 justify-center">
-                                    <PiUserThin size={25} />
-                                    <span className="">{`${getValues('searchGuest')?.guest || 1} adult · ${
-                                        getValues('searchGuest')?.room || 1
-                                    } rooms`}</span>
-                                </Button>
-                            </Dropdown>
+                        <Tooltip
+                            title={errors?.searchGuest?.message as string}
+                            color="red"
+                            placement="bottom"
+                            open={!!errors.searchGuest}
+                        >
+                            <div className="flex flex-col text-black ml-3">
+                                <span className="text-base font-medium">Guest</span>
+                                <Dropdown
+                                    dropdownRender={() => (
+                                        <DropDownItem value={field.value} onChange={(value) => field.onChange(value)} />
+                                    )}
+                                    placement="bottomLeft"
+                                    trigger={['click']}
+                                >
+                                    <div className="font-main lg:py-2 flex items-center gap-1 justify-center text-black cursor-pointer text-lg">
+                                        <PiUserThin size={25} />
+                                        <span>{`${getValues('searchGuest')?.guest} adult · ${
+                                            getValues('searchGuest')?.room
+                                        } rooms`}</span>
+                                    </div>
+                                </Dropdown>
+                            </div>
                         </Tooltip>
                     )}
                 />
 
                 <Button
-                    className="font-main px-5 h-[50px] rounded-full flex-grow bg-blue-500"
+                    className="font-main bg-blue-500 flex items-center justify-center"
+                    shape="circle"
                     type="primary"
-                    icon={<SearchOutlined />}
+                    icon={<FaArrowRight size={30} />}
                     htmlType="submit"
-                >
-                    Search
-                </Button>
+                    style={{ width: '57px', height: '57px' }}
+                />
             </form>
         )
     );

@@ -1,8 +1,7 @@
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button, Flex, Spin } from 'antd';
-import { path } from '@/utils/constant';
 import icons from '@/utils/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiBooking } from '@/apis';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +14,7 @@ interface CheckoutFormProps {
 const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep, CustomerInfoData }) => {
     const stripe = useStripe();
     const elements = useElements();
+    const queryClient = useQueryClient();
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
@@ -22,7 +22,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ setActiveTab, setStep, Cust
         mutationFn: apiBooking,
         onSuccess: (response: Res) => {
             if (response.success) {
-                navigate(`/${path.BOOKING_COMPLETION}`);
+                navigate(`/booking-completion/${response.data.booking._id}`);
+                queryClient.invalidateQueries({
+                    queryKey: ['my-booking'],
+                });
             }
         },
         onError: (error) => {

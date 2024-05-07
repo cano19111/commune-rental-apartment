@@ -7,9 +7,10 @@ import { Flex, Button, Modal, Tabs, Drawer, Image, Popover, Avatar } from 'antd'
 import type { TabsProps } from 'antd';
 import icons from '@/utils/icons';
 import { useAuth } from '@/hooks';
+import clsx from 'clsx';
 
 const Header: React.FC = () => {
-    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, CgMenuLeft } = icons;
+    const { SlClose, AiOutlineUsergroupAdd, PiSignInBold, CgMenuLeft, HiMenu } = icons;
     const navigate = useNavigate();
     const [openNavigate, setOpenNavigate] = useState(false);
     const { isAuthenticated, user: currentUser, authModel, setAuthModel } = useAuth();
@@ -36,11 +37,11 @@ const Header: React.FC = () => {
                     Sign Up
                 </div>
             ),
-            children: <SignUp setModalOpen={setAuthModel} />,
+            children: <SignUp />,
         },
     ];
     return (
-        <header className="w-full h-[90px] sticky top-0 flex items-center justify-center shadow-md bg-white z-10 ">
+        <header className="w-full h-[90px] sticky top-0 flex items-center justify-center bg-white z-10 ">
             <div className="w-full  flex justify-between px-3 md:px-10 select-none">
                 <div className="lg:hidden" onClick={() => setOpenNavigate(true)}>
                     <CgMenuLeft size={30} />
@@ -55,7 +56,17 @@ const Header: React.FC = () => {
                     <div className="hidden lg:block">
                         <Flex gap={15} align="center">
                             {navigates.map((navigate, index) => (
-                                <NavLink className="font-main text-[20px] font-medium" key={index} to={navigate.path}>
+                                <NavLink
+                                    key={index}
+                                    to={navigate.path}
+                                    className={({ isActive }) =>
+                                        clsx(
+                                            'relative font-main text-[20px] font-medium text-black transition duration-500 ease-in-out',
+                                            isActive ? 'navLink-active text-blue-500' : '',
+                                            'navLink',
+                                        )
+                                    }
+                                >
                                     {navigate.title}
                                 </NavLink>
                             ))}
@@ -66,17 +77,17 @@ const Header: React.FC = () => {
                         {!isAuthenticated && !currentUser ? (
                             <>
                                 <Button
-                                    type="primary"
-                                    className="font-main h-10 px-2 md:px-7 hidden lg:block bg-blue-500 text-white"
-                                    onClick={() => setAuthModel({ isOpen: true, activeTab: 'signin' })}
-                                >
-                                    Sign in
-                                </Button>
-                                <Button
-                                    className="font-main h-10 px-2 md:px-7 hidden lg:block"
+                                    className="font-main h-10 px-2 md:px-7 hidden lg:block rounded-full"
                                     onClick={() => setAuthModel({ isOpen: true, activeTab: 'signup' })}
                                 >
                                     Sign up
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    className="font-main h-10 px-2 md:px-7 hidden lg:block bg-blue-500 text-white rounded-full"
+                                    onClick={() => setAuthModel({ isOpen: true, activeTab: 'signin' })}
+                                >
+                                    Sign in
                                 </Button>
                             </>
                         ) : (
@@ -84,10 +95,12 @@ const Header: React.FC = () => {
                                 placement="bottom"
                                 content={<MenuAccount />}
                                 arrow={true}
-                                trigger={['click', 'contextMenu']}
+                                mouseLeaveDelay={0.3}
+                                trigger={['hover']}
                             >
-                                <span className="mt-3 mx-5 cursor-pointer pb-3">
-                                    <Avatar size={40} src={currentUser?.avatar} className="border border-blue-500" />
+                                <span className="lg:mx-5 cursor-pointer px-3 py-1.5 flex items-center gap-1.5 border border-gray-300 rounded-full justify-center">
+                                    <HiMenu size={17} />
+                                    <Avatar size={30} src={currentUser?.avatar} className="border border-blue-500 " />
                                 </span>
                             </Popover>
                         )}

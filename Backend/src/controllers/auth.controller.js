@@ -11,7 +11,7 @@ const hashPassword = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(
 const register = async (req, res) => {
     try {
         const { email } = req.body;
-        let err, existingUser, newUser;
+        let err, existingUser;
 
         [err, existingUser] = await to(User.findOne({ email }));
         if (err) {
@@ -26,7 +26,6 @@ const register = async (req, res) => {
 
         [err, newUser] = await to(User.create({ email, confirmationToken: confirmationToken }));
         if (err) {
-            console.log(err.message);
             return res.status(500).json({ success: false, message: 'Error registering user' });
         }
 
@@ -42,7 +41,6 @@ const register = async (req, res) => {
         );
         let [mailError] = await to(sendMail({ email, html: emailHtml, subject: 'Confirm email' }));
         if (mailError) {
-            console.log(mailError);
             return res.status(500).json({ success: false, message: 'Error sending email', error: mailError.message });
         }
 
@@ -251,9 +249,7 @@ const logout = async (req, res, next) => {
             });
         }
 
-        const [errUpdate, updatedUser] = await to(
-            User.findOneAndUpdate({ refreshToken }, { refreshToken: '' }, { new: true }),
-        );
+        const [errUpdate] = await to(User.findOneAndUpdate({ refreshToken }, { refreshToken: '' }, { new: true }));
 
         if (errUpdate) {
             return res.status(500).json({
