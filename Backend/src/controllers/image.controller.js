@@ -7,6 +7,17 @@ const conn = mongoose.createConnection(process.env.MONGODB_URI, {
 });
 
 let gfsPromise = new Promise((resolve, reject) => {
+    conn.once('open', () => {
+        const gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+            bucketName: 'images',
+        });
+        resolve(gfs);
+    });
+
+    conn.on('error', (error) => {
+        reject(error);
+    });
+});
 
 const uploadImage = async (req, res, next) => {
     try {

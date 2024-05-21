@@ -60,7 +60,36 @@ const SignIn: React.FC<SignInProps> = ({ setModalOpen }) => {
                             <span className="absolute top-[-10px] left-[45%] bg-white px-3">Or</span>
                         </div>
 
-                        
+                        <Controller
+                            control={control}
+                            name="email"
+                            rules={{
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: 'Invalid email address',
+                                },
+                            }}
+                            render={({ field }) => (
+                                <Flex vertical gap={5}>
+                                    <Input
+                                        size="large"
+                                        placeholder="Enter your email"
+                                        {...field}
+                                        status={errors.email && 'error'}
+                                        prefix={
+                                            <span className="mr-3">
+                                                <FaRegUser size={17} />
+                                            </span>
+                                        }
+                                        className="px-5 py-3"
+                                    />
+                                    {errors.email && (
+                                        <span className="font-main text-red-600">{errors.email.message}</span>
+                                    )}
+                                </Flex>
+                            )}
+                        />
                         <Controller
                             control={control}
                             name="password"

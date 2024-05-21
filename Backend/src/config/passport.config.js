@@ -10,7 +10,24 @@ passport.use(
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: '/api/auth/google/callback',
         },
-       
+        async function (accessToken, refreshToken, profile, cb) {
+            try {
+                if (profile) {
+                    const user = await User.findOne({
+                        email: profile.emails[0]?.value,
+                    });
+                    if (user) return cb(null, user);
+                    const newUser = await User.create({
+                        email: profile.emails[0]?.value,
+                        provider: 'Google',
+                        firstname: profile.name.familyName,
+                        lastname: profile.name.givenName,
+                        avatar: profile?.photos[0]?.value,
+                    });
+                    return cb(null, newUser);
+                }
+            } catch (error) {
+                return cb(null, false);
             }
         },
     ),
