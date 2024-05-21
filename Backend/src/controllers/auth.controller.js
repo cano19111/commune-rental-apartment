@@ -18,16 +18,7 @@ const register = async (req, res) => {
             return res.status(500).json({ success: false, message: 'Error checking existing user' });
         }
 
-        if (existingUser) {
-            return res.status(400).json({ success: false, message: 'Email already in use' });
-        }
-
-        const confirmationToken = generateToken();
-
-        [err, newUser] = await to(User.create({ email, confirmationToken: confirmationToken }));
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Error registering user' });
-        }
+        
 
         const [readError, htmlTemplate] = await to(fs.readFile('src/template/confirmMailTemplate.html', 'utf-8'));
         if (readError) {

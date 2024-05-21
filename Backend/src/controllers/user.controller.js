@@ -11,13 +11,7 @@ const getCurrentUser = async (req, res, next) => {
             });
         }
 
-        const user = await User.findById(uid).select('-refreshToken -password');
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found',
-            });
-        }
+       
         let avatarUrl = user.avatar;
         if (!avatarUrl.startsWith('http')) {
             avatarUrl = `${process.env.SERVER_URI}/api/image/${avatarUrl}`;

@@ -11,14 +11,7 @@ router.get('/confirm-email', controller.confirmEmail);
 router.post('/set-password', controller.setPassword);
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
-router.get(
-    '/google/callback',
-    (req, res, next) => {
-        passport.authenticate('google', (err, profile) => {
-            req.user = profile;
-            next();
-        })(req, res, next);
-    },
+
     (req, res) => {
         res.redirect(`${process.env.CLIENT_URI}/signin-success/${req.user?._id}`);
     },
