@@ -17,6 +17,7 @@ const getAllApartment = async (req, res, next) => {
                 .exec(),
         );
 
+        
         if (err) {
             return res.status(500).json({
                 success: false,
